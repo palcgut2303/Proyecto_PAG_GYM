@@ -1,4 +1,6 @@
 using GYM_Backend.Contexto;
+using GYM_Backend.Interfaces;
+using GYM_Backend.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationContextDb>();
+builder.Services.AddTransient<IClassRepository,ClassRepository>();
+builder.Services.AddTransient<ITypeOfClassRepository, TypeOfClassRepository>();
+
 
 builder.Services.AddAuthorization();
 
