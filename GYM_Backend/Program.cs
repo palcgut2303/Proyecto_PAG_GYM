@@ -13,30 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+builder.Services.AddControllers();
 
-builder.Services.AddControllers(/*opciones =>
-{
-    opciones.Filters.Add(new AuthorizeFilter(politicaUsuariosAutenticados));
-}*/);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer("name=DefaultConnection"));
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationContextDb>();
 builder.Services.AddTransient<IClassRepository,ClassRepository>();
 builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
 
+//builder.Services.AddIdentityApiEndpoints<User>()
+//    .AddEntityFrameworkStores<ApplicationContextDb>();
 
 
-//builder.Services.AddIdentity<User, IdentityRole>(opciones =>
-//{
-//    opciones.Password.RequireDigit = false;
-//    opciones.Password.RequireLowercase = false;
-//    opciones.Password.RequireUppercase = false;
-//    opciones.Password.RequireNonAlphanumeric = false;
-
-//}).AddEntityFrameworkStores<ApplicationContextDb>();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationContextDb>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -75,7 +66,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
+//app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
 app.MapControllers();
 
 app.Run();

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GYM_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCommit2 : Migration
+    public partial class prueba : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

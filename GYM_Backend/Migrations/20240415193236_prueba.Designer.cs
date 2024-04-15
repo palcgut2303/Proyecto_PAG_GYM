@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GYM_Backend.Migrations
 {
     [DbContext(typeof(ApplicationContextDb))]
-    [Migration("20240415170309_initialCommit2")]
-    partial class initialCommit2
+    [Migration("20240415193236_prueba")]
+    partial class prueba
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
