@@ -1,4 +1,5 @@
 ﻿using GYM_Backend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,15 @@ public class ApplicationContextDb : IdentityDbContext
             .WithMany(c => c.Reservations)
             .HasForeignKey(r => r.ClassesId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        List<IdentityRole> roles = new List<IdentityRole>
+        {
+            new IdentityRole
+            { Name = "Instructor", NormalizedName = "INSTRUCTOR" },
+            new IdentityRole
+            { Name = "User", NormalizedName = "USER" },
+        };
+        modelBuilder.Entity<IdentityRole>().HasData(roles);
     }
 }
 

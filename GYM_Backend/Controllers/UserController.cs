@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace GYM_Backend.Controllers
 {
@@ -20,35 +21,53 @@ namespace GYM_Backend.Controllers
             this._signInManager = signInManager;
         }
 
-       
+
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Registro([FromBody] RegisterDTO modelo)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var usuario = new User()
+                {
+                    Email = modelo.Email,
+                    UserName = modelo.Email,
+                    NormalizedEmail = modelo.Email.ToUpper()
+                };
+
+                var createdUser = await _userManager.CreateAsync(usuario, password: modelo.Password);
+
+                if (createdUser.Succeeded)
+                {
+                    var roleResult = await _userManager.AddToRoleAsync(usuario, "User");
+
+                    if (!roleResult.Succeeded)
+                    {
+                        return StatusCode(500, roleResult.Errors);
+                    }
+                    else
+                    {
+                        return Ok("User Created");
+                    }
+                    //await _signInManager.SignInAsync(usuario, isPersistent: true); Para iniciar sesión directamente
+
+                }
+                else
+                {
+                    return StatusCode(500, createdUser.Errors);
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
 
-            var usuario = new User()
-            {
-                Email = modelo.Email,
-                UserName = modelo.Email,
-                NormalizedEmail = modelo.Email.ToUpper()
-            };  
-
-            var resultado = await _userManager.CreateAsync(usuario, password: modelo.Password);
-
-            if (resultado.Succeeded)
-            {
-                await _signInManager.SignInAsync(usuario, isPersistent: true);
-                return Ok();
-            }
-            else
-            {
-                return BadRequest(resultado.Errors);
-            }
 
         }
     }
