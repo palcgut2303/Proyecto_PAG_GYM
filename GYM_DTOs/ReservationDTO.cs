@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace GYM_DTOs
 {
-    public class TypeOfClassDTO
+    public class ReservationDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+
+        public int GymMemberId { get; set; }
+
+        public int ClassesId { get; set; }
     }
 }

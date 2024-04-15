@@ -3,15 +3,17 @@
     public class Classes
     {
         public int Id { get; set; }
-        public string  Name { get; set; }
-        public string Description { get; set; }
-        public int Duration { get; set; }
-        public int Capacity { get; set; }
+        public string Name { get; set; }
+        public int DurationInMinutes { get; set; }
         public DateTime Schedule { get; set; }
-        //public User NameProfessor { get; set; }
-        //List<User>? ListUser { get; set; }
-        //public int TypeOfClassId { get; set; }
-        //public TypeOfClass TypeOfClass { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; }
+
+        public int ClassTypeId { get; set; }
+        public ClassType ClassType { get; set; }
+
+        public int GymInstructorId { get; set; }
+        public GymInstructor GymInstructor { get; set; }
 
     }
 }

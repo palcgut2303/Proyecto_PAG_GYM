@@ -11,10 +11,10 @@ namespace GYM_Backend.Mappers
             {
                 Id = model.Id,
                 Name = model.Name,
-                Capacity = model.Capacity,
-                Description = model.Description,
-                Duration = model.Duration,
-                Schedule = model.Schedule
+                ClassTypeId = model.ClassTypeId,
+                DurationInMinutes = model.DurationInMinutes,
+                Schedule = model.Schedule,
+                GymInstructorId = model.GymInstructorId
             };
         }
     }

@@ -7,11 +7,11 @@ namespace GYM_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeOfClassController : ControllerBase
+    public class ClassTypeController : ControllerBase
     {
-        private readonly ITypeOfClassRepository _typeofclassRepository;
+        private readonly IClassTypeRepository _typeofclassRepository;
 
-        public TypeOfClassController(ITypeOfClassRepository typeofclassRepository)
+        public ClassTypeController(IClassTypeRepository typeofclassRepository)
         {
 
             this._typeofclassRepository = typeofclassRepository;

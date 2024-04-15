@@ -4,9 +4,13 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int Duration { get; set; }
-        public int Capacity { get; set; }
+        public int DurationInMinutes { get; set; }
         public DateTime Schedule { get; set; }
+
+        public ICollection<ReservationDTO> Reservations { get; set; }
+
+        public int ClassTypeId { get; set; }
+
+        public int GymInstructorId { get; set; }
     }
 }

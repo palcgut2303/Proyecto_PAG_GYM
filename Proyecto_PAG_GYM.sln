@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM_Backend", "GYM_Backend\GYM_Backend.csproj", "{629D721E-A473-49ED-9BD5-266912554DB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GYM_DTOs", "GYM_DTOs\GYM_DTOs.csproj", "{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM_DTOs", "GYM_DTOs\GYM_DTOs.csproj", "{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorFronted", "BlazorFronted\BlazorFronted.csproj", "{C9C4085C-66C1-44AE-8829-F477C4A50010}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9C4085C-66C1-44AE-8829-F477C4A50010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C4085C-66C1-44AE-8829-F477C4A50010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C4085C-66C1-44AE-8829-F477C4A50010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C4085C-66C1-44AE-8829-F477C4A50010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
