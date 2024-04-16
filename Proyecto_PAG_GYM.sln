@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM_Backend", "GYM_Backend\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GYM_DTOs", "GYM_DTOs\GYM_DTOs.csproj", "{B926F257-FBC3-4E1C-9A2D-F3C9698E86B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorFronted", "BlazorFronted\BlazorFronted.csproj", "{C9C4085C-66C1-44AE-8829-F477C4A50010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFronted", "BlazorFronted\BlazorFronted.csproj", "{C9C4085C-66C1-44AE-8829-F477C4A50010}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

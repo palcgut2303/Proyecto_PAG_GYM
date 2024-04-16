@@ -1,0 +1,79 @@
+﻿@page "/clases"
+
+@using GYM_DTOs;
+@using CurrieTechnologies.Razor.SweetAlert2;
+@using BlazorFronted.Services;
+
+
+@inject SweetAlertService Swal
+@inject IClassService classService;
+
+<h3>Clases</h3>
+
+<a class="btn btn-success btn-sm mb-3" href="clase">Nueva Clase</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Duracion en minutos
+            </th>
+            <th>
+                Horario
+            </th>
+            <th>
+                Tipo de Clase
+            </th>
+            <th>
+                Instructor
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (ListClass == null)
+        {
+            <tr>
+                <td colspan="5" align="center">
+                    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"/>
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach(var item in ListClass)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.DurationInMinutes
+                    </td>
+                    <td>
+                        @item.Schedule
+                    </td>
+                    <td>
+                        @item.ClassTypeId
+                    </td>
+                    <td>
+                        @item.GymInstructorId
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+@code {
+    List<ClassDTO>? ListClass = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListClass = await classService.ListaClases();
+    }
+}

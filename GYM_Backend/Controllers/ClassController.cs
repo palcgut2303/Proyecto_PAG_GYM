@@ -1,6 +1,7 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,6 +23,7 @@ namespace GYM_Backend.Controllers
 
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
+        //[Authorize]
         public IActionResult GetAll() {
 
             var classes = _classRepository.GetAll();
