@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace GYM_DTOs
 {
-    public class ClassTypeDTO
+    public class CreatedClassTypeRequestDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
     }
 }

@@ -1,4 +1,8 @@
 ﻿using GYM_Backend.Interfaces;
+using GYM_Backend.Mappers;
+using GYM_Backend.Models;
+using GYM_Backend.Repositories;
+using GYM_DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -44,6 +48,14 @@ namespace GYM_Backend.Controllers
             }
 
             return Ok(classes);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CreatedClassTypeRequestDTO model)
+        {
+            ClassType classesCreated = await _typeofclassRepository.CreateClassType(model);
+
+            return CreatedAtAction(nameof(findById), new { id = classesCreated.Id }, classesCreated.toClassTypeDTO());
         }
     }
 }

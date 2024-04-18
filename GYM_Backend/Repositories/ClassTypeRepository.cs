@@ -1,6 +1,8 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
+using GYM_Backend.Mappers;
 using GYM_Backend.Models;
+using GYM_DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace GYM_Backend.Repositories
@@ -23,5 +25,15 @@ namespace GYM_Backend.Repositories
         {
             return await _contextDb.ClassType.FindAsync(id);
         }
+
+        public async Task<ClassType> CreateClassType(CreatedClassTypeRequestDTO model)
+        {
+            var classType = model.toClassTypeFromDTO();
+
+            _contextDb.ClassType.Add(classType);
+            await _contextDb.SaveChangesAsync();
+            return classType;
+        }
+
     }
 }

@@ -50,6 +50,7 @@ builder.Services.AddDbContext<ApplicationContextDb>(options => options.UseSqlSer
 builder.Services.AddTransient<IClassRepository,ClassRepository>();
 builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
 builder.Services.AddTransient<ITokenService,TokenService>();
+builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 
 
 //builder.Services.AddIdentityApiEndpoints<User>()

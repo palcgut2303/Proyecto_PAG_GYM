@@ -16,6 +16,8 @@ public class ApplicationContextDb : IdentityDbContext
     public DbSet<GymInstructor> GymInstructors { get; set; }
     public DbSet<GymMember> GymMembers { get; set; }
 
+    public DbSet<Reservation> Reservations { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

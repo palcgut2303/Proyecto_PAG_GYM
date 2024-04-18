@@ -4,6 +4,7 @@ using GYM_Backend.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GYM_Backend.Migrations
 {
     [DbContext(typeof(ApplicationContextDb))]
-    partial class ApplicationContextDbModelSnapshot : ModelSnapshot
+    [Migration("20240418163923_añadirTablaReservas")]
+    partial class añadirTablaReservas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,13 +195,13 @@ namespace GYM_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ec5153f9-b2ef-492e-a736-4e8f026770ac",
+                            Id = "cf00d8b9-ca48-46c1-9c78-dfff57eff791",
                             Name = "Instructor",
                             NormalizedName = "INSTRUCTOR"
                         },
                         new
                         {
-                            Id = "c1e20189-0dbb-497b-af6b-7dcd20f3b5b0",
+                            Id = "75df8e7e-e9df-431e-b5df-8c1766a4fb3e",
                             Name = "User",
                             NormalizedName = "USER"
                         });

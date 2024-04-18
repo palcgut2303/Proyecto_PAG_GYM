@@ -8,6 +8,6 @@
 
         
         public User User { get; set; }
-        public ICollection<Classes> Classes { get; set; }
+        public ICollection<Classes>? Classes { get; set; }
     }
 }

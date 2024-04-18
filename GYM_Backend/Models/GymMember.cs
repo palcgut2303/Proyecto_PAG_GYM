@@ -9,6 +9,6 @@
         public DateTime JoinDate { get; set; }
         public DateTime? EndDate { get; set; }
         public User User { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
     }
 }

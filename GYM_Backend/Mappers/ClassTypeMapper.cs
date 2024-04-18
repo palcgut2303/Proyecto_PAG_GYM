@@ -7,13 +7,24 @@ namespace GYM_Backend.Mappers
     {
         public static ClassTypeDTO toClassTypeDTO(this ClassType model)
         {
+           
+
             return new ClassTypeDTO
             {
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                ListClasses = model.Classes.Select(x => x.toClassesDTO()).ToList()
+               
 
+            };
+        }
+
+        public static ClassType toClassTypeFromDTO(this CreatedClassTypeRequestDTO model) {
+
+            return new ClassType
+            {
+                Name = model.Name,
+                Description = model.Description,
             };
         }
     }

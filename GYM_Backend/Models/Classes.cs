@@ -7,7 +7,7 @@
         public int DurationInMinutes { get; set; }
         public DateTime Schedule { get; set; }
 
-        public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
 
         public int ClassTypeId { get; set; }
         public ClassType ClassType { get; set; }

@@ -1,5 +1,6 @@
 ﻿using GYM_Backend.Models;
 using GYM_DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GYM_Backend.Mappers
 {
@@ -15,6 +16,18 @@ namespace GYM_Backend.Mappers
                 DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
                 GymInstructorId = model.GymInstructorId
+            };
+        }
+
+        public static Classes toClassFromCreateDTO(this CreateClassRequestDTO requestDTO)
+        {
+            return new Classes
+            {
+                Name = requestDTO.Name,
+                ClassTypeId = requestDTO.ClassTypeId,
+                DurationInMinutes = requestDTO.DurationInMinutes,
+                Schedule = requestDTO.Schedule,
+                GymInstructorId = requestDTO.GymInstructorId
             };
         }
     }

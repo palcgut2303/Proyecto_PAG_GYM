@@ -1,6 +1,8 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
+using GYM_Backend.Models;
+using GYM_DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +52,13 @@ namespace GYM_Backend.Controllers
             return Ok(classes.toClassesDTO());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CreateClassRequestDTO model)
+        {
+            Classes classesCreated = await _classRepository.CreateClass(model);
 
+            return CreatedAtAction(nameof(findById), new { id = classesCreated.Id },classesCreated.toClassesDTO());
+        }
 
     }
 }

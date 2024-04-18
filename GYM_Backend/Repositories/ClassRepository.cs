@@ -17,14 +17,23 @@ namespace GYM_Backend.Repositories
             _contextDb = contextDb;
         }
 
-        public  IEnumerable<ClassDTO> GetAll()
+        public IEnumerable<ClassDTO> GetAll()
         {
-            return   _contextDb.Classes.Select(x => x.toClassesDTO()).ToList();
+            return _contextDb.Classes.Select(x => x.toClassesDTO()).ToList();
         }
 
         public async Task<Classes> GetById(int id)
         {
             return await _contextDb.Classes.FindAsync(id);
+        }
+
+        public async Task<Classes> CreateClass(CreateClassRequestDTO model)
+        {
+            var classes = model.toClassFromCreateDTO();
+
+            _contextDb.Classes.Add(classes);
+            await _contextDb.SaveChangesAsync();
+            return classes;
         }
 
     }
