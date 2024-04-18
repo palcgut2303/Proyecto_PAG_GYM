@@ -23,7 +23,7 @@ namespace GYM_Backend.Controllers
 
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
-        //[Authorize]
+        //[Authorize(Roles = "Instructor")]
         public IActionResult GetAll() {
 
             var classes = _classRepository.GetAll();

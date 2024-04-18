@@ -82,12 +82,18 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin",
-        builder => builder.WithOrigins("http://localhost:5245"));
+    options.AddPolicy("AllowAllOrigins",
+            builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
 });
 
 var app = builder.Build();
-app.UseCors("AllowOrigin");
+app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

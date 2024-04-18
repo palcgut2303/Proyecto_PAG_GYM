@@ -33,7 +33,7 @@ namespace GYM_Backend.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == model.Username);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
 
             if (user is null)
             {
