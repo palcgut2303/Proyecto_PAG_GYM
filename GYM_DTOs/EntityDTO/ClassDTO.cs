@@ -1,4 +1,4 @@
-﻿namespace GYM_DTOs
+﻿namespace GYM_DTOs.EntityDTO
 {
     public class ClassDTO
     {
@@ -8,6 +8,6 @@
         public DateTime Schedule { get; set; }
         public ICollection<ReservationDTO> Reservations { get; set; }
         public int ClassTypeId { get; set; }
-        public int GymInstructorId { get; set; }
+        public string GymInstructorId { get; set; }
     }
 }

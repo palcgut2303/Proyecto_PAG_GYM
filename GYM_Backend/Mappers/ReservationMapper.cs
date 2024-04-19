@@ -1,5 +1,6 @@
 ﻿using GYM_Backend.Models;
-using GYM_DTOs;
+using GYM_DTOs.CreateDTO;
+using GYM_DTOs.EntityDTO;
 using System.Runtime.CompilerServices;
 
 namespace GYM_Backend.Mappers

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GYM_DTOs
+namespace GYM_DTOs.AccountDTO
 {
     public class RegisterDTO
     {

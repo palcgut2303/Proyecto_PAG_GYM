@@ -1,4 +1,4 @@
-﻿using GYM_DTOs;
+﻿using GYM_DTOs.EntityDTO;
 
 namespace BlazorFronted.Services
 {

@@ -57,8 +57,9 @@ namespace GYM_Backend.Migrations
                     b.Property<int>("DurationInMinutes")
                         .HasColumnType("int");
 
-                    b.Property<int>("GymInstructorId")
-                        .HasColumnType("int");
+                    b.Property<string>("GymInstructorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -76,70 +77,6 @@ namespace GYM_Backend.Migrations
                     b.ToTable("Classes");
                 });
 
-            modelBuilder.Entity("GYM_Backend.Models.GymInstructor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GymInstructors");
-                });
-
-            modelBuilder.Entity("GYM_Backend.Models.GymMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GymMembers");
-                });
-
             modelBuilder.Entity("GYM_Backend.Models.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -151,8 +88,9 @@ namespace GYM_Backend.Migrations
                     b.Property<int>("ClassesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GymMemberId")
-                        .HasColumnType("int");
+                    b.Property<string>("GymMemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -192,13 +130,13 @@ namespace GYM_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ec5153f9-b2ef-492e-a736-4e8f026770ac",
+                            Id = "8cee8472-f14d-433a-8261-0018479daf0b",
                             Name = "Instructor",
                             NormalizedName = "INSTRUCTOR"
                         },
                         new
                         {
-                            Id = "c1e20189-0dbb-497b-af6b-7dcd20f3b5b0",
+                            Id = "a0e2bda6-2f15-4f77-b3c5-60c7a694916b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -384,11 +322,28 @@ namespace GYM_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GYM_Backend.Models.User", b =>
+            modelBuilder.Entity("GYM_Backend.Models.GymInstructor", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.Property<string>("Speciality")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("GymInstructor");
+                });
+
+            modelBuilder.Entity("GYM_Backend.Models.GymMember", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasDiscriminator().HasValue("GymMember");
                 });
 
             modelBuilder.Entity("GYM_Backend.Models.Classes", b =>
@@ -408,28 +363,6 @@ namespace GYM_Backend.Migrations
                     b.Navigation("ClassType");
 
                     b.Navigation("GymInstructor");
-                });
-
-            modelBuilder.Entity("GYM_Backend.Models.GymInstructor", b =>
-                {
-                    b.HasOne("GYM_Backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GYM_Backend.Models.GymMember", b =>
-                {
-                    b.HasOne("GYM_Backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GYM_Backend.Models.Reservation", b =>

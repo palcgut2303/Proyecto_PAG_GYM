@@ -2,7 +2,8 @@
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
-using GYM_DTOs;
+using GYM_DTOs.CreateDTO;
+using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -56,6 +57,34 @@ namespace GYM_Backend.Controllers
             Reservation reservation = await _reservationRepository.CreateReservation(model);
 
             return CreatedAtAction(nameof(findById), new { id = reservation.Id }, reservation.toReservationDTO());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateReservationRequestDTO requestDTO)
+        {
+            Reservation reservation = await _reservationRepository.UpdateReservation(requestDTO, id);
+
+            if (reservation == null)
+            {
+                return NotFound("No se ha encontrado el objeto indicado");
+            }
+
+            return Ok(reservation.toReservationDTO());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var respuesta = await _reservationRepository.DeleteReservation(id);
+
+            if (respuesta is null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
     }

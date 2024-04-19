@@ -12,7 +12,7 @@
         public int ClassTypeId { get; set; }
         public ClassType ClassType { get; set; }
 
-        public int GymInstructorId { get; set; }
+        public string GymInstructorId { get; set; }
         public GymInstructor GymInstructor { get; set; }
 
     }

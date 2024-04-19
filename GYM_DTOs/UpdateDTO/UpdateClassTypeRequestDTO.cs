@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GYM_DTOs
+namespace GYM_DTOs.UpdateDTO
 {
-    public class ClassTypeDTO
+    public class UpdateClassTypeRequestDTO
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
     }
 }

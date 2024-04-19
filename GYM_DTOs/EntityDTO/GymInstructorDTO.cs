@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GYM_DTOs
+namespace GYM_DTOs.EntityDTO
 {
     public class GymInstructorDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Specialty { get; set; }
 
 
-        public int userId { get; set; }
         public ICollection<ClassDTO> Classes { get; set; }
     }
 }

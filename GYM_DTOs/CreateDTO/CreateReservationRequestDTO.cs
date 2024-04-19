@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GYM_DTOs
+namespace GYM_DTOs.CreateDTO
 {
     public class CreateReservationRequestDTO
     {
-        public int GymMemberId { get; set; }
+        public string GymMemberId { get; set; }
 
         public int ClassesId { get; set; }
     }

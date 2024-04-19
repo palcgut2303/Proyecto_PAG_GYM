@@ -2,7 +2,8 @@
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
-using GYM_DTOs;
+using GYM_DTOs.CreateDTO;
+using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,5 +61,32 @@ namespace GYM_Backend.Controllers
             return CreatedAtAction(nameof(findById), new { id = classesCreated.Id },classesCreated.toClassesDTO());
         }
 
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassRequestDTO requestDTO)
+        {
+            Classes classes = await _classRepository.UpdateClass(requestDTO, id);
+
+            if (classes == null)
+            {
+                return NotFound("No se ha encontrado el objeto indicado, ya sea Instructor, tipo de clase, o la clase para editar");
+            }
+
+            return Ok(classes.toClassesDTO());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var respuesta = await _classRepository.BorradoClass(id);
+
+            if(respuesta is null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }

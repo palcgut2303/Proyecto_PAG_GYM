@@ -2,7 +2,8 @@
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
-using GYM_DTOs;
+using GYM_DTOs.CreateDTO;
+using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -56,6 +57,34 @@ namespace GYM_Backend.Controllers
             ClassType classesCreated = await _typeofclassRepository.CreateClassType(model);
 
             return CreatedAtAction(nameof(findById), new { id = classesCreated.Id }, classesCreated.toClassTypeDTO());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassTypeRequestDTO requestDTO)
+        {
+            ClassType classType = await _typeofclassRepository.UpdateClassType(requestDTO, id);
+
+            if(classType == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(classType.toClassTypeDTO());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var respuesta = await _typeofclassRepository.DeleteClassType(id);
+
+            if (respuesta is null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

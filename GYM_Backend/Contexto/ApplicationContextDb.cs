@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GYM_Backend.Contexto;
-public class ApplicationContextDb : IdentityDbContext
+public class ApplicationContextDb : IdentityDbContext<User>
 {
     public ApplicationContextDb(DbContextOptions options) : base(options)
     {
@@ -15,7 +15,6 @@ public class ApplicationContextDb : IdentityDbContext
     public DbSet<ClassType> ClassType { get; set; }
     public DbSet<GymInstructor> GymInstructors { get; set; }
     public DbSet<GymMember> GymMembers { get; set; }
-
     public DbSet<Reservation> Reservations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

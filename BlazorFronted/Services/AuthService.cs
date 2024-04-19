@@ -1,11 +1,11 @@
 ﻿using Blazored.LocalStorage;
-using GYM_DTOs;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
 using BlazorFronted.Utility;
+using GYM_DTOs.AccountDTO;
 
 namespace BlazorFronted.Services
 {

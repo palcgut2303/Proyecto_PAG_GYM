@@ -1,6 +1,8 @@
-﻿using GYM_Backend.Interfaces;
+﻿using GYM_Backend.Contexto;
+using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
-using GYM_DTOs;
+using GYM_Backend.Repositories;
+using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,21 +16,27 @@ namespace GYM_Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly ApplicationContextDb _context;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IUserRepository _userRepository;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager,ITokenService tokenService)
+        public UserController(ApplicationContextDb applicationContextDb, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IUserRepository userRepository, RoleManager<IdentityRole> roleManager)
         {
+            this._context = applicationContextDb;
             this._userManager = userManager;
             this._signInManager = signInManager;
             _tokenService = tokenService;
+            this._userRepository = userRepository;
+            this._roleManager = roleManager;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -40,7 +48,7 @@ namespace GYM_Backend.Controllers
                 return Unauthorized("Invalid Username");
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user,model.Password,false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
             if (!result.Succeeded)
             {
@@ -106,5 +114,80 @@ namespace GYM_Backend.Controllers
 
 
         }
+
+        [HttpGet("AllFields")]
+        public async Task<ActionResult<IEnumerable<IdentityUser>>> ListarUsuariosAll()
+        {
+            var usuarios = await _userManager.Users.ToListAsync();
+            return Ok(usuarios);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> ListarUsuarios()
+        {
+            var usuarios = await _userManager.Users
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    Username = u.UserName,
+                    Email = u.Email
+                    // Agrega otros campos que desees devolver
+                })
+                .ToListAsync();
+
+            return Ok(usuarios);
+        }
+
+        [HttpPost("createInstructor")]
+        public async Task<IActionResult> Register([FromBody] RegisterIsntructorDTO model)
+        {
+
+            var respuesta = await _userRepository.CrearProfesorAsync(model.Email, model.FullName, model.Speciality, model.Password);
+
+            if (respuesta.Succeeded)
+            {
+                return Ok("Profesor creado exitosamente");
+            }
+            else
+            {
+                return BadRequest(respuesta.Errors);
+            }
+        }
+        //[HttpGet("Instructores")]
+        //public async Task<ActionResult<IEnumerable<IdentityUser>>> ListarProfesores()
+        //{
+        //    //var profesores = _userRepository.ListarProfesores();
+
+        //    if (profesores == null)
+        //    {
+        //        return BadRequest("No hay profesores");
+        //    }
+
+        //    return Ok(profesores);
+        //}
+
+        //[HttpGet("Instructoress")]
+        //public async Task<IActionResult> GetProfesores()
+        //{
+        //    var profesores = new List<GymInstructor>();
+
+        //    // Obtiene todos los usuarios con el rol "Profesor"
+        //    var usersInRole = await _userManager.GetUsersInRoleAsync("Instructor");
+
+        //    foreach (var user in usersInRole)
+        //    {
+        //        // Obtiene el objeto Profesor asociado al usuario
+        //        List<GymInstructor> profesor = _context.GymInstructors.Select(x => x.UserId == user.Id).ToList();
+
+        //        if (profesor != null)
+        //        {
+        //            profesores.Add(profesor);
+        //        }
+        //    }
+
+        //    return Ok(profesores);
+        //}
+
+
     }
 }

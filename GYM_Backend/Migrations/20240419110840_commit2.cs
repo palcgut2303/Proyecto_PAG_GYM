@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace GYM_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class prueba : Migration
+    public partial class commit2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +33,6 @@ namespace GYM_Backend.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Password = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -247,7 +248,7 @@ namespace GYM_Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reservation",
+                name: "Reservations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -257,18 +258,27 @@ namespace GYM_Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reservation", x => x.Id);
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservation_Classes_ClassesId",
+                        name: "FK_Reservations_Classes_ClassesId",
                         column: x => x.ClassesId,
                         principalTable: "Classes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservation_GymMembers_GymMemberId",
+                        name: "FK_Reservations_GymMembers_GymMemberId",
                         column: x => x.GymMemberId,
                         principalTable: "GymMembers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "9143ee97-699e-4e22-8df1-0092feb4f298", null, "Instructor", "INSTRUCTOR" },
+                    { "b190099b-5d6b-4194-b95e-e279048bdd90", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -331,13 +341,13 @@ namespace GYM_Backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_ClassesId",
-                table: "Reservation",
+                name: "IX_Reservations_ClassesId",
+                table: "Reservations",
                 column: "ClassesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservation_GymMemberId",
-                table: "Reservation",
+                name: "IX_Reservations_GymMemberId",
+                table: "Reservations",
                 column: "GymMemberId");
         }
 
@@ -360,7 +370,7 @@ namespace GYM_Backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Reservation");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

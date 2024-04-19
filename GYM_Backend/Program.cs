@@ -16,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 builder.Services.AddControllers();
+    //.AddJsonOptions(options =>
+    //{
+    //    options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+    //    options.JsonSerializerOptions.IgnoreNullValues = true;
+    //    
+    //});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -51,6 +57,7 @@ builder.Services.AddTransient<IClassRepository,ClassRepository>();
 builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
 builder.Services.AddTransient<ITokenService,TokenService>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 
 //builder.Services.AddIdentityApiEndpoints<User>()

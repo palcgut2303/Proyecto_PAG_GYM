@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GYM_Backend.Migrations
 {
     [DbContext(typeof(ApplicationContextDb))]
-    [Migration("20240418163923_añadirTablaReservas")]
-    partial class añadirTablaReservas
+    [Migration("20240419110840_commit2")]
+    partial class commit2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,13 +195,13 @@ namespace GYM_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cf00d8b9-ca48-46c1-9c78-dfff57eff791",
+                            Id = "9143ee97-699e-4e22-8df1-0092feb4f298",
                             Name = "Instructor",
                             NormalizedName = "INSTRUCTOR"
                         },
                         new
                         {
-                            Id = "75df8e7e-e9df-431e-b5df-8c1766a4fb3e",
+                            Id = "b190099b-5d6b-4194-b95e-e279048bdd90",
                             Name = "User",
                             NormalizedName = "USER"
                         });

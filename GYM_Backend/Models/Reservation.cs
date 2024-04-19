@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public int GymMemberId { get; set; }
+        public string GymMemberId { get; set; }
         public GymMember GymMember { get; set; }
 
         public int ClassesId{ get; set; }

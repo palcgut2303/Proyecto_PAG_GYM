@@ -1,13 +1,13 @@
-﻿namespace GYM_Backend.Models
-{
-    public class GymInstructor
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Specialty { get; set; }
+﻿using System.Text.Json.Serialization;
 
-        
-        public User User { get; set; }
+namespace GYM_Backend.Models
+{
+    public class GymInstructor : User
+    {
+        public string FullName { get; set; }
+
+        public string Speciality { get; set; }
+
         public ICollection<Classes>? Classes { get; set; }
     }
 }
