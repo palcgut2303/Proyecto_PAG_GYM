@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GYM_Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class commit2 : Migration
+    public partial class actualizarBD : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,6 @@ namespace GYM_Backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -65,6 +64,35 @@ namespace GYM_Backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GymInstructors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Speciality = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GymInstructors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GymMembers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GymMembers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -174,51 +202,6 @@ namespace GYM_Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GymInstructors",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GymInstructors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GymInstructors_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GymMembers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GymMembers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GymMembers_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Classes",
                 columns: table => new
                 {
@@ -277,8 +260,8 @@ namespace GYM_Backend.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9143ee97-699e-4e22-8df1-0092feb4f298", null, "Instructor", "INSTRUCTOR" },
-                    { "b190099b-5d6b-4194-b95e-e279048bdd90", null, "User", "USER" }
+                    { "530a194e-4084-4251-8631-7ae7f0ccbd47", null, "Instructor", "INSTRUCTOR" },
+                    { "5528e85a-6b82-40e6-8cbe-a7442bd616fc", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -331,16 +314,6 @@ namespace GYM_Backend.Migrations
                 column: "GymInstructorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GymInstructors_UserId",
-                table: "GymInstructors",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GymMembers_UserId",
-                table: "GymMembers",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ClassesId",
                 table: "Reservations",
                 column: "ClassesId");
@@ -376,6 +349,9 @@ namespace GYM_Backend.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Classes");
 
             migrationBuilder.DropTable(
@@ -386,9 +362,6 @@ namespace GYM_Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "GymInstructors");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

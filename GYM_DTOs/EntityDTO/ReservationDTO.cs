@@ -10,7 +10,7 @@ namespace GYM_DTOs.EntityDTO
     {
         public int Id { get; set; }
 
-        public string GymMemberId { get; set; }
+        public int GymMemberId { get; set; }
 
         public int ClassesId { get; set; }
     }

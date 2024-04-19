@@ -8,6 +8,6 @@
         public DateTime Schedule { get; set; }
         public ICollection<ReservationDTO> Reservations { get; set; }
         public int ClassTypeId { get; set; }
-        public string GymInstructorId { get; set; }
+        public int GymInstructorId { get; set; }
     }
 }

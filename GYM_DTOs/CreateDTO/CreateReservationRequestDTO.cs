@@ -8,7 +8,7 @@ namespace GYM_DTOs.CreateDTO
 {
     public class CreateReservationRequestDTO
     {
-        public string GymMemberId { get; set; }
+        public int GymMemberId { get; set; }
 
         public int ClassesId { get; set; }
     }

@@ -12,6 +12,6 @@ namespace GYM_DTOs.CreateDTO
         public int DurationInMinutes { get; set; }
         public DateTime Schedule { get; set; }
         public int ClassTypeId { get; set; }
-        public string GymInstructorId { get; set; }
+        public int GymInstructorId { get; set; }
     }
 }

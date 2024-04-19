@@ -8,7 +8,7 @@ namespace GYM_DTOs.UpdateDTO
 {
     public class UpdateReservationRequestDTO
     {
-        public string GymMemberId { get; set; }
+        public int GymMemberId { get; set; }
 
         public int ClassesId { get; set; }
     }

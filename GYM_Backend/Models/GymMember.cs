@@ -1,7 +1,9 @@
 ﻿namespace GYM_Backend.Models
 {
-    public class GymMember : User
+    public class GymMember
     {
+
+        public int Id { get; set; }
         public string FullName { get; set; }
 
         public DateTime JoinDate { get; set; }

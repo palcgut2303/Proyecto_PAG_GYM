@@ -138,55 +138,7 @@ namespace GYM_Backend.Controllers
             return Ok(usuarios);
         }
 
-        [HttpPost("createInstructor")]
-        public async Task<IActionResult> Register([FromBody] RegisterIsntructorDTO model)
-        {
-
-            var respuesta = await _userRepository.CrearProfesorAsync(model.Email, model.FullName, model.Speciality, model.Password);
-
-            if (respuesta.Succeeded)
-            {
-                return Ok("Profesor creado exitosamente");
-            }
-            else
-            {
-                return BadRequest(respuesta.Errors);
-            }
-        }
-        //[HttpGet("Instructores")]
-        //public async Task<ActionResult<IEnumerable<IdentityUser>>> ListarProfesores()
-        //{
-        //    //var profesores = _userRepository.ListarProfesores();
-
-        //    if (profesores == null)
-        //    {
-        //        return BadRequest("No hay profesores");
-        //    }
-
-        //    return Ok(profesores);
-        //}
-
-        //[HttpGet("Instructoress")]
-        //public async Task<IActionResult> GetProfesores()
-        //{
-        //    var profesores = new List<GymInstructor>();
-
-        //    // Obtiene todos los usuarios con el rol "Profesor"
-        //    var usersInRole = await _userManager.GetUsersInRoleAsync("Instructor");
-
-        //    foreach (var user in usersInRole)
-        //    {
-        //        // Obtiene el objeto Profesor asociado al usuario
-        //        List<GymInstructor> profesor = _context.GymInstructors.Select(x => x.UserId == user.Id).ToList();
-
-        //        if (profesor != null)
-        //        {
-        //            profesores.Add(profesor);
-        //        }
-        //    }
-
-        //    return Ok(profesores);
-        //}
+        
 
 
     }
