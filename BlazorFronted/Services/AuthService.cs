@@ -27,12 +27,14 @@ namespace BlazorFronted.Services
         public async Task<RegisterResult> Register(RegisterDTO registerModel)
         {
             var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
-            if (!result.IsSuccessStatusCode)
+            if (result.IsSuccessStatusCode)
                 return new RegisterResult { Successful = true, Errors = null };
 
 
             return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
         }
+
+        
 
         public async Task<LoginResult> Login(LoginDTO loginModel)
         {

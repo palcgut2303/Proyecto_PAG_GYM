@@ -81,11 +81,11 @@ builder.Services.AddAuthentication(options =>
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidIssuer = builder.Configuration["JwtIssuer"],
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidAudience = builder.Configuration["JwtAudience"],
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"])),
         };
     });
 builder.Services.AddCors(options =>

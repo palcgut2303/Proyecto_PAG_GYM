@@ -5,10 +5,15 @@ using GYM_Backend.Repositories;
 using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace GYM_Backend.Controllers
 {
@@ -22,8 +27,9 @@ namespace GYM_Backend.Controllers
         private readonly ITokenService _tokenService;
         private readonly IUserRepository _userRepository;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IConfiguration _configuration;
 
-        public UserController(ApplicationContextDb applicationContextDb, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IUserRepository userRepository, RoleManager<IdentityRole> roleManager)
+        public UserController(IConfiguration configuration, ApplicationContextDb applicationContextDb, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IUserRepository userRepository, RoleManager<IdentityRole> roleManager)
         {
             this._context = applicationContextDb;
             this._userManager = userManager;
@@ -31,36 +37,54 @@ namespace GYM_Backend.Controllers
             _tokenService = tokenService;
             this._userRepository = userRepository;
             this._roleManager = roleManager;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO model)
+        public async Task<IActionResult> Login(LoginDTO login)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
 
             if (user is null)
             {
                 return Unauthorized("Invalid Username");
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
 
             if (!result.Succeeded)
             {
                 return Unauthorized("Username not found and/or password incorrect");
             }
 
-            return Ok(new NewUserDTO
+
+            if (!result.Succeeded)
+                return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+
+            var claims = new[]
             {
-                Username = user.UserName,
-                Email = user.Email,
-                Token = _tokenService.CreateToken(user)
-            });
+            new Claim(ClaimTypes.Name, login.Email!)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtAudience"],
+                claims,
+                expires: expiry,
+                signingCredentials: creds
+            );
+
+            return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+
         }
 
         [HttpPost("register")]
@@ -92,19 +116,17 @@ namespace GYM_Backend.Controllers
                     }
                     else
                     {
-                        return Ok(new NewUserDTO
-                        {
-                            Username = usuario.UserName,
-                            Email = usuario.Email,
-                            Token = _tokenService.CreateToken(usuario)
-                        });
+
+                        return Ok(new RegisterResult { Successful = true });
                     }
                     //await _signInManager.SignInAsync(usuario, isPersistent: true); Para iniciar sesión directamente
 
                 }
                 else
                 {
-                    return StatusCode(500, createdUser.Errors);
+                    var errors = createdUser.Errors.Select(x => x.Description);
+
+                    return Ok(new RegisterResult { Successful = false, Errors = errors });
                 }
             }
             catch (Exception e)
@@ -138,7 +160,7 @@ namespace GYM_Backend.Controllers
             return Ok(usuarios);
         }
 
-        
+
 
 
     }

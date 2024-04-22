@@ -18,4 +18,8 @@
     <ProjectReference Include="..\GYM_DTOs\GYM_DTOs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>

@@ -14,7 +14,7 @@ namespace GYM_Backend.Service
         public TokenService(IConfiguration config)
         {
             _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSecurityKey"]));
         }
 
         public string CreateToken(User user)
@@ -32,8 +32,8 @@ namespace GYM_Backend.Service
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds,
-                Issuer = _config["JWT:Issuer"],
-                Audience = _config["JWT:Audience"]
+                Issuer = _config["JwtIssuer"],
+                Audience = _config["JwtAudience"]
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

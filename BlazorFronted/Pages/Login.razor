@@ -29,6 +29,9 @@
                 <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
                 <ValidationMessage For="@(() => loginModel.Password)" />
             </div>
+
+            <span><a href="register">¿No tienes una cuenta?, Registrate aquí</a></span>
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </EditForm>
     </div>
@@ -52,7 +55,7 @@
         }
         else
         {
-            //NavigationManager.NavigateTo("/");
+            
             Error = result.Error!;
             ShowErrors = true;
         }
