@@ -4,6 +4,7 @@ using GYM_Backend.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GYM_Backend.Migrations
 {
     [DbContext(typeof(ApplicationContextDb))]
-    partial class ApplicationContextDbModelSnapshot : ModelSnapshot
+    [Migration("20240423185515_comprobacion")]
+    partial class comprobacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,12 +95,7 @@ namespace GYM_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("GymInstructors");
                 });
@@ -120,12 +118,7 @@ namespace GYM_Backend.Migrations
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("GymMembers");
                 });
@@ -247,13 +240,13 @@ namespace GYM_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7bed2455-5692-4def-b0f6-1d05d960285d",
+                            Id = "a1fe2c95-3e80-4980-9636-aee27edbf5cb",
                             Name = "Instructor",
                             NormalizedName = "INSTRUCTOR"
                         },
                         new
                         {
-                            Id = "5f7795fb-61cc-405d-b919-b86c97a5fa92",
+                            Id = "accfbcc7-bc13-472c-adf4-9ac750050215",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -382,24 +375,6 @@ namespace GYM_Backend.Migrations
                     b.Navigation("ClassType");
 
                     b.Navigation("GymInstructor");
-                });
-
-            modelBuilder.Entity("GYM_Backend.Models.GymInstructor", b =>
-                {
-                    b.HasOne("GYM_Backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GYM_Backend.Models.GymMember", b =>
-                {
-                    b.HasOne("GYM_Backend.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GYM_Backend.Models.Reservation", b =>

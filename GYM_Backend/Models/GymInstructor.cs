@@ -9,5 +9,7 @@ namespace GYM_Backend.Models
         public string FullName { get; set; }
         public string Speciality { get; set; }
         public ICollection<Classes>? Classes { get; set; }
+
+        public User User { get; set; }
     }
 }

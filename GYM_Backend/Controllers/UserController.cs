@@ -1,14 +1,10 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
-using GYM_Backend.Repositories;
 using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -52,19 +48,14 @@ namespace GYM_Backend.Controllers
 
             if (user is null)
             {
-                return Unauthorized("Invalid Username");
+                return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
 
             if (!result.Succeeded)
-            {
-                return Unauthorized("Username not found and/or password incorrect");
-            }
-
-
-            if (!result.Succeeded)
                 return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+
 
             var claims = new[]
             {

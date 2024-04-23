@@ -1,64 +1,30 @@
 ﻿@inject NavigationManager NavigationManager
 
-@* <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
 
-        <ul class="nav nav-pills">
-        @* <li>
-                <a href="/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-
-                    <img src="~/img/Logo_AppPAG.png" alt="Logo de la App">
-
-                    <span class="fs-4">PAG GYM</span>
-                </a>
-        </li>
-
-        <AuthorizeView>
-            <Authorized>
-
-                    <li class="nav-item"><a href="home" class="nav-link @((CurrentRoute == "/home") ? "active" : "")" aria-current="page">Inicio</a></li>
-                    <li class="nav-item"><a href="home" class="nav-link">Clases</a></li>
-                    <li class="nav-item"><a href="home" class="nav-link">Mis Reservas</a></li>
-                    <li class="nav-item"><a href="home" class="nav-link @((CurrentRoute == "/about") ? "active" : "")">Acerca de</a></li>
-                    <li class="nav-item"><a href="Logout" class="nav-link">Log out</a></li>
-
-            </Authorized>
-            <NotAuthorized>
-
-                    <li class="nav-item">
-                        <a class="nav-link @((CurrentRoute == "/login") ? "active" : "")" href="login">Iniciar Sesión</a>
-                    </li>
-                    <li class="nav-item"><a href="home" class="nav-link @((CurrentRoute == "/home") ? "active" : "")" aria-current="page">Inicio</a></li>
-                    <li class="nav-item"><a href="home" class="nav-link">Acerca de</a></li>
-
-
-            </NotAuthorized>
-        </AuthorizeView>
-        </ul>
-    </header>
-</div> *@
 
 <header class="header-area header-sticky">
-    <div class="container">
+    <div class="container ">
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="/" class="logo">Training<em> Studio</em></a>
+                    <a href="/" class="logo">GYM <em> PAG</em></a>
                     <!-- ***** Logo End ***** -->
+
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-                        <li class="scroll-to-section"><a href="#features">About</a></li>
+                        <li class="scroll-to-section"><a href="#top" class="active">Inicio</a></li>
+                        <li class="scroll-to-section"><a href="#features">Acerca de</a></li>
 
-                        <li class="scroll-to-section"><a href="#contact-us">Contact</a></li>
+                        <li class="scroll-to-section"><a href="#contact-us">Contacto</a></li>
                         <AuthorizeView>
                             <Authorized>
-                                <li class="scroll-to-section"><a href="#our-classes">Classes</a></li>
-                                <li class="scroll-to-section"><a href="#schedule">Schedules</a></li>
+                                <li class="scroll-to-section"><a href="#our-classes">Clases</a></li>
+                                <li class="scroll-to-section"><a href="#schedule">Reservas</a></li>
+                                <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
                             </Authorized>
                             <NotAuthorized>
-                                <li class="main-button"><a href="login">Sign Up</a></li>
+                                <li class="main-button"><a href="login">Iniciar Sesion</a></li>
                             </NotAuthorized>
                         </AuthorizeView>
                     </ul>
@@ -73,14 +39,4 @@
 </header>
 
 
-@code {
-    // Variable para almacenar la ruta actual
-    string CurrentRoute { get; set; }
 
-    // Método para actualizar la ruta actual
-    protected override void OnInitialized()
-    {
-        // Obtener la ruta actual
-        CurrentRoute = NavigationManager.Uri;
-    }
-}
