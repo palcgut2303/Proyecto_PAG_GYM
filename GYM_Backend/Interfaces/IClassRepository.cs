@@ -11,6 +11,7 @@ namespace GYM_Backend.Interfaces
         Task<Classes> CreateClass(CreateClassRequestDTO model);
         IEnumerable<ClassDTO> GetAll();
         Task<Classes> GetById(int id);
+        Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
         Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

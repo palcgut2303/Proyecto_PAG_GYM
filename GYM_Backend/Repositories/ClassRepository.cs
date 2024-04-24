@@ -88,5 +88,18 @@ namespace GYM_Backend.Repositories
 
             return classes.Name;
         }
+
+        public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
+        {
+            // Consulta LINQ para obtener todas las clases
+            var clases =  await _contextDb.Classes.Select(x=> x.toClassesDTO()).ToListAsync();
+
+            // Agrupar las clases por día de la semana (solo utilizando la fecha sin la hora)
+            var clasesPorDia = clases.GroupBy(clase => clase.Schedule.Date)
+                                     .ToDictionary(group => group.Key, group => group.ToList());
+
+            return clasesPorDia;
+        }
+
     }
 }

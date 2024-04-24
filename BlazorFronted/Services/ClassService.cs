@@ -1,4 +1,5 @@
 ﻿using GYM_DTOs.EntityDTO;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace BlazorFronted.Services
@@ -19,6 +20,11 @@ namespace BlazorFronted.Services
 
             return result;
 
+        }
+
+        public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
+        {
+            return await _http.GetFromJsonAsync<Dictionary<DateTime, List<ClassDTO>>>("/api/Class/porDia");
         }
     }
 }

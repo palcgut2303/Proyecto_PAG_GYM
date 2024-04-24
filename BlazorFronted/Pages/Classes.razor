@@ -4,117 +4,211 @@
 @using CurrieTechnologies.Razor.SweetAlert2;
 @using BlazorFronted.Services;
 @using GYM_DTOs.EntityDTO
-    using GYM_DTOs.EntityDTO;
-
-
 @inject SweetAlertService Swal
 @inject IClassService classService;
 
-<h3>Clases</h3>
 
-<a class="btn btn-success btn-sm mb-3" href="clase">Nueva Clase</a>
+<div class="container mt-5">
+    <h3>Clases</h3>
 
-<table class="table">
+    @*  <a class="btn btn-success btn-sm mb-3" href="clase">Nueva Clase</a>
+
+    <table class="table">
     <thead>
-        <tr>
-            <th>
-                Nombre
-            </th>
-            <th>
-                Duracion en minutos
-            </th>
-            <th>
-                Horario
-            </th>
-            <th>
-                Tipo de Clase
-            </th>
-            <th>
-                Instructor
-            </th>
-        </tr>
+    <tr>
+    <th>
+    Nombre
+    </th>
+    <th>
+    Duracion en minutos
+    </th>
+    <th>
+    Horario
+    </th>
+    <th>
+    Tipo de Clase
+    </th>
+    <th>
+    Instructor
+    </th>
+    </tr>
     </thead>
     <tbody>
 
-        @if (ListClass == null)
-        {
-            @if (ListClass.Count() == 0)
-            {
-                
-                <tr>
-                    <td colspan="5" align="center">
-                        <p>No hay clases disponibles</p>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td colspan="5" align="center">
-                        <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                    </td>
-                </tr>
-            }
-           
+    @if (ShowErrors)
+    {
+    <tr>
+    <td colspan="5" align="center">
 
-        }
-        else
-        {
-            @if(ListClass.Count() == 0)
-            {
-                <tr>
-                    <td colspan="5" align="center">
-                        <p>No hay clases disponibles</p>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @foreach (var item in ListClass)
+    <p>@Error</p>
+    </td>
+    </tr>
+    }
+    else
+    {
+    if (ListClass is null)
+    {
+    <tr>
+    <td colspan="5" align="center">
+    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+    </td>
+    </tr>
+    }
+    else
+    {
+    @foreach (var item in ListClass)
+    {
+    <tr>
+    <td>
+    @item.Name
+    </td>
+    <td>
+    @item.DurationInMinutes
+    </td>
+    <td>
+    @item.Schedule
+    </td>
+    <td>
+    @item.ClassTypeId
+    </td>
+    <td>
+    @item.GymInstructorId
+    </td>
+    </tr>
+    }
+    }
+    }
+    </tbody>
+    </table> *@
+    @if (clasesPorDia is not null)
+    {
+        <div>
+            <button @onclick="IrAlDiaAnterior">Anterior</button>
+
+            <span>@diaActual.ToString()</span>
+
+            <button @onclick="IrAlDiaSiguiente">Siguiente</button>
+        </div>
+
+
+        <table class="table">
+
+            <tbody>
+                @if (clasesEnEseDia is not null)
+                {
+                    @foreach (var clase in clasesEnEseDia)
+                    {
+                        if (clase.Schedule.Date == diaActual.Date)
+                        {
+                            <tr>
+                                <td>@clase.Name</td>
+                                <td>@clase.Schedule</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.DurationInMinutes
-                        </td>
-                        <td>
-                            @item.Schedule
-                        </td>
-                        <td>
-                            @item.ClassTypeId
-                        </td>
-                        <td>
-                            @item.GymInstructorId
-                        </td>
+                        <td>Valor nulo</td>
+                        <td></td>
                     </tr>
                 }
-            }
-            
-        }
 
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Cargando...</p>
+    }
+</div>
+
+
+
+
 
 @code {
-    IEnumerable<ClassDTO>? ListClass = null;
-    private bool ShowErrors;
-    private string Error = "";
+    // IEnumerable<ClassDTO>? ListClass = null;
+    // private bool ShowErrors;
+    // private string Error = "";
 
 
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var result = await classService.ListaClases();
+
+    //     if (result.Successful)
+    //     {
+    //         ShowErrors = false;
+    //         ListClass = result.ListClass;
+    //     }
+    //     else
+    //     {
+    //         ShowErrors = true;
+    //         Error = result.Error;
+    //     }
+    // }
+
+    Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
+    List<DateTime> diasMostrados;
+    DateTime diaActual = DateTime.Now.Date;
+    List<ClassDTO> clasesEnEseDia;
     protected override async Task OnInitializedAsync()
     {
-        var result = await classService.ListaClases();
+        clasesPorDia = await classService.ObtenerClasesPorDiaDeLaSemana();
+        diasMostrados = clasesPorDia.Keys.ToList();
+    }
 
-        if (result.Successful)
+    void IrAlDiaAnterior()
+    {
+        diaActual = diaActual.AddDays(-1);
+
+        foreach (var item in clasesPorDia)
         {
-            ListClass = result.ListClass;
+            if (item.Key.Date == diaActual.Date)
+            {
+                clasesEnEseDia.Add(item.Value.FirstOrDefault());
+            }
         }
-        else
+        // var primerDia = diasMostrados.FirstOrDefault();
+        // var diaAnterior = primerDia.AddDays(-1);
+        // if (clasesPorDia.ContainsKey(diaAnterior))
+        // {
+        //     diasMostrados = Enumerable.Range(0, diasMostrados.Count)
+        //                               .Select(i => diaAnterior.AddDays(i))
+        //                               .ToList();
+        // }
+
+    }
+
+    void IrAlDiaSiguiente()
+    {
+        diaActual = diaActual.AddDays(1);
+
+        // var ultimoDia = diasMostrados.LastOrDefault();
+        // var diaSiguiente = ultimoDia.AddDays(1);
+        // if (clasesPorDia.ContainsKey(diaSiguiente))
+        // {
+        //     diasMostrados = Enumerable.Range(0, diasMostrados.Count)
+        //                               .Select(i => diaSiguiente.AddDays(i))
+        //                               .ToList();
+        // }
+
+        foreach (var item in clasesPorDia)
         {
-            ShowErrors = true;
-            Error = result.Error;
+            if (item.Key.Date == diaActual.Date)
+            {
+                clasesEnEseDia.Add(item.Value.FirstOrDefault());
+            }
         }
     }
 }

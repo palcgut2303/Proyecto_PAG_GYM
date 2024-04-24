@@ -35,7 +35,7 @@ namespace GYM_Backend.Controllers
 
             if(classes == null ||classes.Count() == 0)
             {
-                return BadRequest(new ClassListResult { Successful = false,Error = "No hay clases disponibles" });
+                return Ok(new ClassListResult { Successful = false,Error = "No hay clases disponibles" });
             }
 
             return Ok(new ClassListResult { Successful = true, ListClass = classes });
@@ -54,6 +54,21 @@ namespace GYM_Backend.Controllers
 
             return Ok(classes.toClassesDTO());
         }
+
+        [HttpGet("porDia")]
+        public async Task<IActionResult> encontrarClasesPorDia()
+        {
+            var classes = await _classRepository.ObtenerClasesPorDiaDeLaSemana();
+
+
+            if (classes == null)
+            {
+                return NotFound("No se ha encontrado el objeto");
+            }
+
+            return Ok(classes);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateClassRequestDTO model)
