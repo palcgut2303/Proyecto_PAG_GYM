@@ -3,11 +3,13 @@ using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_DTOs.CreateDTO;
+using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.IdentityModel.Tokens.Jwt;
 
 
 namespace GYM_Backend.Controllers
@@ -33,10 +35,10 @@ namespace GYM_Backend.Controllers
 
             if(classes == null ||classes.Count() == 0)
             {
-                return NotFound("No hay elementos en la lista");
+                return BadRequest(new ClassListResult { Successful = false,Error = "No hay clases disponibles" });
             }
 
-            return Ok(classes);
+            return Ok(new ClassListResult { Successful = true, ListClass = classes });
         }
 
         [HttpGet("{id}")]

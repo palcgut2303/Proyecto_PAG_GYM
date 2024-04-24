@@ -98,10 +98,23 @@
 </table>
 
 @code {
-    List<ClassDTO>? ListClass = null;
+    IEnumerable<ClassDTO>? ListClass = null;
+    private bool ShowErrors;
+    private string Error = "";
+
 
     protected override async Task OnInitializedAsync()
     {
-        ListClass = await classService.ListaClases();
+        var result = await classService.ListaClases();
+
+        if (result.Successful)
+        {
+            ListClass = result.ListClass;
+        }
+        else
+        {
+            ShowErrors = true;
+            Error = result.Error;
+        }
     }
 }

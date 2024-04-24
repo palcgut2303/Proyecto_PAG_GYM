@@ -13,17 +13,11 @@ namespace BlazorFronted.Services
         }
 
 
-        public async Task<List<ClassDTO>> ListaClases()
+        public async Task<ClassListResult> ListaClases()
         {
-            var result = await _http.GetFromJsonAsync<IEnumerable<ClassDTO>>("api/Class");
+            var result = await _http.GetFromJsonAsync<ClassListResult>("api/Class");
 
-            if (result!.Count() != 0)
-            {
-                return result.ToList();
-            }else
-            {
-                throw new Exception("Error");
-            }
+            return result;
 
         }
     }

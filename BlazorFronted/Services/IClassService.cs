@@ -4,6 +4,6 @@ namespace BlazorFronted.Services
 {
     public interface IClassService
     {
-        Task<List<ClassDTO>> ListaClases();
+        Task<ClassListResult> ListaClases();
     }
 }
