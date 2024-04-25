@@ -7,18 +7,19 @@
 @inject SweetAlertService Swal
 @inject IClassService classService;
 
+<PageTitle>Clases</PageTitle>
 
-<div class="container mt-5">
-    <h3>Clases</h3>
-
+<div class="container mb-5 contenido-clases border border-primary rounded">
+    <div>
+        <h3 class="align-items-center">Clases</h3>
+    </div>
 
     <EditForm Model="classDTO">
-       <DataAnnotationsValidator />
-       <div class="mb-3">
-        <label class="form-label">Calendario</label>
-            <InputDate class="form-control" @bind-Value="classDTO.Schedule"></InputDate>
+        <DataAnnotationsValidator />
+        <div class="mt-3">
+            <InputDate class="form-control" @bind-Value="classDTO.Schedule" ></InputDate>
             <ValidationMessage For="@(() => classDTO.Schedule)"></ValidationMessage>
-            <button @onclick="mostrarDia">Obtener Clases</button>
+            <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia">Obtener Clases</button>
         </div>
 
         <table class="table">
@@ -46,13 +47,7 @@
                                     <td>@clase.Schedule</td>
                                 </tr>
                             }
-                            else
-                            {
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            }
+                            
 
                         }
                     }
@@ -76,11 +71,11 @@
             </tbody>
 
         </table>
-        
-    </EditForm>
-    
 
-    
+    </EditForm>
+
+
+
 
 </div>
 
@@ -93,11 +88,8 @@
     Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
     List<DateTime>? diasMostrados;
     DateTime diaActual = DateTime.Now.Date;
-    List<ClassDTO> clasesEnEseDia  = new List<ClassDTO>();
-
+    List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
     ClassDTO classDTO = new ClassDTO();
-
-   
 
     protected override async Task OnInitializedAsync()
     {
@@ -114,23 +106,8 @@
         }
     }
 
-    void IrAlDiaAnterior()
+    private void mostrarDia()
     {
-        diaActual = diaActual.AddDays(-1);
-
-        foreach (var item in clasesPorDia)
-        {
-            if (item.Key.Date == classDTO.Schedule.Date)
-            {
-                clasesEnEseDia = item.Value;
-            }
-        }
-
-    }
-
-    void mostrarDia()
-    {
-       
 
         foreach (var item in clasesPorDia)
         {
@@ -140,4 +117,21 @@
             }
         }
     }
+
+
+    // void IrAlDiaAnterior()
+    // {
+    //     diaActual = diaActual.AddDays(-1);
+
+    //     foreach (var item in clasesPorDia)
+    //     {
+    //         if (item.Key.Date == classDTO.Schedule.Date)
+    //         {
+    //             clasesEnEseDia = item.Value;
+    //         }
+    //     }
+
+    // }
+
+
 }
