@@ -11,125 +11,77 @@
 <div class="container mt-5">
     <h3>Clases</h3>
 
-    @*  <a class="btn btn-success btn-sm mb-3" href="clase">Nueva Clase</a>
 
-    <table class="table">
-    <thead>
-    <tr>
-    <th>
-    Nombre
-    </th>
-    <th>
-    Duracion en minutos
-    </th>
-    <th>
-    Horario
-    </th>
-    <th>
-    Tipo de Clase
-    </th>
-    <th>
-    Instructor
-    </th>
-    </tr>
-    </thead>
-    <tbody>
-
-    @if (ShowErrors)
-    {
-    <tr>
-    <td colspan="5" align="center">
-
-    <p>@Error</p>
-    </td>
-    </tr>
-    }
-    else
-    {
-    if (ListClass is null)
-    {
-    <tr>
-    <td colspan="5" align="center">
-    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-    </td>
-    </tr>
-    }
-    else
-    {
-    @foreach (var item in ListClass)
-    {
-    <tr>
-    <td>
-    @item.Name
-    </td>
-    <td>
-    @item.DurationInMinutes
-    </td>
-    <td>
-    @item.Schedule
-    </td>
-    <td>
-    @item.ClassTypeId
-    </td>
-    <td>
-    @item.GymInstructorId
-    </td>
-    </tr>
-    }
-    }
-    }
-    </tbody>
-    </table> *@
-    @if (clasesPorDia is not null)
-    {
-        <div>
-            <button @onclick="IrAlDiaAnterior">Anterior</button>
-
-            <span>@diaActual.ToString()</span>
-
-            <button @onclick="IrAlDiaSiguiente">Siguiente</button>
+    <EditForm Model="classDTO">
+       <DataAnnotationsValidator />
+       <div class="mb-3">
+        <label class="form-label">Calendario</label>
+            <InputDate class="form-control" @bind-Value="classDTO.Schedule"></InputDate>
+            <ValidationMessage For="@(() => classDTO.Schedule)"></ValidationMessage>
+            <button @onclick="mostrarDia">Obtener Clases</button>
         </div>
 
-
         <table class="table">
-
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Horario
+                    </th>
+                </tr>
+            </thead>
             <tbody>
-                @if (clasesEnEseDia is not null)
+                @if (clasesPorDia is not null)
                 {
-                    @foreach (var clase in clasesEnEseDia)
+                    @if (clasesEnEseDia is not null)
                     {
-                        if (clase.Schedule.Date == diaActual.Date)
+                        @foreach (var clase in clasesEnEseDia)
                         {
-                            <tr>
-                                <td>@clase.Name</td>
-                                <td>@clase.Schedule</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        }
+                            if (clase.Schedule.Date == classDTO.Schedule.Date)
+                            {
+                                <tr>
+                                    <td>@clase.Name</td>
+                                    <td>@clase.Schedule</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
 
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" align="center">
+                                <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                            </td>
+                        </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td>Valor nulo</td>
-                        <td></td>
+                        <td colspan="2" align="center">
+                            <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                        </td>
                     </tr>
                 }
-
             </tbody>
+
         </table>
-    }
-    else
-    {
-        <p>Cargando...</p>
-    }
+        
+    </EditForm>
+    
+
+    
+
 </div>
 
 
@@ -137,35 +89,29 @@
 
 
 @code {
-    // IEnumerable<ClassDTO>? ListClass = null;
-    // private bool ShowErrors;
-    // private string Error = "";
-
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     var result = await classService.ListaClases();
-
-    //     if (result.Successful)
-    //     {
-    //         ShowErrors = false;
-    //         ListClass = result.ListClass;
-    //     }
-    //     else
-    //     {
-    //         ShowErrors = true;
-    //         Error = result.Error;
-    //     }
-    // }
 
     Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
-    List<DateTime> diasMostrados;
+    List<DateTime>? diasMostrados;
     DateTime diaActual = DateTime.Now.Date;
-    List<ClassDTO> clasesEnEseDia;
+    List<ClassDTO> clasesEnEseDia  = new List<ClassDTO>();
+
+    ClassDTO classDTO = new ClassDTO();
+
+   
+
     protected override async Task OnInitializedAsync()
     {
         clasesPorDia = await classService.ObtenerClasesPorDiaDeLaSemana();
         diasMostrados = clasesPorDia.Keys.ToList();
+        classDTO.Schedule = DateTime.Now.Date;
+
+        foreach (var item in clasesPorDia)
+        {
+            if (item.Key.Date == classDTO.Schedule.Date)
+            {
+                clasesEnEseDia = item.Value;
+            }
+        }
     }
 
     void IrAlDiaAnterior()
@@ -174,40 +120,23 @@
 
         foreach (var item in clasesPorDia)
         {
-            if (item.Key.Date == diaActual.Date)
+            if (item.Key.Date == classDTO.Schedule.Date)
             {
-                clasesEnEseDia.Add(item.Value.FirstOrDefault());
+                clasesEnEseDia = item.Value;
             }
         }
-        // var primerDia = diasMostrados.FirstOrDefault();
-        // var diaAnterior = primerDia.AddDays(-1);
-        // if (clasesPorDia.ContainsKey(diaAnterior))
-        // {
-        //     diasMostrados = Enumerable.Range(0, diasMostrados.Count)
-        //                               .Select(i => diaAnterior.AddDays(i))
-        //                               .ToList();
-        // }
 
     }
 
-    void IrAlDiaSiguiente()
+    void mostrarDia()
     {
-        diaActual = diaActual.AddDays(1);
-
-        // var ultimoDia = diasMostrados.LastOrDefault();
-        // var diaSiguiente = ultimoDia.AddDays(1);
-        // if (clasesPorDia.ContainsKey(diaSiguiente))
-        // {
-        //     diasMostrados = Enumerable.Range(0, diasMostrados.Count)
-        //                               .Select(i => diaSiguiente.AddDays(i))
-        //                               .ToList();
-        // }
+       
 
         foreach (var item in clasesPorDia)
         {
-            if (item.Key.Date == diaActual.Date)
+            if (item.Key.Date == classDTO.Schedule.Date)
             {
-                clasesEnEseDia.Add(item.Value.FirstOrDefault());
+                clasesEnEseDia = item.Value;
             }
         }
     }
