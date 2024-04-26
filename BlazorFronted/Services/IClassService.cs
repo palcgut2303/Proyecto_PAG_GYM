@@ -4,7 +4,7 @@ namespace BlazorFronted.Services
 {
     public interface IClassService
     {
-        Task<ClassListResult> ListaClases();
-        Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
+        Task<ClassListResult> ClassesList();
+        Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
     }
 }

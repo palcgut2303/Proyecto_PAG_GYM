@@ -47,6 +47,12 @@
                                     <td>@clase.Schedule</td>
                                 </tr>
                             }
+                            else
+                            {
+                                <tr>
+                                    <td>No hay clases disponibles</td>
+                                </tr>
+                            }
                             
 
                         }
@@ -93,7 +99,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        clasesPorDia = await classService.ObtenerClasesPorDiaDeLaSemana();
+        clasesPorDia = await classService.GetClassesByDayOfTheWeek();
         diasMostrados = clasesPorDia.Keys.ToList();
         classDTO.Schedule = DateTime.Now.Date;
 

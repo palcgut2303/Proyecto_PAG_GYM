@@ -13,18 +13,11 @@ namespace BlazorFronted.Services
             this._http = http;
         }
 
-        public async Task<List<ClassTypeDTO>> Lista()
+        public async Task<ClassTypeListResult> ClassTypeList()
         {
-            var result = await _http.GetFromJsonAsync<ResponseAPI<List<ClassTypeDTO>>>("api/Class");
+            var result =  await _http.GetFromJsonAsync<ClassTypeListResult>("api/ClassType");
 
-            if (result!.EsCorrecto)
-            {
-                return result.Valor;
-            }
-            else
-            {
-                throw new Exception(result.Mensaje);
-            }
+            return result;
         }
 
         public async Task<ClassTypeDTO> Buscar(int id)

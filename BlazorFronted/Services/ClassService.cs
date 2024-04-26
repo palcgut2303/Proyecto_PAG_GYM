@@ -14,7 +14,7 @@ namespace BlazorFronted.Services
         }
 
 
-        public async Task<ClassListResult> ListaClases()
+        public async Task<ClassListResult> ClassesList()
         {
             var result = await _http.GetFromJsonAsync<ClassListResult>("api/Class");
 
@@ -22,7 +22,7 @@ namespace BlazorFronted.Services
 
         }
 
-        public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
+        public async Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek()
         {
             return await _http.GetFromJsonAsync<Dictionary<DateTime, List<ClassDTO>>>("/api/Class/porDia");
         }

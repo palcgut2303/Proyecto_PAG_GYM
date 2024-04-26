@@ -4,7 +4,7 @@ namespace BlazorFronted.Services
 {
     public interface IClassTypeService
     {
-        Task<List<ClassTypeDTO>> Lista();
+        Task<ClassTypeListResult> ClassTypeList();
         Task<ClassTypeDTO> Buscar(int id);
 
         Task<int> Guardar(ClassTypeDTO classType);

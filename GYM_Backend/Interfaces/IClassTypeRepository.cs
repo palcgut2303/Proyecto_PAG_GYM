@@ -1,5 +1,6 @@
 ﻿using GYM_Backend.Models;
 using GYM_DTOs.CreateDTO;
+using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 
 namespace GYM_Backend.Interfaces
@@ -8,7 +9,7 @@ namespace GYM_Backend.Interfaces
     {
         Task<string> DeleteClassType(int id);
         Task<ClassType> CreateClassType(CreatedClassTypeRequestDTO model);
-        Task<IEnumerable<ClassType>> GetAll();
+        IEnumerable<ClassTypeDTO> GetAll();
         Task<ClassType> GetById(int id);
         Task<ClassType> UpdateClassType(UpdateClassTypeRequestDTO mode, int id);
     }

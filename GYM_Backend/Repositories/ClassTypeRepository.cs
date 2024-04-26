@@ -3,6 +3,7 @@ using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_DTOs.CreateDTO;
+using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,9 +18,9 @@ namespace GYM_Backend.Repositories
             _contextDb = contextDb;
         }
 
-        public async Task<IEnumerable<ClassType>> GetAll()
+        public IEnumerable<ClassTypeDTO> GetAll()
         {
-           return await _contextDb.ClassType.ToListAsync();
+            return _contextDb.ClassType.Select(x => x.toClassTypeDTO()).ToList();
         }
 
         public async Task<ClassType> GetById(int id)

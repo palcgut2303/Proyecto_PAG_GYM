@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\img\contact-bg.jpg" />
     <Content Remove="wwwroot\img\cta-bg.jpg" />
+    <Content Remove="wwwroot\img\fondo-reservas.png" />
     <Content Remove="wwwroot\img\gym-video.mp4" />
     <Content Remove="wwwroot\img\line-dec.png" />
     <Content Remove="wwwroot\img\Logo_AppPAG.png" />
@@ -24,6 +25,7 @@
   <ItemGroup>
     <Resource Include="wwwroot\img\contact-bg.jpg" />
     <Resource Include="wwwroot\img\cta-bg.jpg" />
+    <Resource Include="wwwroot\img\fondo-reservas.png" />
     <Resource Include="wwwroot\img\gym-video.mp4" />
     <Resource Include="wwwroot\img\line-dec.png" />
     <Resource Include="wwwroot\img\Logo_AppPAG.png">

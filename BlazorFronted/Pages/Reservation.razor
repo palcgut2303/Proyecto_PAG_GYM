@@ -1,0 +1,74 @@
+﻿@page "/reservas"
+@using GYM_DTOs.EntityDTO
+
+@inject IClassTypeService classTypeService;
+
+<div class="container-general">
+    <div class="container-reservation">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="left-section">
+
+                    <img src="img/fondo-reservas.png" alt="Imagen" class="img-fluid">
+
+                    <a href="clases" class="btn btn-primary">
+                        <i class="bi bi-calendar-event"></i>
+                        Horarios
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="right-section">
+                    <div id="accordion">
+                        <div class="card">
+
+                            @if (listClassType is null)
+                            {
+                                <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+
+                            }
+                            else
+                            {
+                                @foreach (var item in listClassType)
+                                {
+                                    <div class="card-header mb-2" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-geo-alt"></i>
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                @item.Name
+                                            </button>
+                                        </h5>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@code {
+    private bool showReservationSection = false;
+    ClassTypeListResult classTypeResult = new ClassTypeListResult();
+    IEnumerable<ClassTypeDTO>? listClassType;
+
+    protected override async Task OnInitializedAsync()
+    {
+        classTypeResult = await classTypeService.ClassTypeList();
+        listClassType = classTypeResult.ListClass;
+    }
+
+    private void ToggleReservationSection()
+    {
+        showReservationSection = true;
+    }
+}

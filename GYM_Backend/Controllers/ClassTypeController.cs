@@ -3,6 +3,7 @@ using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
 using GYM_DTOs.CreateDTO;
+using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +25,18 @@ namespace GYM_Backend.Controllers
 
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
-        public async Task<IActionResult> GetAll()
+        //[Authorize(Roles = "Instructor")]
+        public IActionResult GetAll()
         {
 
-            var classes = await _typeofclassRepository.GetAll();
+            var typeOfClass = _typeofclassRepository.GetAll();
 
-            if (classes == null || classes.Count() == 0)
+            if (typeOfClass == null || typeOfClass.Count() == 0)
             {
-                return NotFound("No hay elementos en la lista");
+                return Ok(new ClassTypeListResult { Successful = false, Error = "No hay tipos de clases disponibles" });
             }
 
-            return Ok(classes);
+            return Ok(new ClassTypeListResult { Successful = true, ListClass = typeOfClass });
         }
 
         [HttpGet("{id}")]
