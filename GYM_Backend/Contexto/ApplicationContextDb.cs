@@ -1,14 +1,15 @@
 ﻿using GYM_Backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GYM_Backend.Contexto;
 public class ApplicationContextDb : IdentityDbContext<User>
 {
+
     public ApplicationContextDb(DbContextOptions options) : base(options)
     {
-
     }
 
     public DbSet<Classes> Classes {  get; set; }
@@ -56,5 +57,9 @@ public class ApplicationContextDb : IdentityDbContext<User>
         };
         modelBuilder.Entity<IdentityRole>().HasData(roles);
     }
+
+   
+    
+
 }
 

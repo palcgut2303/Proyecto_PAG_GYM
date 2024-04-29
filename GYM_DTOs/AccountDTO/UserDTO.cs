@@ -15,5 +15,7 @@ namespace GYM_DTOs.AccountDTO
 
         public string Email { get; set; }
 
+        public string Rol { get; set; }
+
     }
 }

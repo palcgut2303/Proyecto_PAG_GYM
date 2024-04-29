@@ -6,6 +6,7 @@ namespace GYM_Backend.Interfaces
 {
     public interface IUserRepository
     {
-        
+        Task<string> GetUserIdByEmailAsync(string email);
+        Task<List<string>> GetUserRolesAsync(string userId);
     }
 }

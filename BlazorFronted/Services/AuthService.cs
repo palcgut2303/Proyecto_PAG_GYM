@@ -6,6 +6,9 @@ using System.Text.Json;
 using System.Text;
 using BlazorFronted.Utility;
 using GYM_DTOs.AccountDTO;
+using System.Security.Claims;
+using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BlazorFronted.Services
 {
@@ -51,6 +54,8 @@ namespace BlazorFronted.Services
                 return loginResult!;
             }
 
+
+
             await _localStorage.SetItemAsync("authToken", loginResult!.Token);
             ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email!);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
@@ -64,5 +69,55 @@ namespace BlazorFronted.Services
             ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
+
+        public async Task<string> GetRole()
+        {
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            // Verifica si el usuario está autenticado
+            if (user.Identity.IsAuthenticated)
+            {
+                // Obtiene el token de autenticación
+                var token = await _localStorage.GetItemAsync<string>("authToken");
+
+                var handler = new JwtSecurityTokenHandler();
+                var tokenRead = handler.ReadJwtToken(token);
+
+                if (tokenRead != null)
+                {
+                    //// Decodifica el token JWT
+                    //var handler = new JwtSecurityTokenHandler();
+                    //var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+                    //// Extrae el claim del rol del token
+                    //var roleClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+                    //if (roleClaim != null)
+                    //{
+                    //    // Devuelve el valor del rol
+                    //    return roleClaim.Value;
+                    //}
+                    //else
+                    //{
+                    //    return "roleClaim NULO";
+                    //}
+
+                    var rol = tokenRead.Claims.FirstOrDefault(c => c.Type == "rol")?.Value;
+
+
+                    return rol;
+                }
+                else
+                {
+                    return "TOKEN NULO";
+                }
+            }
+            else
+            {
+                return "No autenticado";
+            }
+        }
+
     }
 }

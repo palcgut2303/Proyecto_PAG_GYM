@@ -1,6 +1,7 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
+using GYM_Backend.Service;
 using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -55,11 +56,29 @@ namespace GYM_Backend.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            
+            
+            
+            return await TokenCrear(login);
+
+        }
+
+        private async Task<IActionResult> TokenCrear(LoginDTO login)
+        {
+            var username = await _context.Users.Where(u => u.Email == login.Email).Select(x => x.UserName).FirstOrDefaultAsync();
+
+
+
+            var usuarioId = await _userRepository.GetUserIdByEmailAsync(login.Email);
+
+            var rolJWT = await _userRepository.GetUserRolesAsync(usuarioId);
 
 
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, login.Email!)
+                new Claim("email",login.Email!),
+                new Claim("username",username!),
+                new Claim("rol",rolJWT.FirstOrDefault()!),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
@@ -75,13 +94,14 @@ namespace GYM_Backend.Controllers
             );
 
             return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
-
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
+            string rolDefault = "User";
+
             try
             {
                 if (!ModelState.IsValid)
@@ -92,14 +112,15 @@ namespace GYM_Backend.Controllers
                 var usuario = new User()
                 {
                     UserName = model.Username,
-                    Email = model.Email
+                    Email = model.Email,
+                    Role = rolDefault
                 };
 
                 var createdUser = await _userManager.CreateAsync(usuario, model.Password);
 
                 if (createdUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(usuario, "User");
+                    var roleResult = await _userManager.AddToRoleAsync(usuario, rolDefault);
 
                     if (!roleResult.Succeeded)
                     {
@@ -143,7 +164,8 @@ namespace GYM_Backend.Controllers
                 {
                     Id = u.Id,
                     Username = u.UserName,
-                    Email = u.Email
+                    Email = u.Email,
+                    Rol = u.Role
                     // Agrega otros campos que desees devolver
                 })
                 .ToListAsync();
@@ -151,8 +173,7 @@ namespace GYM_Backend.Controllers
             return Ok(usuarios);
         }
 
-
-
+        
 
     }
 }

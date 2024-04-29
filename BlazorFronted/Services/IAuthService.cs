@@ -7,5 +7,6 @@ namespace BlazorFronted.Services
         Task<RegisterResult> Register(RegisterDTO registerModel);
         Task<LoginResult> Login(LoginDTO loginModel);
         Task Logout();
+        Task<string> GetRole();
     }
 }

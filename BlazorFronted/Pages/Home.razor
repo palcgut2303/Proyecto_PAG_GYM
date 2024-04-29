@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inject IJSRuntime JSRuntime
-
+@inject IAuthService AuthService
 <PageTitle>Home</PageTitle>
 
 
@@ -14,6 +14,7 @@
         <div class="caption">
             <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
             <h2>FÁCIL CON NUESTRO <em>GIMNASIO</em></h2>
+            <h2>@userRole</h2>
             <div class="main-button scroll-to-section">
                 <a href="register">Hazte Miembro</a>
             </div>
@@ -127,4 +128,10 @@
 <!-- ***** Call to Action End ***** -->
 
 @code {
+    private string userRole;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userRole = await AuthService.GetRole();
+    }
 }
