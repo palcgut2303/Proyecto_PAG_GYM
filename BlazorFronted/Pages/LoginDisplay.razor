@@ -1,7 +1,6 @@
 ﻿@inject NavigationManager NavigationManager
 
 
-
 <header class="header-area header-sticky">
     <div class="container ">
         <div class="row">
@@ -17,7 +16,7 @@
                         <li class="scroll-to-section"><a href="#features">Acerca de</a></li>
 
                         <li class="scroll-to-section"><a href="#contact-us">Contacto</a></li>
-                        <AuthorizeView>
+                        <AuthorizeView Roles="User, Instructor">
                             <Authorized>
                                 <li class="scroll-to-section"><a href="clases">Clases</a></li>
                                 <li class="scroll-to-section"><a href="reservas">Reservar</a></li>
@@ -27,6 +26,17 @@
                                 <li class="main-button"><a href="login">Iniciar Sesion</a></li>
                             </NotAuthorized>
                         </AuthorizeView>
+                        @* <AuthorizeView Roles="Instructor">
+                            <Authorized>
+                                <li class="scroll-to-section"><a href="clases">Crear Clase</a></li>
+                                <li class="scroll-to-section"><a href="reservas">Reservas</a></li>
+                                <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
+                            </Authorized>
+                            <NotAuthorized>
+                                <li class="main-button"><a href="login">Iniciar Sesion</a></li>
+                            </NotAuthorized>
+                        </AuthorizeView> *@
+
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>

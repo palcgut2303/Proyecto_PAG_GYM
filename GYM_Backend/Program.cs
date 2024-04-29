@@ -64,7 +64,11 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 //    .AddEntityFrameworkStores<ApplicationContextDb>();
 
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    // Configurar opciones de Identity
+    options.ClaimsIdentity.RoleClaimType = "Role"; // Especificar el tipo de reclamación de roles
+})
     .AddEntityFrameworkStores<ApplicationContextDb>();
 
 builder.Services.AddAuthentication(options =>
