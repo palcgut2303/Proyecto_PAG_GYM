@@ -173,7 +173,32 @@ namespace GYM_Backend.Controllers
             return Ok(usuarios);
         }
 
-        
+        [HttpPost("CambiarRolAInstructor")]
+        public async Task<IActionResult> CambiarRolUsuario(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            // Quita el rol de USER
+            var removeUserFromRoleResult = await _userManager.RemoveFromRoleAsync(user, "User");
+            if (!removeUserFromRoleResult.Succeeded)
+            {
+                return StatusCode(500, "Error al quitar el rol de USER");
+            }
+
+            user.Role = "Instructor";
+            // Agrega el rol de ADMIN
+            var addAdminRoleResult = await _userManager.AddToRoleAsync(user, "Instructor");
+            if (!addAdminRoleResult.Succeeded)
+            {
+                return StatusCode(500, "Error al agregar el rol de ADMIN");
+            }
+
+            return Ok("Rol cambiado exitosamente a ADMIN");
+        }
 
     }
 }
