@@ -59,28 +59,10 @@ builder.Services.AddTransient<ITokenService,TokenService>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
-
-//builder.Services.AddIdentityApiEndpoints<User>()
-//    .AddEntityFrameworkStores<ApplicationContextDb>();
-
-
-builder.Services.AddIdentity<User, IdentityRole>(options =>
-{
-    // Configurar opciones de Identity
-    options.ClaimsIdentity.RoleClaimType = "Role"; // Especificar el tipo de reclamación de roles
-})
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContextDb>();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
-
-}).AddJwtBearer(options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -92,6 +74,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"])),
         };
     });
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",

@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 @inject IAuthService AuthService
 
@@ -17,38 +18,27 @@
 
                         <li class="scroll-to-section"><a href="#contact-us">Contacto</a></li>
 
-                        <AuthorizeView>
+                        <AuthorizeView Roles="Instructor">
 
                             <Authorized>
-                                @if (userRole.ToUpper() == "USER")
-                                {
-                                    <li class="scroll-to-section"><a href="clases">Clases</a></li>
-                                    <li class="scroll-to-section"><a href="reservas">Reservar</a></li>
-                                    <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
-                                }
-                                else if (userRole.ToUpper() == "INSTRUCTOR")
-                                {
-                                    <li class="scroll-to-section"><a href="clases">Crear Clases</a></li>
-                                    <li class="scroll-to-section"><a href="reservas">Mirar Reservas</a></li>
-                                    <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
+                               
+                                        <li class="scroll-to-section"><a href="createdclasses">Crear Clases</a></li>
+                                        <li class="scroll-to-section"><a href="reservas">Mirar Reservas</a></li>
+                                        <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
 
-                                }
                             </Authorized>
-                            <NotAuthorized>
-                                <li class="main-button"><a href="login">Iniciar Sesion</a></li>
-                            </NotAuthorized>
                         </AuthorizeView>
 
-                        @* <AuthorizeView Roles="Instructor, User">
-                        <Authorized>
-                        <li class="scroll-to-section"><a href="clases">Crear Clase</a></li>
-                        <li class="scroll-to-section"><a href="reservas">Reservas</a></li>
-                        <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
-                        </Authorized>
-                        <NotAuthorized>
-                        <li class="main-button"><a href="login">Iniciar Sesion</a></li>
-                        </NotAuthorized>
-                        </AuthorizeView> *@
+                        <AuthorizeView Roles="User">
+
+                            <Authorized>
+
+                                <li class="scroll-to-section"><a href="clases">Clases</a></li>
+                                <li class="scroll-to-section"><a href="reservas">Reservar</a></li>
+                                <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
+
+                            </Authorized>
+                        </AuthorizeView>
 
                     </ul>
                     <a class='menu-trigger'>
@@ -68,5 +58,11 @@
     protected override async Task OnInitializedAsync()
     {
         userRole = await AuthService.GetRole();
+        await GuardarRolEnAlmacenamientoLocal(userRole);
+    }
+
+    private async Task GuardarRolEnAlmacenamientoLocal(string rol)
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "Role", rol);
     }
 }

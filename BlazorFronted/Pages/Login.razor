@@ -2,6 +2,7 @@
  @using GYM_DTOs.AccountDTO
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <section class="vh-100" style="background-color: #eee;">
 
@@ -82,7 +83,9 @@
 
         if (result.Successful)
         {
+            
             NavigationManager.NavigateTo("/");
+            // await JSRuntime.InvokeVoidAsync("location.reload");
         }
         else
         {

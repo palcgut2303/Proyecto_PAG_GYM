@@ -8,6 +8,14 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+<AuthorizeView Roles="User">
+    <p>  Hello, @context.User.Identity!.Name!, you are User</p>
+</AuthorizeView>
+
+<AuthorizeView Roles="Instructor">
+    <p>  Hello, @context.User.Identity!.Name!, you are Admin</p>
+</AuthorizeView>
+
 @code {
     private int currentCount = 0;
 

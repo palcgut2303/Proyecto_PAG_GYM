@@ -53,11 +53,11 @@ namespace BlazorFronted.Services
             {
                 return loginResult!;
             }
-
+            
 
 
             await _localStorage.SetItemAsync("authToken", loginResult!.Token);
-            ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email!);
+            ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginResult.Token!);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
             return loginResult;
@@ -66,6 +66,7 @@ namespace BlazorFronted.Services
         public async Task Logout()
         {
             await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveItemAsync("Role");
             ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
@@ -76,7 +77,7 @@ namespace BlazorFronted.Services
             var user = authState.User;
 
             // Verifica si el usuario está autenticado
-            if (user.Identity.IsAuthenticated)
+            if (user.Identity!.IsAuthenticated)
             {
                 // Obtiene el token de autenticación
                 var token = await _localStorage.GetItemAsync<string>("authToken");
@@ -103,7 +104,7 @@ namespace BlazorFronted.Services
                     //    return "roleClaim NULO";
                     //}
 
-                    var rol = tokenRead.Claims.FirstOrDefault(c => c.Type == "rol")?.Value;
+                    var rol = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
 
                     return rol;

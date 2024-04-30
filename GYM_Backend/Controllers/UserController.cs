@@ -66,20 +66,25 @@ namespace GYM_Backend.Controllers
         private async Task<IActionResult> TokenCrear(LoginDTO login)
         {
             var username = await _context.Users.Where(u => u.Email == login.Email).Select(x => x.UserName).FirstOrDefaultAsync();
-
-
-
             var usuarioId = await _userRepository.GetUserIdByEmailAsync(login.Email);
 
-            var rolJWT = await _userRepository.GetUserRolesAsync(usuarioId);
 
+
+            var user = await _userManager.FindByEmailAsync(login.Email);
+            var roles = await _userManager.GetRolesAsync(user);
+            var rolJWT = await _userRepository.GetUserRolesAsync(usuarioId);
 
             var claims = new[]
             {
-                new Claim("email",login.Email!),
+                new Claim(ClaimTypes.Name,login.Email!),
                 new Claim("username",username!),
-                new Claim("rol",rolJWT.FirstOrDefault()!),
+                new Claim(ClaimTypes.Role, rolJWT.FirstOrDefault())
             };
+
+            //foreach (var rol in rolJWT)
+            //{
+            //    claims.Append(new Claim("rol", rol));
+            //}
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
