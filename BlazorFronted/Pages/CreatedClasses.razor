@@ -1,61 +1,76 @@
 ﻿@using GYM_DTOs.EntityDTO
 @using Microsoft.AspNetCore.Authorization
 @inject IJSRuntime JSRuntime
-
+@inject IClassTypeService classTypeService;
 @page "/createdclasses"
 @attribute [Authorize(Roles = "Instructor")]
-<AuthorizeView>
-    <Authorized>
-
-        <h3>Crear Clase</h3>
-
-        <EditForm Model="@clase" OnValidSubmit="SubmitForm">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <InputText class="form-control" id="name" @bind-Value="@clase.Name" />
-                <ValidationMessage For="@(() => clase.Name)" />
-            </div>
-
-            <div class="mb-3">
-                <label for="duration" class="form-label">Duration (minutes):</label>
-                <InputNumber class="form-control" id="duration" @bind-Value="@clase.DurationInMinutes" />
-                <ValidationMessage For="@(() => clase.DurationInMinutes)" />
-            </div>
-
-            <div class="mb-3">
-                <label for="schedule" class="form-label">Schedule:</label>
-                <InputDate class="form-control" id="schedule" @bind-Value="@clase.Schedule" />
-                <ValidationMessage For="@(() => clase.Schedule)" />
-            </div>
-
-            <div class="mb-3">
-                <label for="classTypeId" class="form-label">Class Type ID:</label>
-                <InputNumber class="form-control" id="classTypeId" @bind-Value="@clase.ClassTypeId" />
-                <ValidationMessage For="@(() => clase.ClassTypeId)" />
-            </div>
-
-            <div class="mb-3">
-                <label for="gymInstructorId" class="form-label">Gym Instructor ID:</label>
-                <InputNumber class="form-control" id="gymInstructorId" @bind-Value="@clase.GymInstructorId" />
-                <ValidationMessage For="@(() => clase.GymInstructorId)" />
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
+<style>
+    /* .container-createdClass {
+        margin-top: 5%;
+    } */
+</style>
+<div class="container container-createdClass">
 
 
+    <h3>Crear Clase</h3>
 
 
+    <EditForm Model="@clase" OnValidSubmit="SubmitForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre de la Clase:</label>
+            <InputText class="form-control" id="name" @bind-Value="@clase.Name" />
+            <ValidationMessage For="@(() => clase.Name)" />
+        </div>
 
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duracion (minutos):</label>
+            <InputNumber class="form-control" id="duration" @bind-Value="@clase.DurationInMinutes" />
+            <ValidationMessage For="@(() => clase.DurationInMinutes)" />
+        </div>
 
+        <div class="mb-3">
+            <label for="schedule" class="form-label">Fecha:</label>
+            <InputDate class="form-control" @bind-Value="clase.Schedule"></InputDate>
+            <ValidationMessage For="@(() => clase.Schedule)"></ValidationMessage>
+        </div>
+        <div class="mb-3">
+            <label for="typeOfClass" class="form-label">Tipo de clase:</label>
+            <select @bind="@selectedClassType" class="form-control">
+                @if (listClassType != null)
+                {
+                    <option value="">Selecciona un tipo de clase</option>
+                    @foreach (var typeName in listClassType)
+                    {
+                        <option value="@typeName">@typeName.Name</option>
+                    }
+                }
+                else
+                {
+                    <option value="">No hay tipos de clases para seleccionar</option>
+                }
 
-    </Authorized>
-    <NotAuthorized>
-        <h1>¡No tienes permisos para acceder a esta página!</h1>
-    </NotAuthorized>
-</AuthorizeView>
+            </select>
+            <ValidationMessage For="@(() => clase.ClassTypeId)"></ValidationMessage>
+        </div>
+        
+
+        <button type="submit" class="btn btn-primary">Crear Clase</button>
+    </EditForm>
+</div>
 @code {
     private ClassDTO clase = new ClassDTO();
+    ClassTypeListResult classTypeResult = new ClassTypeListResult();
+    IEnumerable<ClassTypeDTO>? listClassType;
+
+    private string? selectedClassType;
+
+    protected override async Task OnInitializedAsync()
+    {
+        clase.Schedule =  DateTime.Now;
+        classTypeResult = await classTypeService.ClassTypeList();
+        listClassType = classTypeResult.ListClass;
+    }
+
 
     private void SubmitForm()
     {

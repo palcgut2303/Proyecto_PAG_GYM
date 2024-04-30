@@ -236,7 +236,6 @@ header
     }
 
 .header-area {
-    position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
@@ -346,7 +345,6 @@ header
 .header-area .main-nav .menu-trigger {
     cursor: pointer;
     display: block;
-    position: absolute;
     top: 23px;
     width: 32px;
     height: 40px;
@@ -365,7 +363,6 @@ header
         transition: all 0.4s;
         background-color: #1e1e1e;
         display: block;
-        position: absolute;
         width: 30px;
         height: 2px;
         left: 0;
@@ -385,7 +382,6 @@ header
     transition: all 0.4s;
     background-color: #1e1e1e;
     display: block;
-    position: absolute;
     width: 30px;
     height: 2px;
     left: 0;
@@ -1220,7 +1216,6 @@ preloader
 }
 
     .preloader-inner .dot {
-        position: absolute;
         width: 16px;
         height: 16px;
         top: 12px;

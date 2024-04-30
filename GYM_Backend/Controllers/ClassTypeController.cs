@@ -43,22 +43,22 @@ namespace GYM_Backend.Controllers
         [SwaggerResponse(404, "No hay elementos en la lista")]
         public async Task<IActionResult> findById([FromRoute] int id)
         {
-            var classes = await _typeofclassRepository.GetById(id);
+            var typeOfClass = await _typeofclassRepository.GetById(id);
 
-            if (classes == null)
+            if (typeOfClass == null)
             {
                 return NotFound("No se ha encontrado el objeto");
             }
 
-            return Ok(classes);
+            return Ok(typeOfClass);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreatedClassTypeRequestDTO model)
         {
-            ClassType classesCreated = await _typeofclassRepository.CreateClassType(model);
+            ClassType typeOfClassCreated = await _typeofclassRepository.CreateClassType(model);
 
-            return CreatedAtAction(nameof(findById), new { id = classesCreated.Id }, classesCreated.toClassTypeDTO());
+            return CreatedAtAction(nameof(findById), new { id = typeOfClassCreated.Id }, typeOfClassCreated.toClassTypeDTO());
         }
 
         [HttpPut]
