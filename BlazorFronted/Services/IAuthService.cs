@@ -8,5 +8,6 @@ namespace BlazorFronted.Services
         Task<LoginResult> Login(LoginDTO loginModel);
         Task Logout();
         Task<string> GetRole();
+        Task<string> GetEmail();
     }
 }

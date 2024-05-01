@@ -1,8 +1,15 @@
-﻿@using GYM_DTOs.EntityDTO
-@using Microsoft.AspNetCore.Authorization
+﻿
 @inject IJSRuntime JSRuntime
 @inject IClassTypeService classTypeService;
+@inject IClassService classService;
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
 @page "/createdclasses"
+@page "/createdclasses/{idClass:int}"
+
+@using CurrieTechnologies.Razor.SweetAlert2
 @attribute [Authorize(Roles = "Instructor")]
 <style>
     /* .container-createdClass {
@@ -11,11 +18,17 @@
 </style>
 <div class="container container-createdClass">
 
-
     <h3>Crear Clase</h3>
 
-
     <EditForm Model="@clase" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+        @if (ShowErrors)
+        {
+            <div class="alert alert-danger" role="alert">
+                <p>@Error</p>
+            </div>
+        }
+
         <div class="mb-3">
             <label for="name" class="form-label">Nombre de la Clase:</label>
             <InputText class="form-control" id="name" @bind-Value="@clase.Name" />
@@ -34,14 +47,14 @@
             <ValidationMessage For="@(() => clase.Schedule)"></ValidationMessage>
         </div>
         <div class="mb-3">
-            <label for="typeOfClass" class="form-label">Tipo de clase:</label>
-            <select @bind="@selectedClassType" class="form-control">
+            <label for="ClassTypeName" class="form-label">Tipo de clase:</label>
+            <select @bind="@selectedClassType" id="ClassTypeName" class="form-control">
                 @if (listClassType != null)
                 {
                     <option value="">Selecciona un tipo de clase</option>
                     @foreach (var typeName in listClassType)
                     {
-                        <option value="@typeName">@typeName.Name</option>
+                        <option value="@typeName.Name">@typeName.Name</option>
                     }
                 }
                 else
@@ -50,34 +63,92 @@
                 }
 
             </select>
-            <ValidationMessage For="@(() => clase.ClassTypeId)"></ValidationMessage>
+            <ValidationMessage For="@(() => clase.ClassTypeName)"></ValidationMessage>
         </div>
         
 
         <button type="submit" class="btn btn-primary">Crear Clase</button>
     </EditForm>
 </div>
+
 @code {
-    private ClassDTO clase = new ClassDTO();
+    [Parameter]
+    public int idClass { get; set; } = 0;
+    string titulo = String.Empty;
+    string btnTexto = string.Empty;
+    private CreateClassRequestDTO clase = new CreateClassRequestDTO();
     ClassTypeListResult classTypeResult = new ClassTypeListResult();
     IEnumerable<ClassTypeDTO>? listClassType;
-
-    private string? selectedClassType;
+    private bool ShowErrors;
+    private string Error = "";
+    private string selectedClassType { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         clase.Schedule =  DateTime.Now;
         classTypeResult = await classTypeService.ClassTypeList();
         listClassType = classTypeResult.ListClass;
+
+        if(idClass != 0)
+        {
+            titulo = "Editar Clase";
+            btnTexto = "Editar Clase";
+            var resutlClass = await classService.findByIdClass(idClass);
+            clase = resutlClass.ListClass.FirstOrDefault();
+        }
+        else
+        {
+            titulo = "Crear Clase";
+            btnTexto = "Crear Clase";
+        }
+
     }
 
 
-    private void SubmitForm()
+    private async void SubmitForm()
     {
-        // Aquí puedes manejar la lógica para enviar el objeto 'clase' a donde sea necesario.
-        // Por ejemplo, puedes enviarlo a una API, a una base de datos, etc.
-        // También puedes realizar validaciones antes de enviar el objeto.
-        // Una vez que se ha enviado el objeto, puedes restablecer el objeto 'clase' para limpiar el formulario.
-        clase = new ClassDTO();
+        
+
+        ShowErrors = false;
+
+        var email = await AuthService.GetEmail();
+
+
+        clase.emailInstructor = email;
+        clase.ClassTypeName = selectedClassType;
+
+        var result = await classService.CrearClass(clase);
+
+        if (result.Successful)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title  = "Confirmacion",
+                Text = "Se ha creado correctamente la clase, ¿quieres volver al inicio?",
+                Icon = SweetAlertIcon.Success,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+            var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+            if (!confirmado)
+            {
+                clase = new CreateClassRequestDTO();
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/");
+            }
+
+            clase = new CreateClassRequestDTO();
+
+        }
+        else
+        {
+            Error = result.Errors.FirstOrDefault();
+            ShowErrors = true;
+        }
     }
 }

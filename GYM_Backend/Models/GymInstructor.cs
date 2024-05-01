@@ -10,6 +10,6 @@ namespace GYM_Backend.Models
         public string Speciality { get; set; }
         public ICollection<Classes>? Classes { get; set; }
 
-        public User User { get; set; }
+        public string emailUser { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
+using GYM_DTOs.AccountDTO;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace GYM_Backend.Controllers
@@ -45,14 +47,29 @@ namespace GYM_Backend.Controllers
         [SwaggerResponse(404, "No hay elementos en la lista")]
         public async Task<IActionResult> findById([FromRoute]int id)
         {
-            var classes = await _classRepository.GetById(id);
+            var classes =  _classRepository.GetById(id);
             
             if(classes == null)
             {
-                return NotFound("No se ha encontrado el objeto");
+                return Ok(new ClassListResult { Successful = false, Error = "No hay clases disponibles" });
             }
 
-            return Ok(classes.toClassesDTO());
+            return Ok(new ClassListResult { Successful = true, ListClass = new List<ClassDTO> { classes } });
+        }
+
+        //Recoger el nombre del instructor de la clase para poder realizar los campos del CreateClassRequestDTO
+        [HttpGet("nameGymInstructor/{id}")]
+        [SwaggerResponse(404, "No hay elementos en la lista")]
+        public async Task<IActionResult> GetGymInstructor([FromRoute] int id)
+        {
+            var classes = _classRepository.GetById(id);
+
+            if (classes == null)
+            {
+                return Ok(new ClassListResult { Successful = false, Error = "No hay clases disponibles" });
+            }
+
+            return Ok(new ClassListResult { Successful = true, ListClass = new List<ClassDTO> { classes } });
         }
 
         [HttpGet("porDia")]
@@ -73,9 +90,15 @@ namespace GYM_Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateClassRequestDTO model)
         {
+
             Classes classesCreated = await _classRepository.CreateClass(model);
 
-            return CreatedAtAction(nameof(findById), new { id = classesCreated.Id },classesCreated.toClassesDTO());
+            if(classesCreated == null)
+            {
+                return Ok(new CreateClassResult { Successful = false, Errors = new List<string> { "Error occured" }});
+            }
+
+            return Ok(new CreateClassResult { Successful = true});
         }
 
         [HttpPut]

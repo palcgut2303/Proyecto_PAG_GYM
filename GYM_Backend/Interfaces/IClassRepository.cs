@@ -10,8 +10,10 @@ namespace GYM_Backend.Interfaces
         Task<string> BorradoClass(int id);
         Task<Classes> CreateClass(CreateClassRequestDTO model);
         IEnumerable<ClassDTO> GetAll();
-        Task<Classes> GetById(int id);
+        ClassDTO GetById(int id);
         Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
+        
+        Task<int> ObtenerIdGymInstructor(string email);
         Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

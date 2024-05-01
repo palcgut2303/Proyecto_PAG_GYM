@@ -24,14 +24,33 @@ namespace GYM_Backend.Repositories
             return _contextDb.Classes.Select(x => x.toClassesDTO()).ToList();
         }
 
-        public async Task<Classes> GetById(int id)
+        public ClassDTO GetById(int id)
         {
-            return await _contextDb.Classes.FindAsync(id);
+            var classes =  _contextDb.Classes.Where(x => x.Id == id).Select(x => x.toClassesDTO());
+
+            return classes.FirstOrDefault();
+
         }
 
         public async Task<Classes> CreateClass(CreateClassRequestDTO model)
         {
-            var classes = model.toClassFromCreateDTO();
+            var idClassType = await ObtenerIdClassType(model.ClassTypeName);
+
+            var idGymInstructor = await ObtenerIdGymInstructor(model.emailInstructor);
+
+            if(idGymInstructor == 0)
+            {
+                return null;
+            }
+
+            var classes = new Classes()
+            {
+                Name = model.Name,
+                ClassTypeId = idClassType,
+                DurationInMinutes = model.DurationInMinutes,
+                Schedule = model.Schedule,
+                GymInstructorId = idGymInstructor
+            };
 
             _contextDb.Classes.Add(classes);
             await _contextDb.SaveChangesAsync();
@@ -99,6 +118,27 @@ namespace GYM_Backend.Repositories
                                      .ToDictionary(group => group.Key, group => group.ToList());
 
             return clasesPorDia;
+        }
+
+        public async Task<int> ObtenerIdGymInstructor(string email)
+        {
+            var gymInstructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(gi => gi.emailUser == email);
+            if(gymInstructor == null)
+            {
+                return 0;
+            }
+            return gymInstructor.Id;
+        }
+
+        public async Task<int> ObtenerIdClassType(string nombreClase)
+        {
+            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(ct => ct.Name == nombreClase);
+            if (classType == null)
+            {
+                return 0;
+            }
+            return classType.Id;
+            
         }
 
     }

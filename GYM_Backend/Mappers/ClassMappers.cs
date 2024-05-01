@@ -1,4 +1,5 @@
-﻿using GYM_Backend.Models;
+﻿using GYM_Backend.Interfaces;
+using GYM_Backend.Models;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -7,6 +8,8 @@ namespace GYM_Backend.Mappers
 {
     public static class ClassMappers
     {
+        
+
         public static ClassDTO toClassesDTO(this Classes model)
         {
             return new ClassDTO
@@ -22,13 +25,16 @@ namespace GYM_Backend.Mappers
 
         public static Classes toClassFromCreateDTO(this CreateClassRequestDTO requestDTO)
         {
+            
+
+
             return new Classes
             {
                 Name = requestDTO.Name,
-                ClassTypeId = requestDTO.ClassTypeId,
+                //ClassTypeId = requestDTO.ClassTypeId,
                 DurationInMinutes = requestDTO.DurationInMinutes,
                 Schedule = requestDTO.Schedule,
-                GymInstructorId = requestDTO.GymInstructorId
+                //GymInstructorId = requestDTO.emailInstructor
             };
         }
     }

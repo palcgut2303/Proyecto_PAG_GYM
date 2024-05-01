@@ -12,5 +12,9 @@ namespace GYM_DTOs.EntityDTO
         public ICollection<ReservationDTO>? Reservations { get; set; }
         public int ClassTypeId { get; set; }
         public int GymInstructorId { get; set; }
+
+        public ClassTypeDTO? ClassType { get; set; }
+
+        public GymInstructorDTO? GymInstructor { get; set; }
     }
 }

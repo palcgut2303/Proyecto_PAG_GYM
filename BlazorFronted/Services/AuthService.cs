@@ -120,5 +120,38 @@ namespace BlazorFronted.Services
             }
         }
 
+        public async Task<string> GetEmail()
+        {
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            // Verifica si el usuario está autenticado
+            if (user.Identity!.IsAuthenticated)
+            {
+                // Obtiene el token de autenticación
+                var token = await _localStorage.GetItemAsync<string>("authToken");
+
+                var handler = new JwtSecurityTokenHandler();
+                var tokenRead = handler.ReadJwtToken(token);
+
+                if (tokenRead != null)
+                {
+                    
+                    var email = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+
+                    return email;
+                }
+                else
+                {
+                    return "TOKEN NULO";
+                }
+            }
+            else
+            {
+                return "No autenticado";
+            }
+        }
+
     }
 }

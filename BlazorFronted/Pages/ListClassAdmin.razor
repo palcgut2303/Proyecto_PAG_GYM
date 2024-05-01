@@ -1,0 +1,88 @@
+﻿@inject SweetAlertService Swal
+@inject IClassService classService;
+
+@page "/listclassadmin"
+@using CurrieTechnologies.Razor.SweetAlert2
+
+<h3>Clases Disponibles</h3>
+
+<a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre Clase</th>
+            <th>Duracion</th>
+            <th>Fecha</th>
+            <th>Tipo de clase</th>
+            <th>Nombre del Instructor</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (resultClass.ListClass == null)
+        {
+            <tr>
+                <td colspan="5" align="center">
+                    <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var classes in resultClass.ListClass)
+            {
+                <tr>
+                    <td>@classes.Name</td>
+                    <td>@classes.DurationInMinutes</td>
+                    <td>@classes.Schedule</td>
+                    <td>@classes.ClassTypeId</td>
+                    <td>@classes.GymInstructorId</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="createdclasses/@classes.Id">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+
+</table>
+
+
+@code {
+    ClassListResult resultClass = new ClassListResult();
+
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        resultClass.ListClass = null;
+        resultClass = await classService.ClassesList();
+    }
+
+    private async Task Eliminar(int id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar Clase",
+                Text = "Deseas eliminar la clase?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            // var eliminado = await classService.Eliminar(id);
+            // if (eliminado)
+            // {
+            //     listaClases = listaClases!.FindAll(e => e.Id != id);
+            // }
+        }
+    }
+
+}
