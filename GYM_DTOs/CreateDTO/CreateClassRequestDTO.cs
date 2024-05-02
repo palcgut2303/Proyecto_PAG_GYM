@@ -15,8 +15,8 @@ namespace GYM_DTOs.CreateDTO
         public int DurationInMinutes { get; set; }
         [Required(ErrorMessage = "{0} is required")]
         public DateTime Schedule { get; set; }
-        [Required(ErrorMessage = "{0} is required")]
-        public string ClassTypeName { get; set; }
+
+        public string? ClassTypeName { get; set; }
         public string? emailInstructor { get; set; }
     }
 }

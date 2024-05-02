@@ -23,9 +23,11 @@ namespace GYM_Backend.Repositories
             return _contextDb.ClassType.Select(x => x.toClassTypeDTO()).ToList();
         }
 
-        public async Task<ClassType> GetById(int id)
+        public ClassTypeDTO GetById(int id)
         {
-            return await _contextDb.ClassType.FindAsync(id);
+            var classType =  _contextDb.ClassType.Where(x => x.Id == id).Select(x => x.toClassTypeDTO());
+
+            return classType.FirstOrDefault();
         }
 
         public async Task<ClassType> CreateClassType(CreatedClassTypeRequestDTO model)

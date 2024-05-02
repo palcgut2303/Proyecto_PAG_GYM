@@ -1,5 +1,4 @@
-﻿
-@inject IJSRuntime JSRuntime
+﻿@inject IJSRuntime JSRuntime
 @inject IClassTypeService classTypeService;
 @inject IClassService classService;
 @inject IAuthService AuthService
@@ -10,15 +9,19 @@
 @page "/createdclasses/{idClass:int}"
 
 @using CurrieTechnologies.Razor.SweetAlert2
+@using GYM_DTOs.UpdateDTO
 @attribute [Authorize(Roles = "Instructor")]
+
+
+
 <style>
     /* .container-createdClass {
-        margin-top: 5%;
-    } */
+            margin-top: 5%;
+        } */
 </style>
 <div class="container container-createdClass">
 
-    <h3>Crear Clase</h3>
+    <h3>@titulo</h3>
 
     <EditForm Model="@clase" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator />
@@ -65,9 +68,9 @@
             </select>
             <ValidationMessage For="@(() => clase.ClassTypeName)"></ValidationMessage>
         </div>
-        
 
-        <button type="submit" class="btn btn-primary">Crear Clase</button>
+
+        <button type="submit" class="btn btn-primary">@btnTexto</button>
     </EditForm>
 </div>
 
@@ -85,16 +88,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        clase.Schedule =  DateTime.Now;
+        clase.Schedule = DateTime.Now;
         classTypeResult = await classTypeService.ClassTypeList();
         listClassType = classTypeResult.ListClass;
 
-        if(idClass != 0)
+        if (idClass != 0)
         {
             titulo = "Editar Clase";
             btnTexto = "Editar Clase";
             var resutlClass = await classService.findByIdClass(idClass);
-            // clase = resutlClass.ListClass.FirstOrDefault();
+            clase = resutlClass;
+            selectedClassType = clase.ClassTypeName;
         }
         else
         {
@@ -107,7 +111,7 @@
 
     private async void SubmitForm()
     {
-        
+
 
         ShowErrors = false;
 
@@ -117,38 +121,115 @@
         clase.emailInstructor = email;
         clase.ClassTypeName = selectedClassType;
 
-        var result = await classService.CrearClass(clase);
-
-        if (result.Successful)
+        if (btnTexto == "Editar Clase")
         {
-            var resultado = await Swal.FireAsync(new SweetAlertOptions
-            {
-                Title  = "Confirmacion",
-                Text = "Se ha creado correctamente la clase, ¿quieres volver al inicio?",
-                Icon = SweetAlertIcon.Success,
-                ShowCancelButton = true,
-                ConfirmButtonText = "Si",
-                CancelButtonText = "No"
-            });
+            var id = idClass;
 
-            var confirmado = !string.IsNullOrEmpty(resultado.Value);
+            var updateClass = new UpdateClassRequestDTO
+                {
+                    ClassTypeName = clase.ClassTypeName,
+                    DurationInMinutes = clase.DurationInMinutes,
+                    Name = clase.Name,
+                    Schedule = clase.Schedule,
+                    emailInstructor = clase.emailInstructor
+                };
 
-            if (!confirmado)
+            var result = await classService.ActualizarClass(id, updateClass);
+
+            if (!result.EsCorrecto)
             {
-                clase = new CreateClassRequestDTO();
+                var resultado = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = result.Mensaje,
+                        Icon = SweetAlertIcon.Error,
+                        ShowCancelButton = true,
+                        ConfirmButtonText = "Si",
+                        CancelButtonText = "No"
+                    });
+
+                var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+                Error = result.Mensaje;
+                ShowErrors = true;
             }
             else
             {
-                NavigationManager.NavigateTo("/");
+                var resultado = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Confirmacion",
+                        Text = "Se ha actualizado correctamente la clase, ¿quieres volver al inicio?",
+                        Icon = SweetAlertIcon.Success,
+                        ShowCancelButton = true,
+                        ConfirmButtonText = "Si",
+                        CancelButtonText = "No"
+                    });
+
+                var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+                if (!confirmado)
+                {
+                    clase = new CreateClassRequestDTO();
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/listclassadmin");
+                }
+
+
             }
-
-            clase = new CreateClassRequestDTO();
-
         }
         else
         {
-            Error = result.Errors.FirstOrDefault();
-            ShowErrors = true;
+            var result = await classService.CrearClass(clase);
+
+            if (result.Successful)
+            {
+                var resultado = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Confirmacion",
+                        Text = "Se ha creado correctamente la clase, ¿quieres volver al inicio?",
+                        Icon = SweetAlertIcon.Success,
+                        ShowCancelButton = true,
+                        ConfirmButtonText = "Si",
+                        CancelButtonText = "No"
+                    });
+
+                var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+                if (!confirmado)
+                {
+                    clase = new CreateClassRequestDTO();
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/");
+                }
+
+                clase = new CreateClassRequestDTO();
+
+            }
+            else
+            {
+                var resultado = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = result.Errors.FirstOrDefault(),
+                        Icon = SweetAlertIcon.Error,
+                        ShowCancelButton = true,
+                        ConfirmButtonText = "Si",
+                        CancelButtonText = "No"
+                    });
+
+                var confirmado = !string.IsNullOrEmpty(resultado.Value);
+
+
+
+                Error = result.Errors.FirstOrDefault();
+                ShowErrors = true;
+            }
         }
+
+
     }
 }

@@ -2,6 +2,7 @@
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
+using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
@@ -41,16 +42,16 @@ namespace GYM_Backend.Controllers
 
         [HttpGet("{id}")]
         [SwaggerResponse(404, "No hay elementos en la lista")]
-        public async Task<IActionResult> findById([FromRoute] int id)
+        public  IActionResult findById([FromRoute] int id)
         {
-            var typeOfClass = await _typeofclassRepository.GetById(id);
+            var typeOfClass =  _typeofclassRepository.GetById(id);
 
             if (typeOfClass == null)
             {
-                return NotFound("No se ha encontrado el objeto");
+                return NotFound(new findClassTypeByIdResult { Successful = false, Error = "No encontrado el objeto"});
             }
 
-            return Ok(typeOfClass);
+            return Ok(new findClassTypeByIdResult { Successful = true, ClassTypeDTO = typeOfClass });
         }
 
         [HttpPost]

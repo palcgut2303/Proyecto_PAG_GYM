@@ -59,14 +59,14 @@ namespace GYM_Backend.Repositories
 
         public async Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id)
         {
-            var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(X=> X.Id == mode.GymInstructorId);
+            var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(X => X.emailUser == mode.emailInstructor);
 
-            if(instructor == null)
+            if (instructor == null)
             {
                 return null;
             }
 
-            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Id == mode.ClassTypeId);
+            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Name == mode.ClassTypeName);
 
             if (classType == null)
             {
@@ -75,19 +75,19 @@ namespace GYM_Backend.Repositories
 
             var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(classes == null)
+            if (classes == null)
             {
                 return null;
             }
 
             classes.Name = mode.Name;
             classes.DurationInMinutes = mode.DurationInMinutes;
-            classes.ClassTypeId = mode.ClassTypeId;
-            classes.GymInstructorId = mode.GymInstructorId;
+            classes.ClassTypeId = classType.Id;
+            classes.GymInstructorId = instructor.Id;
             classes.Schedule = mode.Schedule;
 
 
-             _contextDb.SaveChanges();
+            _contextDb.SaveChanges();
 
             return classes;
         }

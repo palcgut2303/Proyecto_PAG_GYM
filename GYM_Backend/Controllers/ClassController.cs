@@ -95,7 +95,7 @@ namespace GYM_Backend.Controllers
 
             if(classesCreated == null)
             {
-                return Ok(new CreateClassResult { Successful = false, Errors = new List<string> { "Error occured" }});
+                return BadRequest(new CreateClassResult { Successful = false, Errors = new List<string> { "Error occured" }});
             }
 
             return Ok(new CreateClassResult { Successful = true});

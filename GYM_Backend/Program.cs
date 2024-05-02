@@ -58,6 +58,7 @@ builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
 builder.Services.AddTransient<ITokenService,TokenService>();
 builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IGymInstructorRepository, GymInstructorRepository>();
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationContextDb>();

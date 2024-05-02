@@ -22,15 +22,15 @@ namespace BlazorFronted.Services
 
         public async Task<ClassTypeDTO> Buscar(int id)
         {
-            var result = await _http.GetFromJsonAsync<ResponseAPI<ClassTypeDTO>>($"api/Class/{id}");
+            var result = await _http.GetFromJsonAsync<findClassTypeByIdResult>($"api/ClassType/{id}");
 
-            if (result!.EsCorrecto)
+            if (result!.Successful)
             {
-                return result.Valor;
+                return result.ClassTypeDTO;
             }
             else
             {
-                throw new Exception(result.Mensaje);
+                throw new Exception(result.Error);
             }
         }
 

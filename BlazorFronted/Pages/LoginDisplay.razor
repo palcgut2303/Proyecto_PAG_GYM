@@ -3,10 +3,11 @@
 
 @inject IAuthService AuthService
 
+
+
 <style>
-    .cabecera{
-        background-color: #000000;
-        margin-bottom:5%;
+    .cabecera {
+        position: fixed;
     }
 </style>
 
@@ -20,18 +21,16 @@
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li class="scroll-to-section"><a href="#top" class="active">Inicio</a></li>
-                        <li class="scroll-to-section"><a href="#features">Acerca de</a></li>
+                        <li class="scroll-to-section"><a href="/">Inicio</a></li>
 
-                        <li class="scroll-to-section"><a href="#contact-us">Contacto</a></li>
 
                         <AuthorizeView Roles="Instructor">
 
                             <Authorized>
 
                                 <li class="scroll-to-section"><a href="listclassadmin">Clases</a></li>
-                                        <li class="scroll-to-section"><a href="reservas">Mirar Reservas</a></li>
-                                        <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
+                                <li class="scroll-to-section"><a href="reservas">Mirar Reservas</a></li>
+                                <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
 
                             </Authorized>
                         </AuthorizeView>
@@ -39,7 +38,8 @@
                         <AuthorizeView Roles="User">
 
                             <Authorized>
-
+                                <li class="scroll-to-section"><a href="#features">Acerca de</a></li>
+                                <li class="scroll-to-section"><a href="#contact-us">Contacto</a></li>
                                 <li class="scroll-to-section"><a href="clases">Clases</a></li>
                                 <li class="scroll-to-section"><a href="reservas">Reservar</a></li>
                                 <li class="main-button"><a href="logout">Cerrar Sesión</a></li>
