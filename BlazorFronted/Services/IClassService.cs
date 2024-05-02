@@ -7,7 +7,7 @@ namespace BlazorFronted.Services
     {
         Task<ClassListResult> ClassesList();
         Task<CreateClassResult> CrearClass(CreateClassRequestDTO classModel);
-        Task<ClassListResult> findByIdClass(int id);
+        Task<CreateClassRequestDTO> findByIdClass(int id);
         Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
     }
 }

@@ -42,7 +42,7 @@ namespace BlazorFronted.Services
             };
 
 
-            return result;
+            return newClassDTO;
 
         }
 
