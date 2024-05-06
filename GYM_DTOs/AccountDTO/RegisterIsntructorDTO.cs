@@ -16,7 +16,6 @@ namespace GYM_DTOs.AccountDTO
 
         public string Password { get; set; }
 
-        public string Speciality { get; set; }
 
     }
 }

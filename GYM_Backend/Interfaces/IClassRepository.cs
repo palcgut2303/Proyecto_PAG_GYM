@@ -7,7 +7,7 @@ namespace GYM_Backend.Interfaces
 {
     public interface IClassRepository
     {
-        Task<string> BorradoClass(int id);
+        Task<bool> BorradoClass(int id);
         Task<Classes> CreateClass(CreateClassRequestDTO model);
         IEnumerable<ClassDTO> GetAll();
         ClassDTO GetById(int id);

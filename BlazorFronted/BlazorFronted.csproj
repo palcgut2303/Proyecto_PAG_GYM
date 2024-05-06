@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\img\CardUserImg.png" />
+    <Content Remove="wwwroot\img\CardUserImg2.jpeg" />
     <Content Remove="wwwroot\img\contact-bg.jpg" />
     <Content Remove="wwwroot\img\cta-bg.jpg" />
     <Content Remove="wwwroot\img\fondo-reservas.png" />
@@ -23,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="wwwroot\img\CardUserImg.png" />
+    <Resource Include="wwwroot\img\CardUserImg2.jpeg" />
     <Resource Include="wwwroot\img\contact-bg.jpg" />
     <Resource Include="wwwroot\img\cta-bg.jpg" />
     <Resource Include="wwwroot\img\fondo-reservas.png" />

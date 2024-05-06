@@ -13,6 +13,10 @@ namespace GYM_DTOs.AccountDTO
         public string Email { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public string Username { get; set; }
+
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        public string FullName { get; set; }
+
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

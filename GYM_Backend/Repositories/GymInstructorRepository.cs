@@ -44,7 +44,6 @@ namespace GYM_Backend.Repositories
             {
                 emailUser = model.emailUser,
                 FullName = model.FullName,
-                Speciality = model.Speciality,
             };
 
             _contextDb.GymInstructors.Add(instructor);

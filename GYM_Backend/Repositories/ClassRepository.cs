@@ -92,20 +92,20 @@ namespace GYM_Backend.Repositories
             return classes;
         }
 
-        public async Task<string> BorradoClass(int id)
+        public async Task<bool> BorradoClass(int id)
         {
             var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == id);    
 
             if (classes == null)
             {
-                return null;
+                return false;
             }
 
              _contextDb.Classes.Remove(classes);
 
             await _contextDb.SaveChangesAsync();
 
-            return classes.Name;
+            return true;
         }
 
         public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()

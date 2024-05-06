@@ -134,7 +134,7 @@
                     emailInstructor = clase.emailInstructor
                 };
 
-            var result = await classService.ActualizarClass(id, updateClass);
+            var result = await classService.UpdateClass(id, updateClass);
 
             if (!result.EsCorrecto)
             {
@@ -203,7 +203,7 @@
                 }
                 else
                 {
-                    NavigationManager.NavigateTo("/");
+                    NavigationManager.NavigateTo("/listclassadmin");
                 }
 
                 clase = new CreateClassRequestDTO();

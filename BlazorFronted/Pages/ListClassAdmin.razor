@@ -3,7 +3,7 @@
 
 @page "/listclassadmin"
 @using CurrieTechnologies.Razor.SweetAlert2
-
+@attribute [Authorize(Roles = "Instructor")]
 
 
 <h3>Clases Disponibles</h3>
@@ -23,15 +23,27 @@
     <tbody>
         @if (resultClass.ListClass == null)
         {
-            <tr>
-                <td colspan="5" align="center">
-                    <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                </td>
-            </tr>
+            @if(resultClass.Error != null)
+            {
+                <tr>
+                    <td colspan="5" align="center">
+                        @resultClass.Error
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" align="center">
+                        <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                    </td>
+                </tr>
+            }
+            
         }
         else
         {
-            @foreach (var classes in resultClass.ListClass)
+            @foreach (var classes in listClass)
             {
                 <tr>
                     <td>@classes.Name</td>
@@ -58,13 +70,14 @@
 
 @code {
     ClassListResult resultClass = new ClassListResult();
+    IEnumerable<ClassDTO> listClass = null;
 
-    
 
     protected override async Task OnInitializedAsync()
     {
         resultClass.ListClass = null;
         resultClass = await classService.ClassesList();
+        listClass = resultClass.ListClass!;
     }
 
     private async Task Eliminar(int id)
@@ -79,11 +92,18 @@
 
         if (resultado.IsConfirmed)
         {
-            // var eliminado = await classService.Eliminar(id);
-            // if (eliminado)
-            // {
-            //     listaClases = listaClases!.FindAll(e => e.Id != id);
-            // }
+            var eliminado = await classService.DeleteClass(id); 
+            if (eliminado)
+            {
+                var isDelete = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Clase Eliminada",
+                        Text = $"Se ha eliminado correctamente la clase con id: {id}",
+                        Icon = SweetAlertIcon.Success,
+                    });
+
+                resultClass = await classService.ClassesList();
+            }
         }
     }
 

@@ -11,8 +11,8 @@ namespace GYM_Backend.Mappers
             {
                 Id = model.Id,
                 FullName = model.FullName,
-                Speciality = model.Speciality,
-                EmailUser = model.emailUser
+                EmailUser = model.emailUser,
+                
             };
         }
     }

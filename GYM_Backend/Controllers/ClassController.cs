@@ -121,7 +121,7 @@ namespace GYM_Backend.Controllers
         {
             var respuesta = await _classRepository.BorradoClass(id);
 
-            if(respuesta is null)
+            if(!respuesta)
             {
                 return NotFound();
             }

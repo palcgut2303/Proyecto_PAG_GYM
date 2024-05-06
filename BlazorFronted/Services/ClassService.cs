@@ -88,7 +88,7 @@ namespace BlazorFronted.Services
             return new CreateClassResult { Successful = false, Errors = new List<string> { "Error occured" } };
         }
 
-        public async Task<ResponseAPI<ClassDTO>> ActualizarClass(int id,UpdateClassRequestDTO classModel)
+        public async Task<ResponseAPI<ClassDTO>> UpdateClass(int id,UpdateClassRequestDTO classModel)
         {
             var result = await _http.PutAsJsonAsync($"api/class/{id}", classModel);
             if (!result.IsSuccessStatusCode)
@@ -97,7 +97,19 @@ namespace BlazorFronted.Services
             return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
         }
 
+        public async Task<bool> DeleteClass(int id)
+        {
+            var result = await _http.DeleteAsync($"api/class/{id}");
 
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
     }
 }

@@ -118,7 +118,8 @@ namespace GYM_Backend.Controllers
                 {
                     UserName = model.Username,
                     Email = model.Email,
-                    Role = rolDefault
+                    Role = rolDefault,
+                    FullName = model.FullName,
                 };
 
                 var createdUser = await _userManager.CreateAsync(usuario, model.Password);
@@ -170,8 +171,8 @@ namespace GYM_Backend.Controllers
                     Id = u.Id,
                     Username = u.UserName,
                     Email = u.Email,
-                    Rol = u.Role
-                    // Agrega otros campos que desees devolver
+                    Rol = u.Role,
+                    FullName = u.FullName,
                 })
                 .ToListAsync();
 
