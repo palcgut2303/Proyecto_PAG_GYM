@@ -19,6 +19,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStat
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IClassService, ClassService>();
 builder.Services.AddTransient<IClassTypeService, ClassTypeService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddSweetAlert2();
 await builder.Build().RunAsync();

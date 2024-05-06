@@ -2,12 +2,14 @@
 using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
 using GYM_Backend.Service;
+using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -134,6 +136,16 @@ namespace GYM_Backend.Controllers
                     }
                     else
                     {
+                        var nuevoMiembro = new GymMember
+                        {
+                            FullName = usuario.FullName,
+                            emailMember = usuario.Email,
+                            JoinDate = DateTime.Now
+
+                        };
+
+                        _context.GymMembers.Add(nuevoMiembro);
+                        await _context.SaveChangesAsync();
 
                         return Ok(new RegisterResult { Successful = true });
                     }
@@ -163,7 +175,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> ListarUsuarios()
+        public async Task<ActionResult<UserListResult>> ListarUsuarios()
         {
             var usuarios = await _userManager.Users
                 .Select(u => new UserDTO
@@ -176,7 +188,15 @@ namespace GYM_Backend.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(usuarios);
+            if(usuarios.Count == 0)
+            {
+                return BadRequest(new UserListResult { Successful = false, Error = "No hay usuarios" });
+            }else if(usuarios is null)
+            {
+                return BadRequest(new UserListResult { Successful = false, Error = "No hay usuarios" });
+            }
+
+            return Ok(new UserListResult { Successful = true, ListUser = usuarios});
         }
 
         [HttpPost("CambiarRolAInstructor")]
@@ -202,6 +222,26 @@ namespace GYM_Backend.Controllers
             {
                 return StatusCode(500, "Error al agregar el rol de ADMIN");
             }
+
+            var listaMiembros = await _context.GymMembers.ToListAsync();
+
+            foreach (var miembro in listaMiembros)
+            {
+                if (miembro.emailMember == user.Email)
+                {
+                    _context.GymMembers.Remove(miembro);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            var nuevoInstructor = new GymInstructor
+            {
+                FullName = user.FullName,
+                emailUser = user.Email
+            };
+
+            _context.GymInstructors.Add(nuevoInstructor);
+            await _context.SaveChangesAsync();
 
             return Ok("Rol cambiado exitosamente a ADMIN");
         }
