@@ -206,6 +206,7 @@ namespace GYM_Backend.Controllers
                     Email = u.Email,
                     Rol = u.Role,
                     FullName = u.FullName,
+                    isEnable = u.IsEnabled
                 })
                 .ToListAsync();
 
@@ -268,8 +269,8 @@ namespace GYM_Backend.Controllers
         }
 
 
-        [HttpPost("disableUser/{userId}")]
-        public async Task<IActionResult> DesactivarUsuario(string userId)
+        [HttpGet("disableUser/{userId}")]
+        public async Task<IActionResult> DesactivarUsuario([FromRoute]string userId)
         {
             var success = await _userRepository.DisableUser(userId);
             if (!success)
@@ -280,8 +281,8 @@ namespace GYM_Backend.Controllers
             return Ok(new ResponseAPI<UserDTO> { EsCorrecto = true, Mensaje = "Cuenta Deshabilitada" });
         }
 
-        [HttpPost("enableUser/{userId}")]
-        public async Task<IActionResult> ActivarUsuario(string userId)
+        [HttpGet("enableUser/{userId}")]
+        public async Task<IActionResult> ActivarUsuario([FromRoute]string userId)
         {
             var success = await _userRepository.EnableUser(userId);
             if (!success)

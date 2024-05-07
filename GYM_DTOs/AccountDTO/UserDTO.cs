@@ -11,6 +11,7 @@ namespace GYM_DTOs.AccountDTO
 
         public string Id { get; set; }
 
+        public bool isEnable { get; set; }
         public string Username { get; set; }
 
         public string FullName { get; set; }

@@ -1,5 +1,6 @@
 ﻿@inject IUserService userService;
 @inject SweetAlertService Swal
+@inject IAuthService AuthService
 
 
 @page "/useradminmanage"
@@ -59,6 +60,10 @@
                         <h5 class="card-title">@user.Username</h5>
                         <p class="card-text">Correo electrónico: @user.Email</p>
                         <p class="card-text">Rol: @user.Rol</p>
+                        @if (email == user.Email)
+                        {
+                            <button href="#" class="btn btn-primary">Editar</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -88,8 +93,13 @@
                         <p class="card-text">Correo electrónico: @user.Email</p>
                         <p class="card-text">Rol: @user.Rol</p>
                         <button href="#" class="btn btn-primary">Editar</button>
-                        <button class="btn btn-success" @onclick="(() => HacerAdmin(user.Id))">Hacer Admin</button>
-                        <button class="btn btn-danger">Dar de baja</button>
+                        <button class="btn btn-success" @onclick="(() => HacerAdmin(user.Id))">Hacer Instructor</button>
+                        @if (user.isEnable)
+                        {
+                            <button class="btn btn-danger" @onclick="(() => InactiveUser(user.Id))">Dar de baja</button>
+                        }else{
+                            <button class=" btn btn-danger" @onclick="(() => EnableUser(user.Id))">Dar de alta</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -102,9 +112,11 @@
     UserListResult resultUser = null;
     List<UserDTO> listAdmin = null;
     List<UserDTO> listUser = null;
-
+    string email = null;
     protected override async Task OnInitializedAsync()
     {
+        email = await AuthService.GetEmail();
+
         resultUser = await userService.UserList();
         listAdmin = resultUser.ListUser.Where(x => x.Rol == "Instructor").ToList();
         listUser = resultUser.ListUser.Where(x => x.Rol == "User").ToList();
@@ -123,6 +135,60 @@
                 {
                     Title = "Correcto",
                     Text = "Se ha cambiado correctamente el rol a Instructor",
+                    Icon = SweetAlertIcon.Success
+                });
+            resultUser = await userService.UserList();
+            listAdmin = resultUser.ListUser.Where(x => x.Rol == "Instructor").ToList();
+            listUser = resultUser.ListUser.Where(x => x.Rol == "User").ToList();
+        }
+        else
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = result.Mensaje,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+
+    private async Task InactiveUser(string id)
+    {
+        var result = await userService.InactiveUser(id);
+
+        if (result.EsCorrecto)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Correcto",
+                    Text = "Se ha dado de baja correctamente el usuario",
+                    Icon = SweetAlertIcon.Success
+                });
+            resultUser = await userService.UserList();
+            listAdmin = resultUser.ListUser.Where(x => x.Rol == "Instructor").ToList();
+            listUser = resultUser.ListUser.Where(x => x.Rol == "User").ToList();
+        }
+        else
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = result.Mensaje,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+
+    private async Task EnableUser(string id)
+    {
+        var result = await userService.EnableUser(id);
+
+        if (result.EsCorrecto)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Correcto",
+                    Text = "Se ha dado de alta correctamente el usuario",
                     Icon = SweetAlertIcon.Success
                 });
             resultUser = await userService.UserList();
