@@ -12,14 +12,17 @@ namespace GYM_Backend.Mappers
 
         public static ClassDTO toClassesDTO(this Classes model)
         {
+            
             return new ClassDTO
             {
                 Id = model.Id,
                 Name = model.Name,
                 ClassTypeId = model.ClassTypeId,
+                ClassTypeName = model.ClassType.Name,
                 DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
-                GymInstructorId = model.GymInstructorId
+                GymInstructorName = model.GymInstructor.FullName,
+                GymInstructorId = model.GymInstructorId,
             };
         }
 

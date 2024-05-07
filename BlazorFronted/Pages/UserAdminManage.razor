@@ -1,7 +1,9 @@
 ﻿@inject IUserService userService;
+@inject SweetAlertService Swal
 
 
 @page "/useradminmanage"
+@using CurrieTechnologies.Razor.SweetAlert2
 @using GYM_DTOs.AccountDTO
 @attribute [Authorize(Roles = "Instructor")]
 
@@ -57,8 +59,6 @@
                         <h5 class="card-title">@user.Username</h5>
                         <p class="card-text">Correo electrónico: @user.Email</p>
                         <p class="card-text">Rol: @user.Rol</p>
-                        <a href="#" class="btn btn-primary">Editar</a>
-                        <a href="#" class="btn btn-danger">Eliminar</a>
                     </div>
                 </div>
             </div>
@@ -87,9 +87,9 @@
                         <h5 class="card-title">@user.Username</h5>
                         <p class="card-text">Correo electrónico: @user.Email</p>
                         <p class="card-text">Rol: @user.Rol</p>
-                        <a href="#" class="btn btn-primary">Editar</a>
-                        <a href="#" class="btn btn-success">Hacer Admin</a>
-                        <a href="#" class="btn btn-danger">Eliminar</a>
+                        <button href="#" class="btn btn-primary">Editar</button>
+                        <button class="btn btn-success" @onclick="(() => HacerAdmin(user.Id))">Hacer Admin</button>
+                        <button class="btn btn-danger">Dar de baja</button>
                     </div>
                 </div>
             </div>
@@ -110,4 +110,34 @@
         listUser = resultUser.ListUser.Where(x => x.Rol == "User").ToList();
 
     }
+
+    private async Task HacerAdmin(string id)
+    {
+        string idUser = id;
+
+        var result = await userService.MakeAdmin(idUser);
+
+        if (result.EsCorrecto)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Correcto",
+                    Text = "Se ha cambiado correctamente el rol a Instructor",
+                    Icon = SweetAlertIcon.Success
+                });
+            resultUser = await userService.UserList();
+            listAdmin = resultUser.ListUser.Where(x => x.Rol == "Instructor").ToList();
+            listUser = resultUser.ListUser.Where(x => x.Rol == "User").ToList();
+        }
+        else
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = result.Mensaje,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+
 }

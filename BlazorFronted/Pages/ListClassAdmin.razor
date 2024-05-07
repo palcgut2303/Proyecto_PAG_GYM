@@ -49,8 +49,8 @@
                     <td>@classes.Name</td>
                     <td>@classes.DurationInMinutes</td>
                     <td>@classes.Schedule</td>
-                    <td>@classes.ClassTypeId</td>
-                    <td>@classes.GymInstructorId</td>
+                    <td>@classes.ClassTypeName</td>
+                    <td>@classes.GymInstructorName</td>
                     <td>
                         <a class="btn btn-primary btn-sm" href="createdclasses/@classes.Id">
                             <i class="bi bi-pencil-fill"></i>
@@ -103,8 +103,20 @@
                     });
 
                 resultClass = await classService.ClassesList();
+                listClass = resultClass.ListClass!;
+            }
+            else
+            {
+                var error = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = "Error al eliminar la clase",
+                        Icon = SweetAlertIcon.Error,
+                    });
             }
         }
     }
+
+
 
 }

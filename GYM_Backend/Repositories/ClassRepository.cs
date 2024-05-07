@@ -21,12 +21,12 @@ namespace GYM_Backend.Repositories
 
         public IEnumerable<ClassDTO> GetAll()
         {
-            return _contextDb.Classes.Select(x => x.toClassesDTO()).ToList();
+            return _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Select(x => x.toClassesDTO()).ToList();
         }
 
         public ClassDTO GetById(int id)
         {
-            var classes =  _contextDb.Classes.Where(x => x.Id == id).Select(x => x.toClassesDTO());
+            var classes =  _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Where(x => x.Id == id).Select(x => x.toClassesDTO());
 
             return classes.FirstOrDefault();
 
@@ -37,6 +37,9 @@ namespace GYM_Backend.Repositories
             var idClassType = await ObtenerIdClassType(model.ClassTypeName);
 
             var idGymInstructor = await ObtenerIdGymInstructor(model.emailInstructor);
+
+            var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(x => x.emailUser == model.emailInstructor);
+            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Name == model.ClassTypeName);
 
             if(idGymInstructor == 0)
             {
@@ -49,7 +52,9 @@ namespace GYM_Backend.Repositories
                 ClassTypeId = idClassType,
                 DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
-                GymInstructorId = idGymInstructor
+                GymInstructorId = idGymInstructor,
+                GymInstructor = instructor,
+                ClassType = classType
             };
 
             _contextDb.Classes.Add(classes);
@@ -111,7 +116,7 @@ namespace GYM_Backend.Repositories
         public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
         {
             // Consulta LINQ para obtener todas las clases
-            var clases =  await _contextDb.Classes.Select(x=> x.toClassesDTO()).ToListAsync();
+            var clases =  await _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Select(x=> x.toClassesDTO()).ToListAsync();
 
             // Agrupar las clases por día de la semana (solo utilizando la fecha sin la hora)
             var clasesPorDia = clases.GroupBy(clase => clase.Schedule.Date)

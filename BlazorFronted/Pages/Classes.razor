@@ -57,6 +57,12 @@
                     <th>
                         Horario
                     </th>
+                    <th>
+                        Tipo de Clase
+                    </th>
+                    <th>
+                        Nombre del instructor
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -71,12 +77,14 @@
                                 <tr>
                                     <td>@clase.Name</td>
                                     <td>@clase.Schedule</td>
+                                    <td>@clase.ClassTypeName</td>
+                                    <td>@clase.GymInstructorName</td>
                                 </tr>
                             }
                             else
                             {
                                 <tr>
-                                    <td>No hay clases disponibles</td>
+                                    <td colspan="5" class="text-center">No hay clases disponibles</td>
                                 </tr>
                             }
                             
@@ -86,7 +94,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="2" align="center">
+                            <td colspan="5" align="center">
                                 <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
                             </td>
                         </tr>
@@ -95,7 +103,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="2" align="center">
+                        <td colspan="5" align="center">
                             <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
                         </td>
                     </tr>

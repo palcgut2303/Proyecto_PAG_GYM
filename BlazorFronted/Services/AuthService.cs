@@ -17,18 +17,30 @@ namespace BlazorFronted.Services
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
-
+        private readonly IUserService userService;
         public AuthService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage)
+                           ILocalStorageService localStorage,
+                           IUserService userService)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
+            this.userService = userService;
         }
 
         public async Task<RegisterResult> Register(RegisterDTO registerModel)
         {
+            var listUser = await userService.UserList();
+
+            foreach (var user in listUser.ListUser)
+            {
+                if (user.Email == registerModel.Email || user.Username == registerModel.Username)
+                {
+                    return new RegisterResult { Successful = false, Errors = new List<string> { "Este email o username ya existe. Inicia Sesión" } };
+                }
+            }
+
             var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
             if (result.IsSuccessStatusCode)
                 return new RegisterResult { Successful = true, Errors = null };

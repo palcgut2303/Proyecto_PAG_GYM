@@ -1,18 +1,21 @@
 ﻿using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
+using GYM_Backend.Repositories;
 using GYM_Backend.Service;
 using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GYM_Backend.Controllers
 {
@@ -48,6 +51,12 @@ namespace GYM_Backend.Controllers
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
+
+            if (!user.IsEnabled)
+            {
+                return BadRequest(new LoginResult { Successful = false, Error = "Cuenta Deshabilitada, hable con el administrador del sistema." });
+
+            }
 
             if (user is null)
             {
@@ -111,6 +120,17 @@ namespace GYM_Backend.Controllers
 
             try
             {
+
+                var listUser = await _userManager.Users.ToListAsync();
+
+                foreach (var user in listUser)
+                {
+                    if (user.Email == model.Email || user.UserName == model.Username)
+                    {
+                        return BadRequest(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
+                    }
+                }
+
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -122,6 +142,7 @@ namespace GYM_Backend.Controllers
                     Email = model.Email,
                     Role = rolDefault,
                     FullName = model.FullName,
+                    IsEnabled = true
                 };
 
                 var createdUser = await _userManager.CreateAsync(usuario, model.Password);
@@ -199,20 +220,20 @@ namespace GYM_Backend.Controllers
             return Ok(new UserListResult { Successful = true, ListUser = usuarios});
         }
 
-        [HttpPost("CambiarRolAInstructor")]
-        public async Task<IActionResult> CambiarRolUsuario(string userId)
+        [HttpGet("CambiarRolAInstructor/{userId}")]
+        public async Task<IActionResult> CambiarRolUsuario([FromRoute] string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound("Usuario no encontrado");
+                return NotFound(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Usuario no encontrado" });
             }
 
             // Quita el rol de USER
             var removeUserFromRoleResult = await _userManager.RemoveFromRoleAsync(user, "User");
             if (!removeUserFromRoleResult.Succeeded)
             {
-                return StatusCode(500, "Error al quitar el rol de USER");
+                return BadRequest(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Error al quitar el rol de USER"});
             }
 
             user.Role = "Instructor";
@@ -220,7 +241,7 @@ namespace GYM_Backend.Controllers
             var addAdminRoleResult = await _userManager.AddToRoleAsync(user, "Instructor");
             if (!addAdminRoleResult.Succeeded)
             {
-                return StatusCode(500, "Error al agregar el rol de ADMIN");
+                return BadRequest(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Rol no cambiado a ADMIN" });
             }
 
             var listaMiembros = await _context.GymMembers.ToListAsync();
@@ -243,8 +264,36 @@ namespace GYM_Backend.Controllers
             _context.GymInstructors.Add(nuevoInstructor);
             await _context.SaveChangesAsync();
 
-            return Ok("Rol cambiado exitosamente a ADMIN");
+            return Ok(new ResponseAPI<UserDTO> {EsCorrecto = true, Mensaje = "Rol cambiado exitosamente a ADMIN" });
+        }
+
+
+        [HttpPost("disableUser/{userId}")]
+        public async Task<IActionResult> DesactivarUsuario(string userId)
+        {
+            var success = await _userRepository.DisableUser(userId);
+            if (!success)
+            {
+                return Ok(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "No se puede desactivar esta cuenta" });
+            }
+
+            return Ok(new ResponseAPI<UserDTO> { EsCorrecto = true, Mensaje = "Cuenta Deshabilitada" });
+        }
+
+        [HttpPost("enableUser/{userId}")]
+        public async Task<IActionResult> ActivarUsuario(string userId)
+        {
+            var success = await _userRepository.EnableUser(userId);
+            if (!success)
+            {
+                return Ok(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Error, no se puede habilitar" });
+            }
+
+            return Ok(new ResponseAPI<UserDTO> { EsCorrecto = true, Mensaje = "Cuenta Habilitada" });
         }
 
     }
+
+
+    
 }

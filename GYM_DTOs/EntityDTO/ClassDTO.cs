@@ -13,6 +13,9 @@ namespace GYM_DTOs.EntityDTO
         public int ClassTypeId { get; set; }
         public int GymInstructorId { get; set; }
 
+        public string? ClassTypeName { get; set; }
+        public string? GymInstructorName { get; set; }
+
         public ClassTypeDTO? ClassType { get; set; }
 
         public GymInstructorDTO? GymInstructor { get; set; }

@@ -43,5 +43,33 @@ namespace GYM_Backend.Repositories
             return user?.Id;
         }
 
+        public async Task<bool> DisableUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsEnabled = false;
+            await _userManager.UpdateAsync(user);
+
+            return true;
+        }
+
+        public async Task<bool> EnableUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsEnabled = true;
+            await _userManager.UpdateAsync(user);
+
+            return true;
+        }
+
     }
 }
