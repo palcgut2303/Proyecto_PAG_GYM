@@ -5,6 +5,7 @@ using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BlazorFronted.Services
 {
@@ -63,7 +64,8 @@ namespace BlazorFronted.Services
                DurationInMinutes = classDTO.DurationInMinutes,
                Schedule = classDTO.Schedule,
                ClassTypeName = classTypeName,
-               emailInstructor = gymInstructorEmail
+               emailInstructor = gymInstructorEmail,
+               Capacity = classDTO.Capacity
             };
 
 
@@ -110,6 +112,19 @@ namespace BlazorFronted.Services
                 return false;
             }
         }
+
+        public async Task<ResponseAPI<ClassDTO>> ReserveClass(int id,string email)
+        {
+            var data = new { Id = id, Email = email };
+
+            var result = await _http.PostAsJsonAsync("api/reservation", data);
+
+            if (!result.IsSuccessStatusCode)
+                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = "No se ha podido reservar" };
+
+            return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
+        }
+        
 
     }
 }

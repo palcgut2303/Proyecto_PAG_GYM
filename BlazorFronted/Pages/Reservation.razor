@@ -1,4 +1,4 @@
-﻿@page "/reservation"
+﻿@page "/reservation/{idClass:int}"
 @using GYM_DTOs.EntityDTO
 
 <h3>Reservar Clase</h3>
@@ -6,7 +6,8 @@
 
 
 @code {
-    
+    [Parameter]
+    public int idClass { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {

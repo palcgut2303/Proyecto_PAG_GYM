@@ -45,6 +45,12 @@
         </div>
 
         <div class="mb-3">
+            <label for="capacity" class="form-label">Capacidad de la clase:</label>
+            <InputNumber class="form-control" id="capacity" @bind-Value="@clase.Capacity" />
+            <ValidationMessage For="@(() => clase.Capacity)" />
+        </div>
+
+        <div class="mb-3">
             <label for="schedule" class="form-label">Fecha:</label>
             <InputDate class="form-control" @bind-Value="clase.Schedule"></InputDate>
             <ValidationMessage For="@(() => clase.Schedule)"></ValidationMessage>
@@ -77,6 +83,7 @@
 @code {
     [Parameter]
     public int idClass { get; set; } = 0;
+
     string titulo = String.Empty;
     string btnTexto = string.Empty;
     private CreateClassRequestDTO clase = new CreateClassRequestDTO();
@@ -131,7 +138,8 @@
                     DurationInMinutes = clase.DurationInMinutes,
                     Name = clase.Name,
                     Schedule = clase.Schedule,
-                    emailInstructor = clase.emailInstructor
+                    emailInstructor = clase.emailInstructor,
+                    Capacity = clase.Capacity
                 };
 
             var result = await classService.UpdateClass(id, updateClass);

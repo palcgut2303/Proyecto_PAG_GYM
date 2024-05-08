@@ -13,5 +13,6 @@ namespace BlazorFronted.Services
         Task<CreateClassRequestDTO> findByIdClass(int id);
         Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
         Task<bool> DeleteClass(int id);
+        Task<ResponseAPI<ClassDTO>> ReserveClass(int id, string email);
     }
 }

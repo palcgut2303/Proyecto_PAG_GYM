@@ -91,7 +91,7 @@ namespace GYM_Backend.Repositories
             classes.ClassTypeId = classType.Id;
             classes.GymInstructorId = instructor.Id;
             classes.Schedule = mode.Schedule;
-
+            classes.Capacity = mode.Capacity;
 
             _contextDb.SaveChanges();
 
@@ -136,6 +136,16 @@ namespace GYM_Backend.Repositories
             return gymInstructor.Id;
         }
 
+        public async Task<int> ObtenerIdGymMember(string email)
+        {
+            var gymMembers = await _contextDb.GymMembers.FirstOrDefaultAsync(gi => gi.emailMember == email);
+            if (gymMembers == null)
+            {
+                return 0;
+            }
+            return gymMembers.Id;
+        }
+
         public async Task<int> ObtenerIdClassType(string nombreClase)
         {
             var classType = await _contextDb.ClassType.FirstOrDefaultAsync(ct => ct.Name == nombreClase);
@@ -145,6 +155,29 @@ namespace GYM_Backend.Repositories
             }
             return classType.Id;
             
+        }
+
+        public async Task<bool> ReservarClase(int idClase, int idUsuario)
+        {
+            var clase = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == idClase);
+            var usuario = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.Id == idUsuario);
+
+            if (clase == null || usuario == null)
+            {
+                return false;
+            }
+
+            var reserva = new Reservation()
+            {
+                ClassesId = idClase,
+                GymMemberId = idUsuario
+            };
+
+            _contextDb.Reservations.Add(reserva);
+            await _contextDb.SaveChangesAsync();
+
+
+            return true;
         }
 
     }

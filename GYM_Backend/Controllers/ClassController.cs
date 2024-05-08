@@ -128,5 +128,24 @@ namespace GYM_Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpPost]
+        [Route("reservar/{id}")]
+        public async Task<IActionResult> ReservarClase([FromRoute] int id,string emailUser)
+        {
+
+            //Cojer el id del usuario a traves de su email
+            var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
+
+            var respuesta = await _classRepository.ReservarClase(id,idUsuario);
+
+            if (!respuesta)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }
+

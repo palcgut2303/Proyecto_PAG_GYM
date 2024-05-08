@@ -16,9 +16,11 @@ namespace GYM_Backend.Controllers
     {
         private readonly IReservationRepository _reservationRepository;
 
-        public ReservationController(IReservationRepository reservationRepository)
+        private readonly IClassRepository _classRepository;
+        public ReservationController(IReservationRepository reservationRepository, IClassRepository classRepository)
         {
             this._reservationRepository = reservationRepository;
+            _classRepository = classRepository;
         }
 
         [HttpGet]
@@ -52,11 +54,20 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateReservationRequestDTO model)
+        public async Task<IActionResult> ReservarClase( int id, string emailUser)
         {
-            Reservation reservation = await _reservationRepository.CreateReservation(model);
 
-            return CreatedAtAction(nameof(findById), new { id = reservation.Id }, reservation.toReservationDTO());
+            //Cojer el id del usuario a traves de su email
+            var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
+
+            var respuesta = await _classRepository.ReservarClase(id, idUsuario);
+
+            if (!respuesta)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
         [HttpPut]

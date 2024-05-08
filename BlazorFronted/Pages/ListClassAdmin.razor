@@ -9,63 +9,67 @@
 <h3>Clases Disponibles</h3>
 
 <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre Clase</th>
-            <th>Duracion</th>
-            <th>Fecha</th>
-            <th>Tipo de clase</th>
-            <th>Nombre del Instructor</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (resultClass.ListClass == null)
-        {
-            @if(resultClass.Error != null)
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Instructor</th>
+                <th>Tipo</th>
+                <th>Fecha</th>
+                <th>Duracion</th>
+                <th>Capacidad</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (resultClass.ListClass == null)
             {
-                <tr>
-                    <td colspan="5" align="center">
-                        @resultClass.Error
-                    </td>
-                </tr>
+                @if (resultClass.Error != null)
+                {
+                    <tr>
+                        <td colspan="5" align="center">
+                            @resultClass.Error
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" align="center">
+                            <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                        </td>
+                    </tr>
+                }
+
             }
             else
             {
-                <tr>
-                    <td colspan="5" align="center">
-                        <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                    </td>
-                </tr>
-            }
-            
-        }
-        else
-        {
-            @foreach (var classes in listClass)
-            {
-                <tr>
-                    <td>@classes.Name</td>
-                    <td>@classes.DurationInMinutes</td>
-                    <td>@classes.Schedule</td>
-                    <td>@classes.ClassTypeName</td>
-                    <td>@classes.GymInstructorName</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="createdclasses/@classes.Id">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-                        <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </td>
-                </tr>
-            }
-        }
+                @foreach (var classes in listClass)
+                {
+                    <tr>
+                        <td>@classes.GymInstructorName</td>
+                        <td>@classes.ClassTypeName</td>
+                        <td>@classes.Schedule</td>
+                        <td>@classes.DurationInMinutes</td>
+                        <td>@classes.Capacity</td>
 
-    </tbody>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="createdclasses/@classes.Id">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
 
-</table>
+        </tbody>
+
+    </table>
+</div>
+
 
 
 @code {

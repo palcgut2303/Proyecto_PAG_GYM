@@ -14,6 +14,8 @@ namespace GYM_Backend.Interfaces
         Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
         
         Task<int> ObtenerIdGymInstructor(string email);
+        Task<int> ObtenerIdGymMember(string email);
+        Task<bool> ReservarClase(int idClase, int idUsuario);
         Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/clases"
+@inject IAuthService AuthService
 
 @using GYM_DTOs;
 @using CurrieTechnologies.Razor.SweetAlert2;
@@ -35,7 +36,7 @@
     }
 </style>
 
-<div class="container mb-5 contenido-clases border border-primary rounded">
+<div class="container mb-5 contenido-clases border border-primary rounded table-responsive">
     <div>
         <h3 class="align-items-center">Clases</h3>
     </div>
@@ -48,17 +49,23 @@
             <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia">Obtener Clases</button>
         </div>
 
-        <table class="table">
+        <table class="table ">
             <thead>
                 <tr>
+                    <th>
+                        Instructor
+                    </th>
+                    <th>
+                        Tipo
+                    </th>
                     <th>
                         Horario
                     </th>
                     <th>
-                        Tipo de Clase
+                        Capacidad
                     </th>
                     <th>
-                        Instructor
+                        
                     </th>
                 </tr>
             </thead>
@@ -72,11 +79,12 @@
                             if (clase.Schedule.Date == classDTO.Schedule.Date)
                             {
                                 <tr>
-                                    <td>@clase.Schedule</td>
-                                    <td>@clase.ClassTypeName</td>
                                     <td>@clase.GymInstructorName</td>
+                                    <td>@clase.ClassTypeName</td>
+                                    <td>@clase.Schedule</td>
+                                    <td>0/@clase.Capacity</td>
                                     <td>
-                                        <a href="reservation" class="btn btn-primary">Hacer Reserva</a>
+                                        <button class="btn btn-primary" @onclick="(() => HacerReserva(clase.Id))">Hacer Reserva</button>
                                     </td>
                                 </tr>
                             }
@@ -129,13 +137,13 @@
     DateTime diaActual = DateTime.Now.Date;
     List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
     ClassDTO classDTO = new ClassDTO();
-
+    string email = null;
     protected override async Task OnInitializedAsync()
     {
         clasesPorDia = await classService.GetClassesByDayOfTheWeek();
         diasMostrados = clasesPorDia.Keys.ToList();
         classDTO.Schedule = DateTime.Now.Date;
-
+        email = await AuthService.GetEmail();
         foreach (var item in clasesPorDia)
         {
             if (item.Key.Date == classDTO.Schedule.Date)
@@ -158,19 +166,42 @@
     }
 
 
-    // void IrAlDiaAnterior()
-    // {
-    //     diaActual = diaActual.AddDays(-1);
+    private async Task HacerReserva(int id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Reserva",
+                Text = "¿Deseas Reservar esta clase?",
+                Icon = SweetAlertIcon.Info,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
 
-    //     foreach (var item in clasesPorDia)
-    //     {
-    //         if (item.Key.Date == classDTO.Schedule.Date)
-    //         {
-    //             clasesEnEseDia = item.Value;
-    //         }
-    //     }
+        if (resultado.IsConfirmed)
+        {
+            var result = await classService.ReserveClass(id,email);
 
-    // }
+            if (result.EsCorrecto)
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "Reserva realizada con exito",
+                    Icon = SweetAlertIcon.Success
+                });
+            }
+            else
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "No se pudo realizar la reserva",
+                    Icon = SweetAlertIcon.Error
+                });
+            }
+        }
+    }
 
 
 }
