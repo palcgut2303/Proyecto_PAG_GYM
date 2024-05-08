@@ -54,7 +54,8 @@ namespace GYM_Backend.Repositories
                 Schedule = model.Schedule,
                 GymInstructorId = idGymInstructor,
                 GymInstructor = instructor,
-                ClassType = classType
+                ClassType = classType,
+                Capacity = model.Capacity
             };
 
             _contextDb.Classes.Add(classes);

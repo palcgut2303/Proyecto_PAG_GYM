@@ -23,20 +23,20 @@ namespace GYM_Backend.Mappers
                 Schedule = model.Schedule,
                 GymInstructorName = model.GymInstructor.FullName,
                 GymInstructorId = model.GymInstructorId,
+                Capacity = model.Capacity
             };
         }
 
         public static Classes toClassFromCreateDTO(this CreateClassRequestDTO requestDTO)
         {
             
-
-
             return new Classes
             {
                 Name = requestDTO.Name,
                 //ClassTypeId = requestDTO.ClassTypeId,
                 DurationInMinutes = requestDTO.DurationInMinutes,
                 Schedule = requestDTO.Schedule,
+                Capacity = requestDTO.Capacity
                 //GymInstructorId = requestDTO.emailInstructor
             };
         }

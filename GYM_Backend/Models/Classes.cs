@@ -18,6 +18,10 @@ namespace GYM_Backend.Models
         public int ClassTypeId { get; set; }
         public ClassType ClassType { get; set; }
 
+        [Required(ErrorMessage = "{0} is required")]
+        [Range(1, 10, ErrorMessage = "The field {0} must be between {1} and {2}.")]
+        public int Capacity { get; set; }
+
         public int GymInstructorId { get; set; }
         public GymInstructor GymInstructor { get; set; }
 

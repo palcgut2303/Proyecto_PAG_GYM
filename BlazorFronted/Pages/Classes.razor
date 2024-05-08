@@ -52,16 +52,13 @@
             <thead>
                 <tr>
                     <th>
-                        Nombre
-                    </th>
-                    <th>
                         Horario
                     </th>
                     <th>
                         Tipo de Clase
                     </th>
                     <th>
-                        Nombre del instructor
+                        Instructor
                     </th>
                 </tr>
             </thead>
@@ -75,10 +72,12 @@
                             if (clase.Schedule.Date == classDTO.Schedule.Date)
                             {
                                 <tr>
-                                    <td>@clase.Name</td>
                                     <td>@clase.Schedule</td>
                                     <td>@clase.ClassTypeName</td>
                                     <td>@clase.GymInstructorName</td>
+                                    <td>
+                                        <a href="reservation" class="btn btn-primary">Hacer Reserva</a>
+                                    </td>
                                 </tr>
                             }
                             else
