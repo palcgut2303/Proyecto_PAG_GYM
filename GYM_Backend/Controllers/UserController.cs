@@ -52,15 +52,17 @@ namespace GYM_Backend.Controllers
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
 
-            if (!user.IsEnabled)
-            {
-                return BadRequest(new LoginResult { Successful = false, Error = "Cuenta Deshabilitada, hable con el administrador del sistema." });
-
-            }
 
             if (user is null)
             {
                 return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            }
+
+
+            if (!user.IsEnabled)
+            {
+                return BadRequest(new LoginResult { Successful = false, Error = "Cuenta Deshabilitada, hable con el administrador del sistema." });
+
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
