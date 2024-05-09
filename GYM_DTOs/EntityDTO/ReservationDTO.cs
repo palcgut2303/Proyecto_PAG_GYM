@@ -13,5 +13,7 @@ namespace GYM_DTOs.EntityDTO
         public int GymMemberId { get; set; }
 
         public int ClassesId { get; set; }
+
+        public List<GymMemberDTO>? Members { get; set; }
     }
 }

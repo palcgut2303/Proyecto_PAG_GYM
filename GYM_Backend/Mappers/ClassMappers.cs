@@ -27,6 +27,20 @@ namespace GYM_Backend.Mappers
             };
         }
 
+        public static ClassDTO toClassesTwoDTO(this Classes model)
+        {
+            return new ClassDTO
+            {
+                Id = model.Id,
+                Name = model.Name,
+                ClassTypeId = model.ClassTypeId,
+                DurationInMinutes = model.DurationInMinutes,
+                Schedule = model.Schedule,
+                GymInstructorId = model.GymInstructorId,
+                Capacity = model.Capacity
+            };
+        }
+
         public static Classes toClassFromCreateDTO(this CreateClassRequestDTO requestDTO)
         {
             

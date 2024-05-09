@@ -86,5 +86,77 @@ namespace GYM_Backend.Repositories
 
             return "Borrado Correctamente";
         }
+
+        public async Task<int> GetReservationId(int id, string email)
+        {
+            var reservation = await _contextDb.Reservations.FirstOrDefaultAsync(x => x.ClassesId == id && x.GymMember.emailMember == email);
+
+            if (reservation == null)
+            {
+                return 0;
+            }
+
+            return reservation.Id;
+        }
+
+        public async Task<List<GymMemberDTO>> GetReservationsByClass(int id)
+        {
+            var reservations = await _contextDb.Reservations.Where(x => x.ClassesId == id).ToListAsync();
+
+            if (reservations == null)
+            {
+                return null;
+            }
+
+            List<GymMemberDTO> gymMembers = new List<GymMemberDTO>();
+
+            foreach (var item in reservations)
+            {
+                var gymMember = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.Id == item.GymMemberId);
+
+                var gymMemberDTO = gymMember.toGymMemberDTO();
+
+                gymMembers.Add(gymMemberDTO);
+            }
+
+            return gymMembers;
+        }
+
+        public async Task<List<ClassDTO>> GetClassesByGymMember(string email)
+        {
+            if (email == null)
+            {
+                return null;
+            }
+
+            var user = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var reservations = await _contextDb.Reservations.Where(x => x.GymMemberId == user.Id).ToListAsync();
+
+            if (reservations == null)
+            {
+                return null;
+            }
+
+            List<ClassDTO> classes = new List<ClassDTO>();
+
+            foreach (var item in reservations)
+            {
+                var classs = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == item.ClassesId);
+
+                var classDTO = classs.toClassesTwoDTO();
+
+                classes.Add(classDTO);
+            }
+
+            return classes;
+        }
+
+
     }
 }

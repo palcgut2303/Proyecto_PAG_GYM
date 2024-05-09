@@ -11,6 +11,9 @@ namespace GYM_Backend.Interfaces
         Task<string> DeleteReservation(int id);
         IEnumerable<ReservationDTO> GetAll();
         Task<Reservation> GetById(int id);
+        Task<List<ClassDTO>> GetClassesByGymMember(string email);
+        Task<int> GetReservationId(int id, string email);
+        Task<List<GymMemberDTO>> GetReservationsByClass(int id);
         Task<Reservation> UpdateReservation(UpdateReservationRequestDTO mode, int id);
     }
 }

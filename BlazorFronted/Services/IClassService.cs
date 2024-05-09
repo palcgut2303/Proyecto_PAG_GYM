@@ -14,5 +14,7 @@ namespace BlazorFronted.Services
         Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
         Task<bool> DeleteClass(int id);
         Task<ResponseAPI<ClassDTO>> ReserveClass(int id, string email);
+        Task<ResponseAPI<ClassDTO>> CancelReservation(int id, string email);
+        Task<List<ClassDTO>> GetClassesByGymMember(string email);
     }
 }

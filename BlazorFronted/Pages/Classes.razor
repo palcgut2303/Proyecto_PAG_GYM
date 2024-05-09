@@ -83,9 +83,34 @@
                                     <td>@clase.ClassTypeName</td>
                                     <td>@clase.Schedule</td>
                                     <td>0/@clase.Capacity</td>
-                                    <td>
-                                        <button class="btn btn-primary" @onclick="(() => HacerReserva(clase.Id))">Hacer Reserva</button>
-                                    </td>
+                                    @if (listClassByUser is null)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        @foreach (var item in listClassByUser)
+                                        {
+                                            if (item.Id == clase.Id)
+                                            {
+                                                reservada = true;
+                                            }
+                                        }
+                                    }
+                                    
+                                    @if (!reservada)
+                                    {
+                                        <td>
+                                            <button class="btn btn-primary" @onclick="(() => HacerReserva(clase.Id))">Hacer Reserva</button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <button class="btn btn-primary" @onclick="(() => CancelarReserva(clase.Id))">Cancelar Reserva</button>
+                                        </td>
+                                    }
+
                                 </tr>
                             }
                             else
@@ -138,6 +163,10 @@
     List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
     ClassDTO classDTO = new ClassDTO();
     string email = null;
+    bool reservada = false;
+    List<ClassDTO> listClassByUser = null;
+
+
     protected override async Task OnInitializedAsync()
     {
         clasesPorDia = await classService.GetClassesByDayOfTheWeek();
@@ -151,6 +180,8 @@
                 clasesEnEseDia = item.Value;
             }
         }
+
+        listClassByUser = await classService.GetClassesByGymMember(email);
     }
 
     private void mostrarDia()
@@ -190,6 +221,8 @@
                     Text = "Reserva realizada con exito",
                     Icon = SweetAlertIcon.Success
                 });
+
+                reservada = true;
             }
             else
             {
@@ -199,6 +232,45 @@
                     Text = "No se pudo realizar la reserva",
                     Icon = SweetAlertIcon.Error
                 });
+            }
+        }
+    }
+
+    private async Task CancelarReserva(int id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Reserva",
+                Text = "¿Deseas Cancelar la reserva de esta clase?",
+                Icon = SweetAlertIcon.Info,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            var result = await classService.CancelReservation(id, email);
+
+            if (result.EsCorrecto)
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "Reserva cancelada con exito",
+                        Icon = SweetAlertIcon.Success
+                    });
+
+                reservada = false;
+            }
+            else
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "No se pudo cancelar la reserva",
+                        Icon = SweetAlertIcon.Error
+                    });
             }
         }
     }

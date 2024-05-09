@@ -115,7 +115,7 @@ namespace BlazorFronted.Services
 
         public async Task<ResponseAPI<ClassDTO>> ReserveClass(int id,string email)
         {
-            var data = new { Id = id, Email = email };
+            CreateReservationRequest data = new CreateReservationRequest { id = id, email = email };
 
             var result = await _http.PostAsJsonAsync("api/reservation", data);
 
@@ -124,7 +124,32 @@ namespace BlazorFronted.Services
 
             return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
         }
+
+        public async Task<ResponseAPI<ClassDTO>> CancelReservation(int id, string email)
+        {
+            var idReservation = await _http.GetFromJsonAsync<int>($"api/reservation/{id}/{email}");
+
+
+            var result = await _http.DeleteAsync($"api/reservation/{idReservation}");
+
+            if (!result.IsSuccessStatusCode)
+                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = "No se ha podido cancelar la reserva" };
+
+            return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
+        }
+
+        public async Task<List<ClassDTO>> GetClassesByGymMember(string email)
+        {
+            var listClass = await _http.GetFromJsonAsync<List<ClassDTO>>($"api/reservation/GetClassesByGymMember/{email}");
         
+            if(listClass == null)
+            {
+                return null;
+            }
+
+            return listClass;
+        }
+
 
     }
 }

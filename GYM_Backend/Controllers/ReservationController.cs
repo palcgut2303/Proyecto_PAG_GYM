@@ -2,6 +2,7 @@
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
+using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.UpdateDTO;
 using Microsoft.AspNetCore.Http;
@@ -54,20 +55,23 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReservarClase( int id, string emailUser)
+        public async Task<IActionResult> ReservarClase(CreateReservationRequest data)
         {
+
+            var emailUser = data.email;
+            var idClass = data.id;
 
             //Cojer el id del usuario a traves de su email
             var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
 
-            var respuesta = await _classRepository.ReservarClase(id, idUsuario);
+            var respuesta = await _classRepository.ReservarClase(idClass, idUsuario);
 
             if (!respuesta)
             {
-                return NotFound();
+                return NotFound(new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Reserva no creada" });
             }
 
-            return NoContent();
+            return Ok(new ResponseAPI<string> { EsCorrecto = true, Valor = "Reserva Creada"});
         }
 
         [HttpPut]
@@ -97,6 +101,49 @@ namespace GYM_Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("{id}/{email}")]
+        public async Task<IActionResult> GetIdReservation([FromRoute] int id, [FromRoute] string email)
+        {
+            var idReservation = await _reservationRepository.GetReservationId(id, email);
+
+            if (idReservation == 0)
+            {
+                return NotFound("No se ha encontrado el objeto indicado");
+            }
+
+            return Ok(idReservation);
+        }
+
+        [HttpGet]
+        [Route("GetReservationsByClass/{id}")]
+        public async Task<IActionResult> GetGymMembersReservationsByClass([FromRoute] int id)
+        {
+            var listGymMembers = await _reservationRepository.GetReservationsByClass(id);
+
+            if (listGymMembers == null)
+            {
+                return NotFound("No se ha encontrado el objeto indicado");
+            }
+
+            return Ok(listGymMembers);
+        }
+
+        [HttpGet]
+        [Route("GetClassesByGymMember/{email}")]
+        public async Task<IActionResult> GetClassesByGymMember([FromRoute] string email)
+        {
+            var listClasses = await _reservationRepository.GetClassesByGymMember(email);
+
+            if (listClasses == null)
+            {
+                return NotFound("No se ha encontrado el objeto indicado");
+            }
+
+            return Ok(listClasses);
+        }
+
 
     }
 }
