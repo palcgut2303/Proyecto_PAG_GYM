@@ -124,10 +124,10 @@ namespace GYM_Backend.Controllers
 
             if (listGymMembers == null)
             {
-                return NotFound("No se ha encontrado el objeto indicado");
+                return NotFound(new GymMemberListResult { Error = "No se encuentra la clase", Successful = false });
             }
 
-            return Ok(listGymMembers);
+            return Ok(new GymMemberListResult { ListGymMembers = listGymMembers, Successful = true });
         }
 
         [HttpGet]

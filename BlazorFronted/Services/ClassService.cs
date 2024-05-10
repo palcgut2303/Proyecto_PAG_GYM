@@ -150,6 +150,18 @@ namespace BlazorFronted.Services
             return listClass;
         }
 
+        
+        public async Task<List<GymMemberDTO>> GetGymMembersByClass(int id)
+        {
+            var listGymMembers = await _http.GetFromJsonAsync<GymMemberListResult>($"api/reservation/GetReservationsByClass/{id}");
+
+            if (listGymMembers == null)
+            {
+                return null;
+            }
+
+            return listGymMembers.ListGymMembers;
+        }
 
     }
 }

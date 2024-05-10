@@ -19,6 +19,7 @@ namespace GYM_DTOs.EntityDTO
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public int Capacity { get; set; }
 
+        public int? TotalReservations { get; set; }
         public string? ClassTypeName { get; set; }
         public string? GymInstructorName { get; set; }
 

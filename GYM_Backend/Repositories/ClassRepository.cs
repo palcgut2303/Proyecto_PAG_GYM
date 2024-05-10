@@ -117,7 +117,7 @@ namespace GYM_Backend.Repositories
         public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
         {
             // Consulta LINQ para obtener todas las clases
-            var clases =  await _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Select(x=> x.toClassesDTO()).ToListAsync();
+            var clases =  await _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Select(x=> x.toClassesDTO()).ToListAsync();
 
             // Agrupar las clases por día de la semana (solo utilizando la fecha sin la hora)
             var clasesPorDia = clases.GroupBy(clase => clase.Schedule.Date)

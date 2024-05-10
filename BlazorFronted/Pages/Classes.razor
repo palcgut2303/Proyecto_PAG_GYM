@@ -44,10 +44,11 @@
     <EditForm Model="classDTO">
         <DataAnnotationsValidator />
         <div class="mt-3">
-            <InputDate class="form-control" @bind-Value="classDTO.Schedule" ></InputDate>
+            <input type="date" class="form-control" @onchange="@hola" value="classDTO.Schedule"/>
             <ValidationMessage For="@(() => classDTO.Schedule)"></ValidationMessage>
-            <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia">Obtener Clases</button>
-        </div>
+@*             <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia" >Obtener Clases</button>
+ *@        </div>
+
 
         <table class="table ">
             <thead>
@@ -65,7 +66,7 @@
                         Capacidad
                     </th>
                     <th>
-                        
+
                     </th>
                 </tr>
             </thead>
@@ -76,13 +77,13 @@
                     {
                         @foreach (var clase in clasesEnEseDia)
                         {
-                            if (clase.Schedule.Date == classDTO.Schedule.Date)
+                            if (clase.Schedule.Date == dateTime)
                             {
                                 <tr>
                                     <td>@clase.GymInstructorName</td>
                                     <td>@clase.ClassTypeName</td>
                                     <td>@clase.Schedule</td>
-                                    <td>0/@clase.Capacity</td>
+                                    <td>@clase.TotalReservations/@clase.Capacity</td>
                                     @if (listClassByUser is null)
                                     {
 
@@ -97,7 +98,7 @@
                                             }
                                         }
                                     }
-                                    
+
                                     @if (!reservada)
                                     {
                                         <td>
@@ -107,7 +108,7 @@
                                     else
                                     {
                                         <td>
-                                            <button class="btn btn-primary" @onclick="(() => CancelarReserva(clase.Id))">Cancelar Reserva</button>
+                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase.Id))">Cancelar Reserva</button>
                                         </td>
                                     }
 
@@ -119,7 +120,7 @@
                                     <td colspan="5" class="text-center">No hay clases disponibles</td>
                                 </tr>
                             }
-                            
+
 
                         }
                     }
@@ -165,7 +166,7 @@
     string email = null;
     bool reservada = false;
     List<ClassDTO> listClassByUser = null;
-
+    List<GymMemberDTO> listUserByClass = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -211,27 +212,27 @@
 
         if (resultado.IsConfirmed)
         {
-            var result = await classService.ReserveClass(id,email);
+            var result = await classService.ReserveClass(id, email);
 
             if (result.EsCorrecto)
             {
                 await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "Reserva realizada con exito",
-                    Icon = SweetAlertIcon.Success
-                });
+                    {
+                        Title = "Reserva",
+                        Text = "Reserva realizada con exito",
+                        Icon = SweetAlertIcon.Success
+                    });
 
                 reservada = true;
             }
             else
             {
                 await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "No se pudo realizar la reserva",
-                    Icon = SweetAlertIcon.Error
-                });
+                    {
+                        Title = "Reserva",
+                        Text = "No se pudo realizar la reserva",
+                        Icon = SweetAlertIcon.Error
+                    });
             }
         }
     }
@@ -274,6 +275,31 @@
             }
         }
     }
+    string fecha = null;
+    DateTime dateTime = new DateTime();
 
+    private void hola(ChangeEventArgs e)
+    {
+        fecha = e.Value.ToString();
+        dateTime = DateTime.Parse(fecha);
 
+        foreach (var item in clasesPorDia)
+        {
+            if (item.Key.Date == dateTime)
+            {
+                clasesEnEseDia = item.Value;
+            }
+        }
+    }
+    int participantesActuales = 0;
+
+    private async Task<int> CountUserReservationClass(int id)
+    {
+        var listUserByClass = await classService.GetGymMembersByClass(id);
+        participantesActuales = listUserByClass.Count;
+
+        return participantesActuales;
+    }
+
+    
 }

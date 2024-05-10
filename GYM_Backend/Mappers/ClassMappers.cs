@@ -23,7 +23,8 @@ namespace GYM_Backend.Mappers
                 Schedule = model.Schedule,
                 GymInstructorName = model.GymInstructor.FullName,
                 GymInstructorId = model.GymInstructorId,
-                Capacity = model.Capacity
+                Capacity = model.Capacity,
+                TotalReservations = model.Reservations.Where(x => x.ClassesId == model.Id).Count()
             };
         }
 
