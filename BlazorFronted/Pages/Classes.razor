@@ -1,5 +1,6 @@
 ﻿@page "/clases"
 @inject IAuthService AuthService
+@inject IJSRuntime JSRuntime
 
 @using GYM_DTOs;
 @using CurrieTechnologies.Razor.SweetAlert2;
@@ -44,10 +45,11 @@
     <EditForm Model="classDTO">
         <DataAnnotationsValidator />
         <div class="mt-3">
-            <input type="date" class="form-control" @onchange="@hola" value="classDTO.Schedule"/>
+            <input type="date" class="form-control" @onchange="mostrarDia" value="@fecha" />
             <ValidationMessage For="@(() => classDTO.Schedule)"></ValidationMessage>
-@*             <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia" >Obtener Clases</button>
- *@        </div>
+            @*             <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia" >Obtener Clases</button>
+            *@
+        </div>
 
 
         <table class="table ">
@@ -84,33 +86,31 @@
                                     <td>@clase.ClassTypeName</td>
                                     <td>@clase.Schedule</td>
                                     <td>@clase.TotalReservations/@clase.Capacity</td>
-                                    @if (listClassByUser is null)
-                                    {
 
+
+                                    @if (ClaseEstaReservadaPorUsuario(clase))
+                                    {
+                                        <td>
+                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase))">Cancelar Reserva</button>
+                                        </td>
                                     }
                                     else
                                     {
-                                        @foreach (var item in listClassByUser)
+                                        @if (clase.TotalReservations == clase.Capacity)
                                         {
-                                            if (item.Id == clase.Id)
-                                            {
-                                                reservada = true;
-                                            }
+                                            <td>
+                                                <button class="btn btn-secondary">Clase llena</button>
+                                            </td>
                                         }
+                                        else
+                                        {
+                                            <td>
+                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(clase))">Hacer Reserva</button>
+                                            </td>
+                                        }
+
                                     }
 
-                                    @if (!reservada)
-                                    {
-                                        <td>
-                                            <button class="btn btn-primary" @onclick="(() => HacerReserva(clase.Id))">Hacer Reserva</button>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase.Id))">Cancelar Reserva</button>
-                                        </td>
-                                    }
 
                                 </tr>
                             }
@@ -173,6 +173,7 @@
         clasesPorDia = await classService.GetClassesByDayOfTheWeek();
         diasMostrados = clasesPorDia.Keys.ToList();
         classDTO.Schedule = DateTime.Now.Date;
+        dateTime = DateTime.Now.Date;
         email = await AuthService.GetEmail();
         foreach (var item in clasesPorDia)
         {
@@ -185,59 +186,91 @@
         listClassByUser = await classService.GetClassesByGymMember(email);
     }
 
-    private void mostrarDia()
+    private bool ClaseEstaReservadaPorUsuario(ClassDTO clase)
     {
-
-        foreach (var item in clasesPorDia)
+        if (listClassByUser == null || listClassByUser.Count == 0)
         {
-            if (item.Key.Date == classDTO.Schedule.Date)
+            return false;
+        }
+
+        foreach (var item in listClassByUser)
+        {
+            if (item.Id == clase.Id)
             {
-                clasesEnEseDia = item.Value;
+
+                return true;
             }
         }
+
+
+
+        return false;
     }
 
-
-    private async Task HacerReserva(int id)
+    private async Task HacerReserva(ClassDTO model)
     {
-        var resultado = await Swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "Reserva",
-                Text = "¿Deseas Reservar esta clase?",
-                Icon = SweetAlertIcon.Info,
-                ShowCancelButton = true,
-                ConfirmButtonText = "Si",
-                CancelButtonText = "No"
-            });
-
-        if (resultado.IsConfirmed)
+        if (model.TotalReservations < model.Capacity)
         {
-            var result = await classService.ReserveClass(id, email);
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "¿Deseas Reservar esta clase?",
+                    Icon = SweetAlertIcon.Info,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
 
-            if (result.EsCorrecto)
+            if (resultado.IsConfirmed)
             {
-                await Swal.FireAsync(new SweetAlertOptions
-                    {
-                        Title = "Reserva",
-                        Text = "Reserva realizada con exito",
-                        Icon = SweetAlertIcon.Success
-                    });
+                var result = await classService.ReserveClass(model.Id, email);
 
-                reservada = true;
-            }
-            else
-            {
-                await Swal.FireAsync(new SweetAlertOptions
-                    {
-                        Title = "Reserva",
-                        Text = "No se pudo realizar la reserva",
-                        Icon = SweetAlertIcon.Error
-                    });
+                if (result.EsCorrecto)
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "Reserva realizada con exito",
+                            Icon = SweetAlertIcon.Success
+                        });
+
+
+                    // model.TotalReservations++;
+                    // StateHasChanged();
+                    await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+                }
+                else
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "No se pudo realizar la reserva",
+                            Icon = SweetAlertIcon.Error
+                        });
+
+                    reservada = false;
+                    // await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+                }
             }
         }
+        else
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "No hay cupo disponible",
+                    Icon = SweetAlertIcon.Error
+                });
+            return;
+        }
+
+
+
     }
 
-    private async Task CancelarReserva(int id)
+    private async Task CancelarReserva(ClassDTO model)
     {
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -251,7 +284,7 @@
 
         if (resultado.IsConfirmed)
         {
-            var result = await classService.CancelReservation(id, email);
+            var result = await classService.CancelReservation(model.Id, email);
 
             if (result.EsCorrecto)
             {
@@ -262,7 +295,10 @@
                         Icon = SweetAlertIcon.Success
                     });
 
-                reservada = false;
+                // model.TotalReservations--;
+                // StateHasChanged();
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
             }
             else
             {
@@ -272,13 +308,16 @@
                         Text = "No se pudo cancelar la reserva",
                         Icon = SweetAlertIcon.Error
                     });
+                reservada = false;
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
             }
         }
     }
     string fecha = null;
     DateTime dateTime = new DateTime();
 
-    private void hola(ChangeEventArgs e)
+    private void mostrarDia(ChangeEventArgs e)
     {
         fecha = e.Value.ToString();
         dateTime = DateTime.Parse(fecha);
@@ -291,15 +330,7 @@
             }
         }
     }
-    int participantesActuales = 0;
 
-    private async Task<int> CountUserReservationClass(int id)
-    {
-        var listUserByClass = await classService.GetGymMembersByClass(id);
-        participantesActuales = listUserByClass.Count;
 
-        return participantesActuales;
-    }
 
-    
 }

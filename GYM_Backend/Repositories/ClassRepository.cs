@@ -21,12 +21,12 @@ namespace GYM_Backend.Repositories
 
         public IEnumerable<ClassDTO> GetAll()
         {
-            return _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Select(x => x.toClassesDTO()).ToList();
+            return _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Select(x => x.toClassesDTO()).ToList();
         }
 
         public ClassDTO GetById(int id)
         {
-            var classes =  _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Where(x => x.Id == id).Select(x => x.toClassesDTO());
+            var classes =  _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Where(x => x.Id == id).Select(x => x.toClassesDTO());
 
             return classes.FirstOrDefault();
 

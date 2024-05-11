@@ -16,8 +16,8 @@
 
 <style>
     /* .container-createdClass {
-            margin-top: 5%;
-        } */
+                margin-top: 5%;
+            } */
 </style>
 <div class="container container-createdClass">
 
@@ -52,9 +52,11 @@
 
         <div class="mb-3">
             <label for="schedule" class="form-label">Fecha:</label>
-            <InputDate class="form-control" @bind-Value="clase.Schedule"></InputDate>
-            <ValidationMessage For="@(() => clase.Schedule)"></ValidationMessage>
+            <RadzenDatePicker  @bind-Value=@clase.Schedule ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
+
+
         </div>
+
         <div class="mb-3">
             <label for="ClassTypeName" class="form-label">Tipo de clase:</label>
             <select @bind="@selectedClassType" id="ClassTypeName" class="form-control">
