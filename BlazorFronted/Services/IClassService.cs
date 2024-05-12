@@ -17,5 +17,6 @@ namespace BlazorFronted.Services
         Task<ResponseAPI<ClassDTO>> CancelReservation(int id, string email);
         Task<List<ClassDTO>> GetClassesByGymMember(string email);
         Task<List<GymMemberDTO>> GetGymMembersByClass(int id);
+        Task<bool> CheckClassAvailability(CreateClassRequestDTO classModel);
     }
 }

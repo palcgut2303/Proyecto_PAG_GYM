@@ -1,4 +1,5 @@
 ﻿using GYM_Backend.Models;
+using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
@@ -16,6 +17,6 @@ namespace GYM_Backend.Interfaces
         Task<int> ObtenerIdGymInstructor(string email);
         Task<int> ObtenerIdGymMember(string email);
         Task<bool> ReservarClase(int idClase, int idUsuario);
-        Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id);
+        Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

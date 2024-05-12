@@ -162,5 +162,33 @@ namespace BlazorFronted.Services
             return listGymMembers.ListGymMembers;
         }
 
+        public async Task<bool> CheckClassAvailability(CreateClassRequestDTO classModel)
+        {
+            var classes = await ClassesList();
+
+            if (!classes.Successful)
+            {
+                return false;
+            }
+
+            var listClasses = classes.ListClass;
+
+            foreach (var item in listClasses)
+            {
+                
+                if(item.Schedule.Date == classModel.Schedule.Date)
+                {
+                    if(item.Schedule.Hour == classModel.Schedule.Hour)
+                    {
+                        return false;
+                    }
+                }
+
+
+            }
+
+            return true;
+        }
+
     }
 }

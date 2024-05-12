@@ -1,7 +1,9 @@
-﻿using GYM_Backend.Contexto;
+﻿using Azure;
+using GYM_Backend.Contexto;
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
+using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
@@ -61,7 +63,7 @@ namespace GYM_Backend.Repositories
             return classes;
         }
 
-        public async Task<Classes> UpdateClass(UpdateClassRequestDTO mode, int id)
+        public async Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id)
         {
             var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(X => X.emailUser == mode.emailInstructor);
 
@@ -89,9 +91,13 @@ namespace GYM_Backend.Repositories
             classes.Schedule = mode.Schedule;
             classes.Capacity = mode.Capacity;
 
-            _contextDb.SaveChanges();
+            await _contextDb.SaveChangesAsync();
 
-            return classes;
+            var classDTO =  _contextDb.Classes.Include(x => x.Reservations).Include(x => x.GymInstructor).Where(x => x.Id == id).Select(x => x.toClassesDTO());
+
+            var classDTOList = classDTO.ToList();
+
+            return new ResponseAPI<List<ClassDTO>> { EsCorrecto = true, Valor = classDTOList };
         }
 
         public async Task<bool> BorradoClass(int id)

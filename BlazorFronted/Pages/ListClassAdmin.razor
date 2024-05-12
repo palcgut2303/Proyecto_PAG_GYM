@@ -49,8 +49,8 @@
                     <tr>
                         <td>@classes.GymInstructorName</td>
                         <td>@classes.ClassTypeName</td>
-                        <td>@classes.Schedule.Date</td>
-                        <td>@classes.Schedule.TimeOfDay - @classes.Schedule.AddMinutes(60)</td>
+                        <td>@GetDate(classes.Schedule)</td>
+                        <td>@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
                         <td>@classes.Capacity</td>
 
                         <td>
@@ -121,6 +121,18 @@
         }
     }
 
+    //Metodo que me añada una hora a la hora de la clase
+    private TimeSpan AddMinutes(DateTime time, int minutes)
+    {
+        var addHour = time.AddMinutes(minutes);
+        return addHour.TimeOfDay;
+    }
 
+    //Metodo que me devuelva la fecha de la clase
+    private string GetDate(DateTime date)
+    {
+        
+        return date.ToString("dd-MM-yyyy");
+    }
 
 }

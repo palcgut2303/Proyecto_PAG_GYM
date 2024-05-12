@@ -105,14 +105,14 @@ namespace GYM_Backend.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassRequestDTO requestDTO)
         {
-            Classes classes = await _classRepository.UpdateClass(requestDTO, id);
+            var classes = await _classRepository.UpdateClass(requestDTO, id);
 
             if (classes == null)
             {
                 return NotFound("No se ha encontrado el objeto indicado, ya sea Instructor, tipo de clase, o la clase para editar");
             }
 
-            return Ok(classes.toClassesDTO());
+            return Ok(classes);
         }
 
         [HttpDelete]
