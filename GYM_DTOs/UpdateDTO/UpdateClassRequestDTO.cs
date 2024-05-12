@@ -8,8 +8,7 @@ namespace GYM_DTOs.UpdateDTO
 {
     public class UpdateClassRequestDTO
     {
-        public string Name { get; set; }
-        public int DurationInMinutes { get; set; }
+        
         public DateTime Schedule { get; set; }
         public int Capacity { get; set; }
         public string? ClassTypeName { get; set; }

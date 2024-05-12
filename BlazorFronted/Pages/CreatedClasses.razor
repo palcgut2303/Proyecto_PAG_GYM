@@ -33,18 +33,6 @@
         }
 
         <div class="mb-3">
-            <label for="name" class="form-label">Nombre de la Clase:</label>
-            <InputText class="form-control" id="name" @bind-Value="@clase.Name" />
-            <ValidationMessage For="@(() => clase.Name)" />
-        </div>
-
-        <div class="mb-3">
-            <label for="duration" class="form-label">Duracion (minutos):</label>
-            <InputNumber class="form-control" id="duration" @bind-Value="@clase.DurationInMinutes" />
-            <ValidationMessage For="@(() => clase.DurationInMinutes)" />
-        </div>
-
-        <div class="mb-3">
             <label for="capacity" class="form-label">Capacidad de la clase:</label>
             <InputNumber class="form-control" id="capacity" @bind-Value="@clase.Capacity" />
             <ValidationMessage For="@(() => clase.Capacity)" />
@@ -137,8 +125,6 @@
             var updateClass = new UpdateClassRequestDTO
                 {
                     ClassTypeName = clase.ClassTypeName,
-                    DurationInMinutes = clase.DurationInMinutes,
-                    Name = clase.Name,
                     Schedule = clase.Schedule,
                     emailInstructor = clase.emailInstructor,
                     Capacity = clase.Capacity
@@ -191,7 +177,7 @@
         }
         else
         {
-            var result = await classService.CrearClass(clase);
+            var result = await classService.CreateClass(clase);
 
             if (result.Successful)
             {

@@ -60,8 +60,7 @@ namespace BlazorFronted.Services
 
             var newClassDTO = new CreateClassRequestDTO
             {
-               Name = classDTO.Name,
-               DurationInMinutes = classDTO.DurationInMinutes,
+              
                Schedule = classDTO.Schedule,
                ClassTypeName = classTypeName,
                emailInstructor = gymInstructorEmail,
@@ -79,7 +78,7 @@ namespace BlazorFronted.Services
             return await _http.GetFromJsonAsync<Dictionary<DateTime, List<ClassDTO>>>("/api/Class/porDia");
         }
 
-        public async Task<CreateClassResult> CrearClass(CreateClassRequestDTO classModel)
+        public async Task<CreateClassResult> CreateClass(CreateClassRequestDTO classModel)
         {
 
             var result = await _http.PostAsJsonAsync("api/class", classModel);

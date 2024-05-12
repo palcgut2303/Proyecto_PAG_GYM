@@ -9,7 +9,7 @@ namespace BlazorFronted.Services
     {
         Task<ResponseAPI<ClassDTO>> UpdateClass(int id, UpdateClassRequestDTO classModel);
         Task<ClassListResult> ClassesList();
-        Task<CreateClassResult> CrearClass(CreateClassRequestDTO classModel);
+        Task<CreateClassResult> CreateClass(CreateClassRequestDTO classModel);
         Task<CreateClassRequestDTO> findByIdClass(int id);
         Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
         Task<bool> DeleteClass(int id);

@@ -16,10 +16,8 @@ namespace GYM_Backend.Mappers
             return new ClassDTO
             {
                 Id = model.Id,
-                Name = model.Name,
                 ClassTypeId = model.ClassTypeId,
                 ClassTypeName = model.ClassType.Name,
-                DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
                 GymInstructorName = model.GymInstructor.FullName,
                 GymInstructorId = model.GymInstructorId,
@@ -33,9 +31,7 @@ namespace GYM_Backend.Mappers
             return new ClassDTO
             {
                 Id = model.Id,
-                Name = model.Name,
                 ClassTypeId = model.ClassTypeId,
-                DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
                 GymInstructorId = model.GymInstructorId,
                 Capacity = model.Capacity
@@ -47,9 +43,7 @@ namespace GYM_Backend.Mappers
             
             return new Classes
             {
-                Name = requestDTO.Name,
                 //ClassTypeId = requestDTO.ClassTypeId,
-                DurationInMinutes = requestDTO.DurationInMinutes,
                 Schedule = requestDTO.Schedule,
                 Capacity = requestDTO.Capacity
                 //GymInstructorId = requestDTO.emailInstructor

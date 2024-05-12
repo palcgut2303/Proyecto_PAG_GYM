@@ -48,9 +48,7 @@ namespace GYM_Backend.Repositories
 
             var classes = new Classes()
             {
-                Name = model.Name,
                 ClassTypeId = idClassType,
-                DurationInMinutes = model.DurationInMinutes,
                 Schedule = model.Schedule,
                 GymInstructorId = idGymInstructor,
                 GymInstructor = instructor,
@@ -86,8 +84,6 @@ namespace GYM_Backend.Repositories
                 return null;
             }
 
-            classes.Name = mode.Name;
-            classes.DurationInMinutes = mode.DurationInMinutes;
             classes.ClassTypeId = classType.Id;
             classes.GymInstructorId = instructor.Id;
             classes.Schedule = mode.Schedule;

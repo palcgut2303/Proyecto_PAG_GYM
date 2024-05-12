@@ -9,10 +9,7 @@ namespace GYM_DTOs.CreateDTO
 {
     public class CreateClassRequestDTO
     {
-        [Required(ErrorMessage = "{0} is required")]
-        public string Name { get; set; }
-        [Required(ErrorMessage = "{0} is required")]
-        public int DurationInMinutes { get; set; }
+        
         [Required(ErrorMessage = "{0} is required")]
         public DateTime Schedule { get; set; }
         public int Capacity { get; set; }
