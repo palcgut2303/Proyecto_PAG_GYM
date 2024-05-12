@@ -16,7 +16,7 @@
                 <th>Instructor</th>
                 <th>Tipo</th>
                 <th>Fecha</th>
-                <th>Duracion</th>
+                <th>Horario</th>
                 <th>Capacidad</th>
                 <th></th>
             </tr>
@@ -49,7 +49,8 @@
                     <tr>
                         <td>@classes.GymInstructorName</td>
                         <td>@classes.ClassTypeName</td>
-                        <td>@classes.Schedule</td>
+                        <td>@classes.Schedule.Date</td>
+                        <td>@classes.Schedule.TimeOfDay - @classes.Schedule.AddMinutes(60)</td>
                         <td>@classes.Capacity</td>
 
                         <td>
