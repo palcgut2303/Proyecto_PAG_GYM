@@ -2,6 +2,7 @@
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
+using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
@@ -157,6 +158,34 @@ namespace GYM_Backend.Repositories
             return classes;
         }
 
+        public async Task<ResponseAPI<int>> GetReservationsByWeek(string email)
+        {
+            var user = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
+
+            if (user == null)
+            {
+                return new ResponseAPI<int> { EsCorrecto = false, Mensaje = "Usuario no encontrado" };
+            }
+
+            var reservations = await _contextDb.Reservations.Include(x => x.Classes).Where(x => x.GymMemberId == user.Id).ToListAsync();
+
+            if (reservations == null)
+            {
+                return new ResponseAPI<int> { EsCorrecto = true, Mensaje = "Este usuario no tiene reservas" };
+            }
+
+            int count = 0;
+
+            foreach (var item in reservations)
+            {
+                if (item.Classes.Schedule.Date >= DateTime.Now.AddDays(-7))
+                {
+                    count++;
+                }
+            }
+
+            return new ResponseAPI<int> { EsCorrecto = true, Valor = count};
+        }
         
 
     }

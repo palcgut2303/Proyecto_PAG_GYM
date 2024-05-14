@@ -6,6 +6,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Radzen;
 
 
 
@@ -20,6 +21,9 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IClassService, ClassService>();
 builder.Services.AddTransient<IClassTypeService, ClassTypeService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IGymMemberService, GymMemberService>();
 
 builder.Services.AddSweetAlert2();
+builder.Services.AddRadzenComponents();
+
 await builder.Build().RunAsync();

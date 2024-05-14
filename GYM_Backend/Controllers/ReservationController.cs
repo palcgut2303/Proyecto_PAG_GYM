@@ -145,5 +145,21 @@ namespace GYM_Backend.Controllers
         }
 
 
+        [HttpGet]
+        [Route("CheckReservationByUserCountWeek")]
+        public async Task<IActionResult> CheckClassAvailability(string email)
+        {
+            var respuesta = await _reservationRepository.GetReservationsByWeek(email);
+
+            if (respuesta.EsCorrecto)
+            {
+                return Ok(new ResponseAPI<int> { EsCorrecto = true, Valor = respuesta.Valor });
+            }
+
+            return NotFound(new ResponseAPI<int> { EsCorrecto = false, Valor = respuesta.Valor });
+        }
+
+
+
     }
 }

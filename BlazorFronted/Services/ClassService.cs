@@ -45,14 +45,14 @@ namespace BlazorFronted.Services
             var idClassType = classDTO.ClassTypeId;
 
             //Necesito el nombre del instructor cuyo id es el de la variable, para poder mostrarlo en el formulario
-            var gymInstructor = await _http.GetFromJsonAsync<findGymInstructorByIdResult>($"api/GymInstructor/{idGymInstructor}");
+            var gymInstructor = await _http.GetFromJsonAsync<findGymPersonByIdResult>($"api/GymInstructor/{idGymInstructor}");
 
             if(gymInstructor == null)
             {
                 return null;
             }
             //Necesito el nombre del tipo de clase cuyo id es el de la variable, para poder mostrarlo en el formulario
-            var classType = await _classTypeService.Buscar(idClassType);
+            var classType = await _classTypeService.findByClassType(idClassType);
 
 
             var classTypeName = classType.Name;
@@ -168,7 +168,7 @@ namespace BlazorFronted.Services
 
             if (!classes.Successful)
             {
-                return false;
+                return true;
             }
 
             var listClasses = classes.ListClass;

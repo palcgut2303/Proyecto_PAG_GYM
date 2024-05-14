@@ -29,7 +29,7 @@ namespace GYM_Backend.Controllers
 
             if (listGymInstructor == null || listGymInstructor.Count() == 0)
             {
-                return Ok(new ResponseAPI<IEnumerable<GymInstructorDTO>> { EsCorrecto = false, Mensaje = "No hay clases disponibles" });
+                return Ok(new ResponseAPI<IEnumerable<GymInstructorDTO>> { EsCorrecto = false, Mensaje = "No hay instructores disponibles" });
             }
 
             return Ok(new ResponseAPI<IEnumerable<GymInstructorDTO>> { EsCorrecto = true, Valor = listGymInstructor });
@@ -43,10 +43,10 @@ namespace GYM_Backend.Controllers
 
             if (gymInstructor == null)
             {
-                return BadRequest(new findGymInstructorByIdResult { Successful = false, Error = "No se encontro el instructor" });
+                return BadRequest(new findGymPersonByIdResult { Successful = false, Error = "No se encontro el instructor" });
             }
 
-            return Ok(new findGymInstructorByIdResult { Successful = true, GymInstructorDTO = gymInstructor});
+            return Ok(new findGymPersonByIdResult { Successful = true, GymInstructorDTO = gymInstructor});
         }
     }
 }

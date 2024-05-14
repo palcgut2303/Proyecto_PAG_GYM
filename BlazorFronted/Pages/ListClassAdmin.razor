@@ -5,70 +5,72 @@
 @using CurrieTechnologies.Razor.SweetAlert2
 @attribute [Authorize(Roles = "Instructor")]
 
+<div class="m-3">
+    <h3>Clases Disponibles</h3>
 
-<h3>Clases Disponibles</h3>
-
-<a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Instructor</th>
-                <th>Tipo</th>
-                <th>Fecha</th>
-                <th>Horario</th>
-                <th>Capacidad</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (resultClass.ListClass == null)
-            {
-                @if (resultClass.Error != null)
+    <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
+    <div class="table-responsive">
+        <table class="table border-3">
+            <thead>
+                <tr>
+                    <th class="text-center">Instructor</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Horario</th>
+                    <th class="text-center">Capacidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (resultClass.ListClass == null)
                 {
-                    <tr>
-                        <td colspan="5" align="center">
-                            @resultClass.Error
-                        </td>
-                    </tr>
+                    @if (resultClass.Error != null)
+                    {
+                        <tr>
+                            <td colspan="5" align="center">
+                                @resultClass.Error
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" align="center">
+                                <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                            </td>
+                        </tr>
+                    }
+
                 }
                 else
                 {
-                    <tr>
-                        <td colspan="5" align="center">
-                            <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                        </td>
-                    </tr>
+                    @foreach (var classes in listClass)
+                    {
+                        <tr>
+                            <td class="text-center">@classes.GymInstructorName</td>
+                            <td class="text-center">@classes.ClassTypeName</td>
+                            <td class="text-center">@GetDate(classes.Schedule)</td>
+                            <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                            <td class="text-center">@classes.Capacity</td>
+
+                            <td>
+                                <a class="btn btn-primary btn-sm ms-2" href="createdclasses/@classes.Id">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 }
 
-            }
-            else
-            {
-                @foreach (var classes in listClass)
-                {
-                    <tr>
-                        <td>@classes.GymInstructorName</td>
-                        <td>@classes.ClassTypeName</td>
-                        <td>@GetDate(classes.Schedule)</td>
-                        <td>@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
-                        <td>@classes.Capacity</td>
+            </tbody>
 
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="createdclasses/@classes.Id">
-                                <i class="bi bi-pencil-fill"></i>
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
-                }
-            }
-
-        </tbody>
-
-    </table>
+        </table>
+    </div>
 </div>
+
 
 
 

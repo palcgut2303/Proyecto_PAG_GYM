@@ -55,16 +55,16 @@
         <table class="table ">
             <thead>
                 <tr>
-                    <th>
+                    <th class="text-center">
                         Instructor
                     </th>
-                    <th>
+                    <th class="text-center">
                         Tipo
                     </th>
-                    <th>
+                    <th colspan="2" class="text-center">
                         Horario
-                    </th>
-                    <th>
+                    </th >
+                    <th class="text-center">
                         Capacidad
                     </th>
                     <th>
@@ -77,26 +77,27 @@
                 {
                     @if (clasesEnEseDia is not null)
                     {
-                        @foreach (var clase in clasesEnEseDia)
+                        @foreach (var classes in clasesEnEseDia)
                         {
-                            if (clase.Schedule.Date == dateTime)
+                            if (classes.Schedule.Date == dateTime)
                             {
                                 <tr>
-                                    <td>@clase.GymInstructorName</td>
-                                    <td>@clase.ClassTypeName</td>
-                                    <td>@clase.Schedule.Date - @clase.Schedule.TimeOfDay/@clase.Schedule.AddMinutes(60)</td>
-                                    <td>@clase.TotalReservations/@clase.Capacity</td>
+                                    <td class="text-center">@classes.GymInstructorName</td>
+                                    <td class="text-center">@classes.ClassTypeName</td>
+                                    <td class="text-right">@GetDate(classes.Schedule)</td>
+                                    <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                    <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
 
 
-                                    @if (ClaseEstaReservadaPorUsuario(clase))
+                                    @if (ClaseEstaReservadaPorUsuario(classes))
                                     {
                                         <td>
-                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase))">Cancelar Reserva</button>
+                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
                                         </td>
                                     }
                                     else
                                     {
-                                        @if (clase.TotalReservations == clase.Capacity)
+                                        @if (classes.TotalReservations == classes.Capacity)
                                         {
                                             <td>
                                                 <button class="btn btn-secondary">Clase llena</button>
@@ -105,7 +106,7 @@
                                         else
                                         {
                                             <td>
-                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(clase))">Hacer Reserva</button>
+                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
                                             </td>
                                         }
 
@@ -331,6 +332,19 @@
         }
     }
 
+    //Metodo que me añada una hora a la hora de la clase
+    private TimeSpan AddMinutes(DateTime time, int minutes)
+    {
+        var addHour = time.AddMinutes(minutes);
+        return addHour.TimeOfDay;
+    }
+
+    //Metodo que me devuelva la fecha de la clase
+    private string GetDate(DateTime date)
+    {
+
+        return date.ToString("dd-MM-yyyy");
+    }
 
 
 }

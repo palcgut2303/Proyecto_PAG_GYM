@@ -1,5 +1,6 @@
 ﻿using GYM_DTOs;
 using GYM_DTOs.EntityDTO;
+using GYM_DTOs.UpdateDTO;
 using System.Net.Http.Json;
 
 namespace BlazorFronted.Services
@@ -20,7 +21,7 @@ namespace BlazorFronted.Services
             return result;
         }
 
-        public async Task<ClassTypeDTO> Buscar(int id)
+        public async Task<ClassTypeDTO> findByClassType(int id)
         {
             var result = await _http.GetFromJsonAsync<findClassTypeByIdResult>($"api/ClassType/{id}");
 
@@ -34,19 +35,38 @@ namespace BlazorFronted.Services
             }
         }
 
-        public Task<int> Guardar(ClassTypeDTO classType)
+        public async Task<ResponseAPI<bool>> Save(ClassTypeDTO classType)
         {
-            throw new NotImplementedException();
+            var result = await _http.PostAsJsonAsync("api/classtype", classType);
+            if (result.IsSuccessStatusCode)
+            {
+                return new ResponseAPI<bool> { EsCorrecto = true };
+            }
+
+            return new ResponseAPI<bool> { EsCorrecto = false };
         }
 
-        public Task<int> Editar(ClassTypeDTO classType)
+        public async Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType,int id)
         {
-            throw new NotImplementedException();
+            var result = await _http.PutAsJsonAsync($"api/classtype/{id}", classType);
+            if (!result.IsSuccessStatusCode)
+                return new ResponseAPI<UpdateClassTypeRequestDTO> { EsCorrecto = false, Mensaje = "No se ha podido actualizar" };
+
+            return new ResponseAPI<UpdateClassTypeRequestDTO> { EsCorrecto = true, Mensaje = null };
         }
 
-        public Task<bool> Borrar(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = await _http.DeleteAsync($"api/classtype/{id}");
+
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

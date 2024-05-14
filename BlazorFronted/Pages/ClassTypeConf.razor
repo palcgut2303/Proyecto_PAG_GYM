@@ -1,0 +1,103 @@
+﻿@page "/classtypeconf"
+@page "/classtypeconf/{idClassType:int}"
+@using GYM_DTOs.UpdateDTO
+@attribute [Authorize(Roles = "Instructor")]
+
+@inject IClassTypeService classService;
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <h3>@title</h3>
+
+    <EditForm Model="@classType" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+        @if (ShowErrors)
+        {
+            <div class="alert alert-danger" role="alert">
+                <p>@Error</p>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre:</label>
+            <InputText class="form-control" id="name" @bind-Value="@classType.Name" />
+            <ValidationMessage For="@(() => classType.Name)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripcion:</label>
+            <InputText class="form-control" id="description" @bind-Value="@classType.Description" />
+            <ValidationMessage For="@(() => classType.Description)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </EditForm>
+
+</div>
+
+@code {
+    string title = "";
+    private bool ShowErrors;
+    private string Error = "";
+    string btnText = "";
+    [Parameter]
+    public int idClassType { get; set; } = 0;
+
+    ClassTypeDTO classType = new ClassTypeDTO();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (idClassType != 0)
+        {
+            title = "Editar Tipo de Clase";
+            btnText = "Editar Tipo de Clase";
+            var resutlClass = await classService.findByClassType(idClassType);
+            classType = resutlClass;
+        }
+        else
+        {
+            title = "Crear Tipo de Clase";
+            btnText = "Crear Tipo de Clase";
+        }
+    }
+
+
+    private async void SubmitForm()
+    {
+        ShowErrors = false;
+
+        if (idClassType != 0)
+        {
+            var updateModel = new UpdateClassTypeRequestDTO
+                {
+                    Description = classType.Description,
+                    Name = classType.Name
+                };
+
+            var result = await classService.Update(updateModel, idClassType);
+            if (result.Mensaje != null)
+            {
+                ShowErrors = true;
+                Error = result.Mensaje;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/typeofclasspage");
+            }
+        }
+        else
+        {
+            var result = await classService.Save(classType);
+            if (result.Mensaje != null)
+            {
+                ShowErrors = true;
+                Error = result.Mensaje;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/typeofclasspage");
+            }
+        }
+    }
+}

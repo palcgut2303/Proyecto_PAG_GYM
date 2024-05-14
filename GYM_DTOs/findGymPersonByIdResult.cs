@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 
 namespace GYM_DTOs
 {
-    public class findGymInstructorByIdResult
+    public class findGymPersonByIdResult
     {
         public bool Successful { get; set; }
 
         public string? Error { get; set; }
 
-        public GymInstructorDTO GymInstructorDTO{ get; set; }
+        public GymInstructorDTO? GymInstructorDTO{ get; set; }
+
+        public GymMemberDTO? GymMemberDTO { get; set; }
+
     }
 }

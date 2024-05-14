@@ -1,0 +1,73 @@
+﻿@page "/dialogcard/{UserID:int}"
+
+@inject IGymMemberService gymMemberService
+@inject IClassService classService
+@inject Radzen.DialogService dialogService
+@inject NavigationManager NavigationManager
+
+<div class="m-3">
+    <RadzenStack Gap="1rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
+        <RadzenStack>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border)">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Contact</RadzenText>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+
+                        <RadzenStack Gap="0" Class="rz-text-truncate">
+                            <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Usuario</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.FullName</b></RadzenText>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border)">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Delivery Information</RadzenText>
+                    <RadzenStack Gap="0" Class="rz-text-truncate">
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Join Date</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.JoinDate.Date</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">End Date</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.EndDate</b></RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+                <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0">Usuario: @model.FullName, Clases</RadzenText>
+            </RadzenStack>
+            <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Data="@(listClassUser)" ColumnWidth="200px" Density="Density.Compact" AllowAlternatingRows="false">
+                <Columns>
+                    <RadzenDataGridColumn Property="GymInstructorId" Title="Instructor" />
+                    <RadzenDataGridColumn Property="ClassTypeId" Title="Tipo de Clase" />
+                    <RadzenDataGridColumn Property="Schedule" Title="Fecha" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+            @*             <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="Cerrar" Style="width: 120px" />*@
+            <RadzenButton Click="@Cerrar" Variant="Variant.Flat" Text="Volver" Style="width: 120px" />
+         </RadzenStack>
+    </RadzenStack>
+</div>
+
+@code {
+    [Parameter] public int UserID { get; set; }
+
+
+    GymMemberDTO model = new GymMemberDTO();
+    List<ClassDTO> listClassUser = new List<ClassDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var result = await gymMemberService.GymMemberById(UserID);
+
+        model = result.GymMemberDTO!;
+         listClassUser = await classService.GetClassesByGymMember(model.emailMember);
+    }
+    // <RadzenImage Path="@order.Employee?.Photo" Style="width: 80px; height: 80px; border-radius: 50%" />
+
+    private void Cerrar()
+    {
+        NavigationManager.NavigateTo("/useradminmanage");
+    }
+}

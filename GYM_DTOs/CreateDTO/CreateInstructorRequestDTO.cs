@@ -10,7 +10,6 @@ namespace GYM_DTOs.CreateDTO
     public class CreateInstructorRequestDTO
     {
         public string FullName { get; set; }
-        public string Speciality { get; set; }
         public ICollection<ClassDTO>? Classes { get; set; }
 
         public string emailUser { get; set; }

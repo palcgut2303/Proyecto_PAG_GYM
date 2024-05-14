@@ -1,0 +1,114 @@
+﻿@attribute [Authorize(Roles = "Instructor")]
+
+@inject SweetAlertService Swal
+@inject IClassTypeService classTypeService;
+
+@page "/typeofclasspage"
+<div class="m-3"
+    <h3>Tipos de clases</h3>
+
+    <a class="btn btn-success btn-sm mb-3" href="classtypeconf">Crear Tipo de Clase</a>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Descripcion</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (resultClassType.ListClass == null)
+                {
+                    @if (resultClassType.Error != null)
+                    {
+                        <tr>
+                            <td colspan="5" align="center">
+                                @resultClassType.Error
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" align="center">
+                                <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                            </td>
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    @foreach (var classType in listClassType)
+                    {
+                        <tr>
+                            <td class="text-center">@classType.Name</td>
+                            <td class="text-center">@classType.Description</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm ms-2" href="classtypeconf/@classType.Id">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classType.Id))">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+
+@code {
+    ClassTypeListResult resultClassType = new ClassTypeListResult();
+
+    IEnumerable<ClassTypeDTO> listClassType = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        resultClassType = await classTypeService.ClassTypeList();
+        listClassType = resultClassType.ListClass!;
+    }
+
+    private async Task Eliminar(int id)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Eliminar Clase",
+                Text = "Deseas eliminar la clase?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            var eliminado = await classTypeService.Delete(id);
+            if (eliminado)
+            {
+                var isDelete = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Tipo de Clase Eliminada",
+                        Text = $"Se ha eliminado correctamente el tipo de clase con id: {id}",
+                        Icon = SweetAlertIcon.Success,
+                    });
+
+                resultClassType = await classTypeService.ClassTypeList();
+                listClassType = resultClassType.ListClass!;
+            }
+            else
+            {
+                var error = await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Error",
+                        Text = "Error al eliminar el tipo de clase",
+                        Icon = SweetAlertIcon.Error,
+                    });
+            }
+        }
+    }
+}
