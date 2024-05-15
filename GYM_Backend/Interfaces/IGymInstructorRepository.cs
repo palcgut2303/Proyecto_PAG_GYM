@@ -8,6 +8,7 @@ namespace GYM_Backend.Interfaces
     {
         Task<GymInstructor> CreateGymInstrucor(CreateInstructorRequestDTO model);
         IEnumerable<GymInstructorDTO> GetAll();
+        GymInstructorDTO GetByEmail(string email);
         GymInstructorDTO GetById(int id);
     }
 }

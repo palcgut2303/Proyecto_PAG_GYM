@@ -112,6 +112,9 @@
 
         ShowErrors = false;
 
+
+
+
         var email = await AuthService.GetEmail();
 
 
@@ -168,12 +171,14 @@
         }
         else
         {
-            if (!await CheckClassDate(clase))
+            var checkedClass = await CheckClassDate(clase);
+
+            if (!checkedClass.EsCorrecto)
             {
                 var resultado = await Swal.FireAsync(new SweetAlertOptions
                     {
                         Title = "Error",
-                        Text = "Ya existe una clase en esa hora",
+                        Text = checkedClass.Mensaje,
                         Icon = SweetAlertIcon.Error,
                         ShowCancelButton = true,
                     });
@@ -223,9 +228,10 @@
         }
     }
 
-    private async Task<bool> CheckClassDate(CreateClassRequestDTO model)
+    private async Task<ResponseAPI<string>> CheckClassDate(CreateClassRequestDTO model)
     {
-        var result = await classService.CheckClassAvailability(model);
-        return result;
+        return await classService.CheckClassAvailability(model);
+
+        
     }
 }

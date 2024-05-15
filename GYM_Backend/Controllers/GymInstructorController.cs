@@ -48,5 +48,19 @@ namespace GYM_Backend.Controllers
 
             return Ok(new findGymPersonByIdResult { Successful = true, GymInstructorDTO = gymInstructor});
         }
+
+        [HttpGet("email/{email}")]
+        [SwaggerResponse(404, "No hay elementos en la lista")]
+        public async Task<IActionResult> findByEmail([FromRoute] string email)
+        {
+            var gymInstructor = _instructorRepository.GetByEmail(email);
+
+            if (gymInstructor == null)
+            {
+                return BadRequest(new findGymPersonByIdResult { Successful = false, Error = "No se encontro el instructor" });
+            }
+
+            return Ok(new findGymPersonByIdResult { Successful = true, GymInstructorDTO = gymInstructor });
+        }
     }
 }

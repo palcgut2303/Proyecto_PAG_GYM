@@ -1,0 +1,113 @@
+﻿@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@inject IAuthService AuthService
+@inject IGymMemberService GymMemberService
+
+<style>
+    .logo {
+        margin-left: 30px;
+        line-height: 80px;
+        font-size: 28px;
+        font-weight: 600;
+        text-transform: uppercase;
+        float: left;
+    }
+
+    .container2{
+        text-align: right;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    
+        <a class="navbar-brand logo" href="#">GYM <em>PAG</em></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto justify-content-end">
+                @* <li class="nav-item active">
+                <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+                </li> *@
+                <AuthorizeView Roles="Instructor">
+
+                    <Authorized>
+
+                        <li class="nav-item"><a class="nav-link" href="listclassadmin">Clases<span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="typeofclasspage">Tipos de Clases<span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i><span class="sr-only">(current)</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="dialogcardAdmin">Mi Perfil<span class="sr-only">(current)</span></a></li>
+                            <li><a class="dropdown-item" href="useradminmanage">Gestionar Usuarios<span class="sr-only">(current)</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="logout">Cerrar Sesión<span class="sr-only">(current)</span></a></li>
+                            </ul>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+
+                <AuthorizeView Roles="User">
+
+                    <Authorized>
+                        <li class="nav-item"><a class="nav-link" href="#features">Acerca de<span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact-us">Contacto<span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="clases">Clases<span class="sr-only">(current)</span></a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i><span class="sr-only">(current)</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="dialogcard/@idUser">Mi Perfil<span class="sr-only">(current)</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="logout">Cerrar Sesión<span class="sr-only">(current)</span></a></li>
+                            </ul>
+                        </li>
+
+                    </Authorized>
+                </AuthorizeView>
+            <AuthorizeView>
+
+                <NotAuthorized>
+                    <li class="nav-item"><a class="nav-link" href="login">Iniciar Sesion<span class="sr-only">(current)</span></a></li>
+
+                </NotAuthorized>
+            </AuthorizeView>
+            </ul>
+        </div>
+    
+    
+</nav>
+
+
+@code {
+    private string userRole;
+    string emailUserIdentificate;
+    int idUser;
+    protected override async Task OnInitializedAsync()
+    {
+        userRole = await AuthService.GetRole();
+        await GuardarRolEnAlmacenamientoLocal(userRole);
+        emailUserIdentificate = await AuthService.GetEmail();
+
+       @if(userRole == "User")
+        {
+            var result = await GymMemberService.GymMemberByEmail(emailUserIdentificate);
+
+            if (result != null)
+            {
+                idUser = result.GymMemberDTO!.Id;              
+            }
+        }
+        
+    }
+
+    private async Task GuardarRolEnAlmacenamientoLocal(string rol)
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "Role", rol);
+    }
+}

@@ -41,7 +41,7 @@
 <div class="m-3">
     <h2>Usuarios del sistema</h2>
 
-    <h4 class="mt-5 text-center">Administradores</h4>
+    <h4 class="mt-5">Administradores</h4>
 
     <div class="row-user row-cols-1 row-cols-md-2 row-cols-lg-3">
         @if (listAdmin is null)
@@ -59,10 +59,10 @@
                             <h5 class="card-title">@user.Username</h5>
                             <p class="card-text">Correo electrónico: @user.Email</p>
                             <p class="card-text">Rol: @user.Rol</p>
-                            @if (email == user.Email)
+                            @* @if (email == user.Email)
                             {
                                 <button href="#" class="btn btn-primary">Editar</button>
-                            }
+                            } *@
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
         }
     </div>
 
-    <h4 class="mt-5 text-center">Usuarios</h4>
+    <h4 class="mt-5">Usuarios</h4>
 
     <div class="row-user row-cols-1 row-cols-md-2 row-cols-lg-3">
         @if (listUser is null)
@@ -92,18 +92,18 @@
                             <p class="card-text">Rol: @user.Rol</p>
 
 
-                            <RadzenButton Text=@($"Detalles") ButtonStyle="ButtonStyle.Secondary" Click="(() => OpenOrder(user.Email))" />
+                            <RadzenButton class="m-2" Text=@($"Detalles") ButtonStyle="ButtonStyle.Secondary" Click="(() => OpenOrder(user.Email))" />
 
-                            
-                            <RadzenButton Text=@($"Hacer Instructor") ButtonStyle="ButtonStyle.Success" Click="(() => HacerAdmin(user.Id))" />
+
+                            <RadzenButton class="m-2" Text=@($"Hacer Instructor") ButtonStyle="ButtonStyle.Success" Click="(() => HacerAdmin(user.Id))" />
                             @if (user.isEnable)
                             {
-                                
-                                <RadzenButton Text=@($"Dar de baja") ButtonStyle="ButtonStyle.Danger" Click="(() => InactiveUser(user.Id))" />
+
+                                <RadzenButton class="m-2" Text=@($"Dar de baja") ButtonStyle="ButtonStyle.Danger" Click="(() => InactiveUser(user.Id))" />
                             }
                             else
                             {
-                                <RadzenButton Text=@($"Dar de alta") ButtonStyle="ButtonStyle.Danger" Click="(() => EnableUser(user.Id))" />
+                                <RadzenButton class="m-2" Text=@($"Dar de alta") ButtonStyle="ButtonStyle.Danger" Click="(() => EnableUser(user.Id))" />
                             }
                         </div>
                     </div>

@@ -12,6 +12,7 @@ namespace GYM_Backend.Interfaces
         Task<Classes> CreateClass(CreateClassRequestDTO model);
         IEnumerable<ClassDTO> GetAll();
         ClassDTO GetById(int id);
+        IEnumerable<ClassDTO> GetClassByGymInstructor(int idInstructor);
         Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
         
         Task<int> ObtenerIdGymInstructor(string email);

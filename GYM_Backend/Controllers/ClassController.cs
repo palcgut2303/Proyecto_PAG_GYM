@@ -57,19 +57,18 @@ namespace GYM_Backend.Controllers
             return Ok(new ClassListResult { Successful = true, ListClass = new List<ClassDTO> { classes } });
         }
 
-        //Recoger el nombre del instructor de la clase para poder realizar los campos del CreateClassRequestDTO
-        [HttpGet("nameGymInstructor/{id}")]
+        [HttpGet("GetClassesByGymInstructor/{idGymInstructor}")]
         [SwaggerResponse(404, "No hay elementos en la lista")]
-        public async Task<IActionResult> GetGymInstructor([FromRoute] int id)
+        public async Task<IActionResult> GetGymInstructor([FromRoute] int  idGymInstructor)
         {
-            var classes = _classRepository.GetById(id);
+            var classes = _classRepository.GetClassByGymInstructor(idGymInstructor);
 
             if (classes == null)
             {
                 return Ok(new ClassListResult { Successful = false, Error = "No hay clases disponibles" });
             }
 
-            return Ok(new ClassListResult { Successful = true, ListClass = new List<ClassDTO> { classes } });
+            return Ok(new ClassListResult { Successful = true, ListClass =  classes.ToList()  });
         }
 
         [HttpGet("porDia")]

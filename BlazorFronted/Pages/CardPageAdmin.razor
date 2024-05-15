@@ -1,10 +1,12 @@
-﻿@page "/dialogcard/{UserID:int}"
+﻿@page "/dialogcardAdmin"
 
-@inject IGymMemberService gymMemberService
+@inject IGymInstructorService gymInstructorService
 @inject IClassService classService
+@inject IAuthService AuthService
 @inject Radzen.DialogService dialogService
 @inject NavigationManager NavigationManager
 
+@attribute [Authorize(Roles = "Instructor")]
 
 
 <div class="m-3">
@@ -16,31 +18,28 @@
                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
 
                         <RadzenStack Gap="0" Class="rz-text-truncate">
-                            <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Nombre</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Usuario</RadzenText>
                             <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.FullName</b></RadzenText>
                             <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Email</RadzenText>
-                            <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.emailMember</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.EmailUser</b></RadzenText>
                         </RadzenStack>
                     </RadzenStack>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border)">
-                    <RadzenText TextStyle="TextStyle.Subtitle1">Informacion de la suscripción</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Informacion del Instructor</RadzenText>
                     <RadzenStack Gap="0" Class="rz-text-truncate">
-                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Inscripción</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.JoinDate)</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Salida</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.EndDate)</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Rol</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>Instructor</b></RadzenText>
                     </RadzenStack>
                 </RadzenColumn>
             </RadzenRow>
 
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
-                <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0">Reservas de @model.FullName</RadzenText>
+                <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0">Clases Organizadas:</RadzenText>
             </RadzenStack>
             <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             Data="@(listClassUser)" ColumnWidth="200px" Density="Density.Compact" AllowAlternatingRows="false">
                 <Columns>
-                    <RadzenDataGridColumn Property="GymInstructorName" Title="Instructor" />
                     <RadzenDataGridColumn Property="ClassTypeName" Title="Tipo de Clase" />
                     <RadzenDataGridColumn Property="Schedule" Title="Fecha" />
                 </Columns>
@@ -49,31 +48,34 @@
         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
             @*             <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="Cerrar" Style="width: 120px" />*@
             <RadzenButton Click="@Cerrar" Variant="Variant.Flat" Text="Volver" Style="width: 120px" />
-         </RadzenStack>
+        </RadzenStack>
     </RadzenStack>
+
 </div>
 
 @code {
-    [Parameter] public int UserID { get; set; }
 
 
-    GymMemberDTO model = new GymMemberDTO();
+
+    GymInstructorDTO model = new GymInstructorDTO();
     List<ClassDTO> listClassUser = new List<ClassDTO>();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        string emailUserIdentificate = await AuthService.GetEmail();
 
-        var result = await gymMemberService.GymMemberById(UserID);
+        var result = await gymInstructorService.GymInstructorByEmail(emailUserIdentificate);
 
-        model = result.GymMemberDTO!;
-         listClassUser = await classService.GetClassesByGymMember(model.emailMember);
+
+        model = result.GymInstructorDTO!;
+        listClassUser = await classService.ClassesListByGymInstructor(model.Id);
     }
     // <RadzenImage Path="@order.Employee?.Photo" Style="width: 80px; height: 80px; border-radius: 50%" />
 
     private void Cerrar()
     {
-        NavigationManager.NavigateTo("/useradminmanage");
+        NavigationManager.NavigateTo("/");
     }
 
     private string GetDate(DateTime? date)
@@ -81,4 +83,6 @@
 
         return date?.ToString("dd-MM-yyyy");
     }
+
+    
 }

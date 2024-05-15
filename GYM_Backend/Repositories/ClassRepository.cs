@@ -34,6 +34,11 @@ namespace GYM_Backend.Repositories
 
         }
 
+        public IEnumerable<ClassDTO> GetClassByGymInstructor(int idInstructor)
+        {
+            return _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Where(x => x.GymInstructorId == idInstructor).Select(x => x.toClassesDTO()).ToList();
+        }
+
         public async Task<Classes> CreateClass(CreateClassRequestDTO model)
         {
             var idClassType = await ObtenerIdClassType(model.ClassTypeName);

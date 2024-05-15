@@ -7,6 +7,7 @@ using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Runtime.CompilerServices;
 
 namespace GYM_Backend.Repositories
@@ -148,11 +149,9 @@ namespace GYM_Backend.Repositories
 
             foreach (var item in reservations)
             {
-                var classs = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == item.ClassesId);
+                var classs =  _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Where(x=>x.Id == item.ClassesId).Select(x => x.toClassesDTO());
 
-                var classDTO = classs.toClassesTwoDTO();
-
-                classes.Add(classDTO);
+                classes.Add(classs.FirstOrDefault());
             }
 
             return classes;

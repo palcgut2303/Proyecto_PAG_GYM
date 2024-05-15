@@ -51,7 +51,7 @@
                             <td class="text-center">@classes.ClassTypeName</td>
                             <td class="text-center">@GetDate(classes.Schedule)</td>
                             <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
-                            <td class="text-center">@classes.Capacity</td>
+                            <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
 
                             <td>
                                 <a class="btn btn-primary btn-sm ms-2" href="createdclasses/@classes.Id">

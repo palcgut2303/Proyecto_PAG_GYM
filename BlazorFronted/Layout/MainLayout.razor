@@ -1,7 +1,20 @@
 ﻿@inherits LayoutComponentBase
-<div>
+
+<style>
+    .contenedorBody{
+        margin-top: 7%
+    }
+</style>
+
+<div class="page">
+    
     <main>
-        <BlazorFronted.Pages.LoginDisplay></BlazorFronted.Pages.LoginDisplay>
-        @Body
+
+        <BlazorFronted.Pages.MenuConfig.Menu></BlazorFronted.Pages.MenuConfig.Menu>
+
+        <div class="contenedorBody">
+            @Body
+        </div>
+        
     </main>
 </div>

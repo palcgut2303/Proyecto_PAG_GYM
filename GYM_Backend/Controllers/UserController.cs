@@ -232,6 +232,8 @@ namespace GYM_Backend.Controllers
                 return NotFound(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Usuario no encontrado" });
             }
 
+            
+
             // Quita el rol de USER
             var removeUserFromRoleResult = await _userManager.RemoveFromRoleAsync(user, "User");
             if (!removeUserFromRoleResult.Succeeded)
@@ -248,15 +250,22 @@ namespace GYM_Backend.Controllers
             }
 
             var listaMiembros = await _context.GymMembers.ToListAsync();
-
             foreach (var miembro in listaMiembros)
             {
                 if (miembro.emailMember == user.Email)
                 {
+                    var reservas = await _context.Reservations.Where(x => x.GymMemberId == miembro.Id).ToListAsync();
+                    foreach (var reserva in reservas)
+                    {
+                        _context.Reservations.Remove(reserva);
+                        await _context.SaveChangesAsync();
+                    }
+
                     _context.GymMembers.Remove(miembro);
                     await _context.SaveChangesAsync();
                 }
             }
+
 
             var nuevoInstructor = new GymInstructor
             {

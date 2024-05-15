@@ -14,7 +14,7 @@ namespace BlazorFronted.Services
         private readonly HttpClient _http;
         private readonly IClassTypeService _classTypeService;
 
-        public ClassService(HttpClient http,IClassTypeService classTypeService)
+        public ClassService(HttpClient http, IClassTypeService classTypeService)
         {
             _http = http;
             this._classTypeService = classTypeService;
@@ -40,14 +40,14 @@ namespace BlazorFronted.Services
 
             var classDTO = result.ListClass.FirstOrDefault();
 
-            var idGymInstructor = classDTO.GymInstructorId; 
+            var idGymInstructor = classDTO.GymInstructorId;
 
             var idClassType = classDTO.ClassTypeId;
 
             //Necesito el nombre del instructor cuyo id es el de la variable, para poder mostrarlo en el formulario
             var gymInstructor = await _http.GetFromJsonAsync<findGymPersonByIdResult>($"api/GymInstructor/{idGymInstructor}");
 
-            if(gymInstructor == null)
+            if (gymInstructor == null)
             {
                 return null;
             }
@@ -60,11 +60,11 @@ namespace BlazorFronted.Services
 
             var newClassDTO = new CreateClassRequestDTO
             {
-              
-               Schedule = classDTO.Schedule,
-               ClassTypeName = classTypeName,
-               emailInstructor = gymInstructorEmail,
-               Capacity = classDTO.Capacity
+
+                Schedule = classDTO.Schedule,
+                ClassTypeName = classTypeName,
+                emailInstructor = gymInstructorEmail,
+                Capacity = classDTO.Capacity
             };
 
 
@@ -72,6 +72,19 @@ namespace BlazorFronted.Services
 
         }
 
+        public async Task<List<ClassDTO>> ClassesListByGymInstructor(int idGymInstructor)
+        {
+            var result = await _http.GetFromJsonAsync<ClassListResult>($"api/Class/GetClassesByGymInstructor/{idGymInstructor}");
+
+            
+            if (!result.Successful)
+            {
+                return null;
+            }
+
+            return result.ListClass!.ToList();
+
+        }
 
         public async Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek()
         {
@@ -89,7 +102,7 @@ namespace BlazorFronted.Services
             return new CreateClassResult { Successful = false, Errors = new List<string> { "Error occured" } };
         }
 
-        public async Task<ResponseAPI<ClassDTO>> UpdateClass(int id,UpdateClassRequestDTO classModel)
+        public async Task<ResponseAPI<ClassDTO>> UpdateClass(int id, UpdateClassRequestDTO classModel)
         {
             var result = await _http.PutAsJsonAsync($"api/class/{id}", classModel);
             if (!result.IsSuccessStatusCode)
@@ -112,7 +125,7 @@ namespace BlazorFronted.Services
             }
         }
 
-        public async Task<ResponseAPI<ClassDTO>> ReserveClass(int id,string email)
+        public async Task<ResponseAPI<ClassDTO>> ReserveClass(int id, string email)
         {
             CreateReservationRequest data = new CreateReservationRequest { id = id, email = email };
 
@@ -140,8 +153,8 @@ namespace BlazorFronted.Services
         public async Task<List<ClassDTO>> GetClassesByGymMember(string email)
         {
             var listClass = await _http.GetFromJsonAsync<List<ClassDTO>>($"api/reservation/GetClassesByGymMember/{email}");
-        
-            if(listClass == null)
+
+            if (listClass == null)
             {
                 return null;
             }
@@ -149,7 +162,7 @@ namespace BlazorFronted.Services
             return listClass;
         }
 
-        
+
         public async Task<List<GymMemberDTO>> GetGymMembersByClass(int id)
         {
             var listGymMembers = await _http.GetFromJsonAsync<GymMemberListResult>($"api/reservation/GetReservationsByClass/{id}");
@@ -162,32 +175,41 @@ namespace BlazorFronted.Services
             return listGymMembers.ListGymMembers;
         }
 
-        public async Task<bool> CheckClassAvailability(CreateClassRequestDTO classModel)
+        public async Task<ResponseAPI<string>> CheckClassAvailability(CreateClassRequestDTO classModel)
         {
             var classes = await ClassesList();
 
             if (!classes.Successful)
             {
-                return true;
+                return new ResponseAPI<string> { EsCorrecto = true };
             }
+
+            var fechaHoy = DateTime.Now;
+
+            if (classModel.Schedule < fechaHoy)
+            {
+                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No puedes crear clases con fechas anterior a la de hoy" };
+            }
+
+
 
             var listClasses = classes.ListClass;
 
             foreach (var item in listClasses)
             {
-                
-                if(item.Schedule.Date == classModel.Schedule.Date)
+
+                if (item.Schedule.Date == classModel.Schedule.Date)
                 {
-                    if(item.Schedule.Hour == classModel.Schedule.Hour)
+                    if (item.Schedule.Hour == classModel.Schedule.Hour)
                     {
-                        return false;
+                        return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Ya hay una clase en esta misma fecha y hora" };
                     }
                 }
 
 
             }
 
-            return true;
+            return new ResponseAPI<string> { EsCorrecto = true };
         }
 
     }

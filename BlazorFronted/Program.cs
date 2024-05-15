@@ -22,6 +22,7 @@ builder.Services.AddTransient<IClassService, ClassService>();
 builder.Services.AddTransient<IClassTypeService, ClassTypeService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGymMemberService, GymMemberService>();
+builder.Services.AddTransient<IGymInstructorService, GymInstructorService>();
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddRadzenComponents();

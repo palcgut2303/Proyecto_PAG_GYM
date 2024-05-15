@@ -168,7 +168,7 @@
     bool reservada = false;
     List<ClassDTO> listClassByUser = null;
     List<GymMemberDTO> listUserByClass = null;
-
+    DateTime fecha = DateTime.Now;
     protected override async Task OnInitializedAsync()
     {
         clasesPorDia = await classService.GetClassesByDayOfTheWeek();
@@ -183,7 +183,7 @@
                 clasesEnEseDia = item.Value;
             }
         }
-
+        fecha = DateTime.Now;
         listClassByUser = await classService.GetClassesByGymMember(email);
     }
 
@@ -315,13 +315,13 @@
             }
         }
     }
-    string fecha = null;
-    DateTime dateTime = new DateTime();
 
+    DateTime dateTime = new DateTime();
+    string fecha1 = null;
     private void mostrarDia(ChangeEventArgs e)
     {
-        fecha = e.Value.ToString();
-        dateTime = DateTime.Parse(fecha);
+        fecha1 = e.Value.ToString();
+        dateTime = DateTime.Parse(fecha1);
 
         foreach (var item in clasesPorDia)
         {
@@ -332,14 +332,12 @@
         }
     }
 
-    //Metodo que me añada una hora a la hora de la clase
     private TimeSpan AddMinutes(DateTime time, int minutes)
     {
         var addHour = time.AddMinutes(minutes);
         return addHour.TimeOfDay;
     }
 
-    //Metodo que me devuelva la fecha de la clase
     private string GetDate(DateTime date)
     {
 

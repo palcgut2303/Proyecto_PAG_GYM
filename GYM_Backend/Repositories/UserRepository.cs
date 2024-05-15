@@ -52,6 +52,18 @@ namespace GYM_Backend.Repositories
             }
 
             user.IsEnabled = false;
+            
+            var email = user.Email;
+
+            var gymMember = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
+
+            if (gymMember != null)
+            {
+                gymMember.EndDate = DateTime.Now;
+                _contextDb.GymMembers.Update(gymMember);
+                await _contextDb.SaveChangesAsync();
+            }
+
             await _userManager.UpdateAsync(user);
 
             return true;
@@ -66,6 +78,19 @@ namespace GYM_Backend.Repositories
             }
 
             user.IsEnabled = true;
+
+            var email = user.Email;
+
+            var gymMember = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
+
+            if (gymMember != null)
+            {
+                gymMember.JoinDate = DateTime.Now;
+                gymMember.EndDate = null;
+                _contextDb.GymMembers.Update(gymMember);
+                await _contextDb.SaveChangesAsync();
+            }
+
             await _userManager.UpdateAsync(user);
 
             return true;

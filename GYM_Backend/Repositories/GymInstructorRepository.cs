@@ -29,6 +29,13 @@ namespace GYM_Backend.Repositories
             return classes.FirstOrDefault();
         }
 
+        public GymInstructorDTO GetByEmail(string email)
+        {
+            var gymMember = _contextDb.GymInstructors.Where(x => x.emailUser == email).Select(x => x.toInstructorDTO());
+
+            return gymMember.FirstOrDefault();
+        }
+
         public async Task<GymInstructor> CreateGymInstrucor(CreateInstructorRequestDTO model)
         {
             var emailUser = model.emailUser;
