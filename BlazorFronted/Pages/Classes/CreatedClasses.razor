@@ -15,13 +15,38 @@
 
 
 <style>
-    /* .container-createdClass {
-                        margin-top: 5%;
-                    } */
+
+
+    .page-background-class {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/backgroundImage.jpg'); /* Ruta de la imagen de fondo */
+        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
+        background-repeat: no-repeat; /* Evitar que la imagen se repita */
+        background-position: center; /* Posición de la imagen de fondo */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .overlay {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
 </style>
+<div class="page-background-class"></div>
+<div class="overlay"></div>
+
 <div class="container container-createdClass">
 
-    <h3>@titulo</h3>
+    <h3 class="text-white">@titulo</h3>
 
     <EditForm Model="@clase" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator />
@@ -33,20 +58,20 @@
         }
 
         <div class="mb-3">
-            <label for="capacity" class="form-label">Capacidad de la clase:</label>
-            <InputNumber class="form-control" id="capacity" @bind-Value="@clase.Capacity" />
+            <label for="capacity" class="form-label text-white">Capacidad de la clase:</label>
+            <InputNumber class="form-control " id="capacity" @bind-Value="@clase.Capacity" />
             <ValidationMessage For="@(() => clase.Capacity)" />
         </div>
 
         <div class="mb-3">
-            <label for="schedule" class="form-label">Fecha:</label>
+            <label for="schedule" class="form-label text-white">Fecha:</label>
             <RadzenDatePicker @bind-Value=@clase.Schedule ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
 
 
         </div>
 
         <div class="mb-3">
-            <label for="ClassTypeName" class="form-label">Tipo de clase:</label>
+            <label for="ClassTypeName" class="form-label text-white">Tipo de clase:</label>
             <select @bind="@selectedClassType" id="ClassTypeName" class="form-control">
                 @if (listClassType != null)
                 {

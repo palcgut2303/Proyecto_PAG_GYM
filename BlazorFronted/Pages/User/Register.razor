@@ -34,12 +34,12 @@
 
                                     @if (ShowConfirm)
                                     {
-                                       <Alert Color="AlertColor.Success"> 
+                                        <div class="alert alert-success" role="alert">
                                             @foreach (var message in Confirm!)
                                             {
                                                 <p>@message</p>
                                             }
-                                        </Alert>
+                                        </div>
                                     }
 
                                     @if (!loadCodePage)
@@ -130,8 +130,8 @@
     private IEnumerable<string>? Confirm;
 
     private bool loadCodePage = false;
-    private string codeEmailUser = "";
-    private string codeEmailSend = "";
+    private string codeEmailUser;
+    private string codeEmailSend;
 
     private async Task enterCodeValidation()
     {
@@ -150,6 +150,9 @@
             }
             else
             {
+                Errors = null;
+                ShowErrors = false;
+
                 Confirm = new List<string> { "Se ha enviado un correo con el código de validación" };
                 ShowConfirm = true;
                 codeEmailSend = result.Mensaje!;

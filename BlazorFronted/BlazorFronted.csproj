@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\img\backgroundImage.jpg" />
+    <Content Remove="wwwroot\img\backgroungUser.jpg" />
     <Content Remove="wwwroot\img\CardUserImg.png" />
     <Content Remove="wwwroot\img\CardUserImg2.jpeg" />
     <Content Remove="wwwroot\img\contact-bg.jpg" />
@@ -25,6 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="wwwroot\img\backgroundImage.jpg" />
+    <Resource Include="wwwroot\img\backgroungUser.jpg" />
     <Resource Include="wwwroot\img\CardUserImg.png" />
     <Resource Include="wwwroot\img\CardUserImg2.jpeg" />
     <Resource Include="wwwroot\img\contact-bg.jpg" />

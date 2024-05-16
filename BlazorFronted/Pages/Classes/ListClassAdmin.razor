@@ -4,16 +4,78 @@
 @page "/listclassadmin"
 @using CurrieTechnologies.Razor.SweetAlert2
 @attribute [Authorize(Roles = "Instructor")]
+<style>
+    
+     table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-<div class="m-3">
-    <h3>Clases Disponibles</h3>
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    thead{
+        background-color: rgb(3, 17, 41 );
+        color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: rgb(106, 160, 248,0.2 );
+        font-weight: bold;
+        
+    }
+
+    tbody {
+        font-size: 18px;
+    }
+
+        .page-background-class {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/backgroundImage.jpg'); /* Ruta de la imagen de fondo */
+        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
+        background-repeat: no-repeat; /* Evitar que la imagen se repita */
+        background-position: center; /* Posición de la imagen de fondo */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .overlay {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+</style>
+
+<div class="page-background-class"></div>
+<div class="overlay"></div>
+
+<div class="m-3 content">
+    <h3 class="text-white">Clases Disponibles</h3>
 
     <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
     <div class="table-responsive">
         <table class="table border-3">
             <thead>
-                <tr>
-                    <th class="text-center">Instructor</th>
+                <tr class="text-white">
+                    <th class="text-center ">Instructor</th>
                     <th class="text-center">Tipo</th>
                     <th class="text-center">Fecha</th>
                     <th class="text-center">Horario</th>
@@ -46,7 +108,7 @@
                 {
                     @foreach (var classes in listClass)
                     {
-                        <tr>
+                        <tr class="text-white">
                             <td class="text-center">@classes.GymInstructorName</td>
                             <td class="text-center">@classes.ClassTypeName</td>
                             <td class="text-center">@GetDate(classes.Schedule)</td>

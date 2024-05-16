@@ -144,7 +144,9 @@ namespace GYM_Backend.Controllers
                     Email = model.Email,
                     Role = rolDefault,
                     FullName = model.FullName,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    EmailCode = model.EmailCode!
+                    
                 };
 
                 var createdUser = await _userManager.CreateAsync(usuario, model.Password);
