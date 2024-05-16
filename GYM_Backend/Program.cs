@@ -3,6 +3,7 @@ using GYM_Backend.Interfaces;
 using GYM_Backend.Models;
 using GYM_Backend.Repositories;
 using GYM_Backend.Service;
+using GYM_DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -89,6 +90,9 @@ builder.Services.AddCors(options =>
                     .AllowAnyMethod();
             });
 });
+
+builder.Services.Configure<GmailSettings>(builder.Configuration.GetSection("GmailSettings"));
+builder.Services.AddTransient<IMessage, Message>();
 
 var app = builder.Build();
 app.UseCors("AllowAllOrigins");

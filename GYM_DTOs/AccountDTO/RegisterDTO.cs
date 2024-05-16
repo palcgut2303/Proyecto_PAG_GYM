@@ -20,5 +20,7 @@ namespace GYM_DTOs.AccountDTO
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public string? EmailCode { get; set; }
     }
 }

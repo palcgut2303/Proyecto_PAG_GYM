@@ -1,4 +1,5 @@
-﻿using GYM_DTOs.AccountDTO;
+﻿using GYM_DTOs;
+using GYM_DTOs.AccountDTO;
 
 namespace BlazorFronted.Services
 {
@@ -9,5 +10,6 @@ namespace BlazorFronted.Services
         Task Logout();
         Task<string> GetRole();
         Task<string> GetEmail();
+        Task<ResponseAPI<string>> SendEmail(string email);
     }
 }

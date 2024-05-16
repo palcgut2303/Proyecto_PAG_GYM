@@ -9,6 +9,8 @@ using GYM_DTOs.AccountDTO;
 using System.Security.Claims;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
+using GYM_DTOs;
+using GYM_DTOs.EntityDTO;
 
 namespace BlazorFronted.Services
 {
@@ -49,7 +51,7 @@ namespace BlazorFronted.Services
             return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
         }
 
-        
+
 
         public async Task<LoginResult> Login(LoginDTO loginModel)
         {
@@ -57,7 +59,7 @@ namespace BlazorFronted.Services
             var response = await _httpClient.PostAsync("api/User/login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
             var loginResult = JsonSerializer
                 .Deserialize<LoginResult>(
-                    await response.Content.ReadAsStringAsync(), 
+                    await response.Content.ReadAsStringAsync(),
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
                    );
 
@@ -65,7 +67,7 @@ namespace BlazorFronted.Services
             {
                 return loginResult!;
             }
-            
+
 
 
             await _localStorage.SetItemAsync("authToken", loginResult!.Token);
@@ -81,6 +83,18 @@ namespace BlazorFronted.Services
             await _localStorage.RemoveItemAsync("Role");
             ((CustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public async Task<ResponseAPI<string>> SendEmail(string email)
+        {
+            var result = await _httpClient.GetFromJsonAsync<ResponseAPI<string>>($"api/Email/{email}");
+
+            if(result is null)
+            {
+                return null;
+            }
+
+            return result;
         }
 
         public async Task<string> GetRole()
@@ -148,7 +162,7 @@ namespace BlazorFronted.Services
 
                 if (tokenRead != null)
                 {
-                    
+
                     var email = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
 

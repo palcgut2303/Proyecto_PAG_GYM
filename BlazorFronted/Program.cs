@@ -26,5 +26,5 @@ builder.Services.AddTransient<IGymInstructorService, GymInstructorService>();
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddRadzenComponents();
-
+builder.Services.AddBlazorBootstrap();
 await builder.Build().RunAsync();
