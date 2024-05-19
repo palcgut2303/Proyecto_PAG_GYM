@@ -34,6 +34,8 @@ namespace GYM_Backend.Repositories
         {
             var classType = model.toClassTypeFromDTO();
 
+            classType.Name = classType.Name.ToUpper();
+
             _contextDb.ClassType.Add(classType);
             await _contextDb.SaveChangesAsync();
             return classType;

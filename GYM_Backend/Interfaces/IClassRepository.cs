@@ -13,6 +13,7 @@ namespace GYM_Backend.Interfaces
         IEnumerable<ClassDTO> GetAll();
         ClassDTO GetById(int id);
         IEnumerable<ClassDTO> GetClassByGymInstructor(int idInstructor);
+        Task<IEnumerable<ClassDTO>> GetClassByType(string type);
         Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
         
         Task<int> ObtenerIdGymInstructor(string email);

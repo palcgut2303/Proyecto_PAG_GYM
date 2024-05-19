@@ -1,17 +1,417 @@
-﻿@page "/reservation/{idClass:int}"
+﻿@page "/reservation"
 @using GYM_DTOs.EntityDTO
 
-<h3>Reservar Clase</h3>
+@inject IClassTypeService classTypeService;
+@inject SweetAlertService Swal
+@inject IClassService classService;
+@inject IAuthService AuthService
+@inject IJSRuntime JSRuntime
+
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    thead {
+        background-color: rgb(3, 17, 41 );
+        color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: rgb(106, 160, 248,0.2 );
+        font-weight: bold;
+    }
+
+    tbody {
+        font-size: 18px;
+    }
+
+    .container-reservation {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .container-general {
+        width: 100%;
+        height: 100%;
+    }
+
+    .left-section,
+    .right-section {
+        height: 100%;
+    }
+
+    .left-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: 75%;
+        opacity: 0.8;
+        margin-bottom: 2%;
+        border-radius: 10px;
+        border: 2px solid black;
+    }
+
+    #accordion {
+        margin-top: 20px;
+    }
+
+    .card {
+        margin-bottom: 10px;
+    }
+
+    .page-background-class {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/backgroungUser.jpg'); /* Ruta de la imagen de fondo */
+        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
+        background-repeat: no-repeat; /* Evitar que la imagen se repita */
+        background-position: center; /* Posición de la imagen de fondo */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .overlay {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .contenedor-volver {
+    }
+
+</style>
+<div class="page-background-class"></div>
+<div class="overlay"></div>
+
+<div class="container-general">
+    <div class="container-reservation">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="left-section">
+
+                    <img src="img/fondo-reservas.png" alt="Imagen" class="img-fluid">
+
+                    <button class="btn btn-primary">
+                        <i class="bi bi-calendar-event"></i>
+                        Horarios
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="right-section">
+                    <div id="accordion">
+                        <div class="card">
+                            @if (!showReservationSection)
+                            {
+                                @if (listClassType is null)
+                                {
+                                    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+
+                                }
+                                else
+                                {
+                                    @foreach (var item in listClassType)
+                                    {
+                                        <div class="card-header mb-2" id="headingOne">
+                                            <h5 class="mb-0">
+                                                <i class="bi bi-geo-alt"></i>
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="(() => ToggleReservationSection(true,item.Name))">
+                                                    @item.Name
+                                                </button>
+                                            </h5>
+                                        </div>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div class="contenedor-volver">
+                                    <button class="bg-light border-0" @onclick="(() => ToggleReservationSection(false))">
+                                        <i class="bi bi-arrow-left"></i>
+                                    </button>
+                                </div>
+
+                                <h4>Clases de @ClassTypeSelected</h4>
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Instructor</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Hora</th>
+                                            <th class="text-center">Capacidad</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (listClass is null)
+                                        {
+                                            <tr>
+                                                <td colspan="4">
+                                                    No hay clases disponibles de fuerza
+                                                </td>
+                                            </tr>
+
+
+                                        }
+                                        else
+                                        {
+                                            @foreach (var classes in listClass)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">@classes.GymInstructorName</td>
+                                                    <td class="text-right">@GetDate(classes.Schedule)</td>
+                                                    <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                                    <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
+
+
+                                                    @if (ClaseEstaReservadaPorUsuario(classes))
+                                                    {
+                                                        <td>
+                                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (classes.TotalReservations == classes.Capacity)
+                                                        {
+                                                            <td>
+                                                                <button class="btn btn-secondary">Clase llena</button>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
+                                                            </td>
+                                                        }
+
+                                                    }
+
+
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+
+
+
+
+
+
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 @code {
-    [Parameter]
-    public int idClass { get; set; } = 0;
+    private bool showReservationSection;
+    ClassTypeListResult classTypeResult = new ClassTypeListResult();
+    IEnumerable<ClassTypeDTO>? listClassType;
+    ResponseAPI<List<ClassDTO>> resultAPI = new ResponseAPI<List<ClassDTO>>();
+    List<ClassDTO> listClass = null;
+    List<ClassDTO> listClassByUser = null;
+
+    string ClassTypeSelected = string.Empty;
+    string email = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-       
+        showReservationSection = false;
+        classTypeResult = await classTypeService.ClassTypeList();
+        listClassType = classTypeResult.ListClass;
+        email = await AuthService.GetEmail();
+    }
+
+    private async Task ToggleReservationSection(bool value, string classType = null)
+    {
+        showReservationSection = value;
+        if (classType != null)
+        {
+            resultAPI = await classTypeService.GetClassByType(classType);
+
+            listClass = resultAPI.Valor!;
+            ClassTypeSelected = classType;
+        }
+        listClassByUser = await classService.GetClassesByGymMember(email);
+
+    }
+
+    private TimeSpan AddMinutes(DateTime time, int minutes)
+    {
+        var addHour = time.AddMinutes(minutes);
+        return addHour.TimeOfDay;
+    }
+
+    private string GetDate(DateTime date)
+    {
+
+        return date.ToString("dd-MM-yyyy");
+    }
+
+    private bool ClaseEstaReservadaPorUsuario(ClassDTO clase)
+    {
+        if (listClassByUser == null || listClassByUser.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var item in listClassByUser)
+        {
+            if (item.Id == clase.Id)
+            {
+
+                return true;
+            }
+        }
+
+
+
+        return false;
+    }
+
+    private async Task HacerReserva(ClassDTO model)
+    {
+        if (model.TotalReservations < model.Capacity)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "¿Deseas Reservar esta clase?",
+                    Icon = SweetAlertIcon.Info,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
+
+            if (resultado.IsConfirmed)
+            {
+                var result = await classService.ReserveClass(model.Id, email);
+
+                if (result.EsCorrecto)
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "Reserva realizada con exito",
+                            Icon = SweetAlertIcon.Success
+                        });
+
+
+                    // model.TotalReservations++;
+                    // StateHasChanged();
+                    await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+                }
+                else
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "No se pudo realizar la reserva",
+                            Icon = SweetAlertIcon.Error
+                        });
+
+
+                }
+            }
+        }
+        else
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "No hay cupo disponible",
+                    Icon = SweetAlertIcon.Error
+                });
+            return;
+        }
+
+
+
+    }
+
+    private async Task CancelarReserva(ClassDTO model)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Reserva",
+                Text = "¿Deseas Cancelar la reserva de esta clase?",
+                Icon = SweetAlertIcon.Info,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            var result = await classService.CancelReservation(model.Id, email);
+
+            if (result.EsCorrecto)
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "Reserva cancelada con exito",
+                        Icon = SweetAlertIcon.Success
+                    });
+
+                // model.TotalReservations--;
+                // StateHasChanged();
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+            else
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "No se pudo cancelar la reserva",
+                        Icon = SweetAlertIcon.Error
+                    });
+
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+        }
     }
 
 }

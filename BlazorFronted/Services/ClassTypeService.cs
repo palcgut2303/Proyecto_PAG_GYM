@@ -16,7 +16,7 @@ namespace BlazorFronted.Services
 
         public async Task<ClassTypeListResult> ClassTypeList()
         {
-            var result =  await _http.GetFromJsonAsync<ClassTypeListResult>("api/ClassType");
+            var result = await _http.GetFromJsonAsync<ClassTypeListResult>("api/ClassType");
 
             return result;
         }
@@ -46,7 +46,7 @@ namespace BlazorFronted.Services
             return new ResponseAPI<bool> { EsCorrecto = false };
         }
 
-        public async Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType,int id)
+        public async Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType, int id)
         {
             var result = await _http.PutAsJsonAsync($"api/classtype/{id}", classType);
             if (!result.IsSuccessStatusCode)
@@ -67,6 +67,20 @@ namespace BlazorFronted.Services
             {
                 return false;
             }
+        }
+
+        public async Task<ResponseAPI<List<ClassDTO>>> GetClassByType(string typeClass)
+        {
+            var result = await _http.GetFromJsonAsync<ResponseAPI<List<ClassDTO>>>($"api/class/GetClassesByType/{typeClass}");
+
+            if (result is null)
+            {
+                return new ResponseAPI<List<ClassDTO>> { EsCorrecto = false, Mensaje = "No se ha podido obtener las clases" };
+            }
+
+
+            return result;
+
         }
     }
 }

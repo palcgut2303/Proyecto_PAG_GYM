@@ -187,7 +187,12 @@ namespace GYM_Backend.Repositories
             return true;
         }
 
-        
+        public async Task<IEnumerable<ClassDTO>> GetClassByType(string type)
+        {
+            type = type.ToUpper();
+
+            return _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Where(x => x.ClassType.Name == type).Select(x => x.toClassesDTO()).ToList();
+        }
 
     }
 }

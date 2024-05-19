@@ -11,5 +11,6 @@ namespace BlazorFronted.Services
         Task<ResponseAPI<bool>> Save(ClassTypeDTO classType);
         Task<bool> Delete(int id);
         Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType, int id);
+        Task<ResponseAPI<List<ClassDTO>>> GetClassByType(string typeClass);
     }
 }

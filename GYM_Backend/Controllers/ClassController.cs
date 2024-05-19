@@ -2,6 +2,7 @@
 using GYM_Backend.Interfaces;
 using GYM_Backend.Mappers;
 using GYM_Backend.Models;
+using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
@@ -144,6 +145,19 @@ namespace GYM_Backend.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet("GetClassesByType/{typeClass}")]
+        public async Task<IActionResult> encontrarClasesPorTipoClase([FromRoute] string typeClass)
+        {
+            var classes = await _classRepository.GetClassByType(typeClass);
+
+            if (classes == null)
+            {
+                return NotFound(new ResponseAPI<List<ClassDTO>> { EsCorrecto = false, Mensaje = "No se ha encontrado clases con este tipo" });
+            }
+
+            return Ok(new ResponseAPI<List<ClassDTO>> { EsCorrecto = true, Valor = classes.ToList()});
         }
     }
 }

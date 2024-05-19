@@ -76,7 +76,7 @@ namespace BlazorFronted.Services
         {
             var result = await _http.GetFromJsonAsync<ClassListResult>($"api/Class/GetClassesByGymInstructor/{idGymInstructor}");
 
-            
+
             if (!result.Successful)
             {
                 return null;
@@ -211,6 +211,9 @@ namespace BlazorFronted.Services
 
             return new ResponseAPI<string> { EsCorrecto = true };
         }
+
+
+        
 
     }
 }
