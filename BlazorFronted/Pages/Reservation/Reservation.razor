@@ -104,9 +104,93 @@
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
 
-    .contenedor-volver {
+    .contenedor-volver button {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        padding: 0;
     }
 
+    .contenedor-volver i {
+        font-size: 24px;
+    }
+
+    .no-background-card {
+        background-color: transparent;
+        border: none;
+    }
+
+        .no-background-card .card {
+            color: #000; /* Asegúrate de que el texto sea visible */
+        }
+
+    .btn-custom {
+        background-color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+        font-size: 20px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+        .btn-custom:hover {
+            background-color: #e2e6ea;
+        }
+
+        .btn-custom:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .card-custom {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header-custom {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        background-color: #f8f9fa;
+    }
+
+    .icon-button-container {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .icon-button-container i {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #000;
+        }
+
+    .custom-header {
+        background: rgba(255, 255, 255, 0.1); /* Fondo transparente */
+        padding: 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+        .custom-header i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .custom-header h5 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
 </style>
 <div class="page-background-class"></div>
 <div class="overlay"></div>
@@ -120,34 +204,38 @@
 
                     <img src="img/fondo-reservas.png" alt="Imagen" class="img-fluid">
 
-                    <button class="btn btn-primary">
-                        <i class="bi bi-calendar-event"></i>
-                        Horarios
-                    </button>
+
+                    <div class="container">
+                        <div class="custom-header">
+                            
+                            <h5 class="text-white">Escoge el <em>TIPO DE CLASE</em> para reservar</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="right-section">
                     <div id="accordion">
-                        <div class="card">
+                        <div class="card no-background-card">
                             @if (!showReservationSection)
                             {
                                 @if (listClassType is null)
                                 {
-                                    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                                    </div>
                                 }
                                 else
                                 {
                                     @foreach (var item in listClassType)
                                     {
-                                        <div class="card-header mb-2" id="headingOne">
-                                            <h5 class="mb-0">
+                                        <div class="container mt-2">
+                                            <div class="icon-button-container">
                                                 <i class="bi bi-geo-alt"></i>
-                                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="(() => ToggleReservationSection(true,item.Name))">
+                                                <button class="btn btn-custom text-black" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="(() => ToggleReservationSection(true,item.Name))">
                                                     @item.Name
                                                 </button>
-                                            </h5>
+                                            </div>
                                         </div>
                                     }
                                 }
@@ -160,78 +248,73 @@
                                     </button>
                                 </div>
 
-                                <h4>Clases de @ClassTypeSelected</h4>
+                                <h4 class="text-white text-center">Clases de @ClassTypeSelected</h4>
+                                <div class="table-responsive">
 
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Instructor</th>
-                                            <th class="text-center">Fecha</th>
-                                            <th class="text-center">Hora</th>
-                                            <th class="text-center">Capacidad</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (listClass is null)
-                                        {
+                                    <table class="table">
+                                        <thead>
                                             <tr>
-                                                <td colspan="4">
-                                                    No hay clases disponibles de fuerza
-                                                </td>
+                                                <th class="text-center ">Instructor</th>
+                                                <th class="text-center">Fecha</th>
+                                                <th class="text-center">Hora</th>
+                                                <th class="text-center">Capacidad</th>
+                                                <th></th>
                                             </tr>
-
-
-                                        }
-                                        else
-                                        {
-                                            @foreach (var classes in listClass)
+                                        </thead>
+                                        <tbody>
+                                            @if (listClass is null)
                                             {
                                                 <tr>
-                                                    <td class="text-center">@classes.GymInstructorName</td>
-                                                    <td class="text-right">@GetDate(classes.Schedule)</td>
-                                                    <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
-                                                    <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
+                                                    <td colspan="4">
+                                                        No hay clases disponibles de fuerza
+                                                    </td>
+                                                </tr>
 
 
-                                                    @if (ClaseEstaReservadaPorUsuario(classes))
-                                                    {
-                                                        <td>
-                                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        @if (classes.TotalReservations == classes.Capacity)
+                                            }
+                                            else
+                                            {
+                                                @foreach (var classes in listClass)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center text-white">@classes.GymInstructorName</td>
+                                                        <td class="text-right text-white">@GetDate(classes.Schedule)</td>
+                                                        <td class="text-center text-white">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                                        <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+
+
+                                                        @if (ClaseEstaReservadaPorUsuario(classes))
                                                         {
                                                             <td>
-                                                                <button class="btn btn-secondary">Clase llena</button>
+                                                                <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
                                                             </td>
                                                         }
                                                         else
                                                         {
-                                                            <td>
-                                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
-                                                            </td>
+                                                            @if (classes.TotalReservations == classes.Capacity)
+                                                            {
+                                                                <td>
+                                                                    <button class="btn btn-secondary">Clase llena</button>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
+                                                                </td>
+                                                            }
+
                                                         }
 
-                                                    }
 
-
-                                                </tr>
+                                                    </tr>
+                                                }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
-
-
-
-
-
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             }
-
-
                         </div>
                     </div>
                 </div>
