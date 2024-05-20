@@ -9,6 +9,37 @@
 @attribute [Authorize(Roles = "Instructor")]
 
 <style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    thead {
+        background-color: rgb(3, 17, 41 );
+        color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: rgb(106, 160, 248,0.2 );
+        font-weight: bold;
+    }
+
+    tbody {
+        font-size: 18px;
+    }
 
 
     .page-background-class {
@@ -33,6 +64,15 @@
         background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
+
+    .no-background-card {
+        background-color: transparent;
+        border: none;
+    }
+
+        .no-background-card .card {
+            color: #000; /* Asegúrate de que el texto sea visible */
+        }
 
 </style>
 <div class="page-background-class"></div>
@@ -66,13 +106,58 @@
             <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
                 <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0 text-white">Clases Organizadas:</RadzenText>
             </RadzenStack>
-            <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            Data="@(listClassUser)" ColumnWidth="200px" Density="Density.Compact" AllowAlternatingRows="false">
-                <Columns>
-                    <RadzenDataGridColumn Property="ClassTypeName" Title="Tipo de Clase" />
-                    <RadzenDataGridColumn Property="Schedule" Title="Fecha" />
-                </Columns>
-            </RadzenDataGrid>
+            <div class="card no-background-card">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center ">Tipo de Clase</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Hora</th>
+                                <th class="text-center">Capacidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (listClassUser is null)
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-white text-center">
+                                        No hay clases disponibles
+                                    </td>
+                                </tr>
+
+
+                            }
+                            else
+                            {
+                                @if (listClassUser.Count() == 0)
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-white text-center">
+                                            No hay clases disponibles
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var classes in listClassUser)
+                                    {
+                                        <tr>
+                                            <td class="text-center text-white">@classes.ClassTypeName</td>
+                                            <td class="text-center text-white">@GetDate(classes.Schedule)</td>
+                                            <td class="text-center text-white">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                            <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+
+
+                                        </tr>
+                                    }
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </RadzenStack>
         @* <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
             @*             <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="Cerrar" Style="width: 120px" />
@@ -113,5 +198,10 @@
         return date?.ToString("dd-MM-yyyy");
     }
 
+    private TimeSpan AddMinutes(DateTime time, int minutes)
+    {
+        var addHour = time.AddMinutes(minutes);
+        return addHour.TimeOfDay;
+    }
     
 }

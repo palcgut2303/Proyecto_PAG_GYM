@@ -1,0 +1,329 @@
+﻿@page "/dialogcardUser"
+
+@inject IGymMemberService gymMemberService
+@inject IClassService classService
+@inject Radzen.DialogService dialogService
+@inject NavigationManager NavigationManager
+@inject IAuthService AuthService
+@inject IGymMemberService GymMemberService
+@inject IJSRuntime JSRuntime
+@inject SweetAlertService Swal
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    thead {
+        background-color: rgb(3, 17, 41 );
+        color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: rgb(106, 160, 248,0.2 );
+        font-weight: bold;
+    }
+
+    tbody {
+        font-size: 18px;
+    }
+
+    .page-background-class {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/backgroungUser.jpg'); /* Ruta de la imagen de fondo */
+        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
+        background-repeat: no-repeat; /* Evitar que la imagen se repita */
+        background-position: center; /* Posición de la imagen de fondo */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .overlay {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+
+    .no-background-card {
+        background-color: transparent;
+        border: none;
+    }
+
+        .no-background-card .card {
+            color: #000; /* Asegúrate de que el texto sea visible */
+        }
+
+</style>
+<div class="page-background-class"></div>
+<div class="overlay"></div>
+
+<div class="m-3">
+    <RadzenStack Gap="1rem" Orientation="Radzen.Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
+        <RadzenStack>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1 bg-white" Style="border: var(--rz-grid-cell-border)">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Contacto</RadzenText>
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="AlignItems.Center">
+
+                        <RadzenStack Gap="0" Class="rz-text-truncate">
+                            <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Nombre</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.FullName</b></RadzenText>
+                            <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Email</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@model.emailMember</b></RadzenText>
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1 bg-white" Style="border: var(--rz-grid-cell-border)">
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Informacion de la suscripción</RadzenText>
+                    <RadzenStack Gap="0" Class="rz-text-truncate">
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Inscripción</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.JoinDate)</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Salida</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.EndDate)</b></RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+                <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0 text-white" Style="font-weight: bold">Mis Reservas</RadzenText>
+            </RadzenStack>
+            <div class="card no-background-card">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center ">Instructor</th>
+                                <th class="text-center">Fecha</th>
+                                <th class="text-center">Hora</th>
+                                <th class="text-center">Capacidad</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (listClassUser is null)
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-white text-center">
+                                        No hay clases disponibles
+                                    </td>
+                                </tr>
+
+
+                            }
+                            else
+                            {
+                                @if (listClassUser.Count() == 0)
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-white text-center">
+                                            No hay clases disponibles
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var classes in listClassUser)
+                                    {
+                                        <tr>
+                                            <td class="text-center text-white">@classes.GymInstructorName</td>
+                                            <td class="text-right text-white">@GetDate(classes.Schedule)</td>
+                                            <td class="text-center text-white">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                            <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+
+                                            <td>
+                                                <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
+                                            </td>
+
+
+
+                                        </tr>
+                                    }
+                                }
+                                
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </RadzenStack>
+
+    </RadzenStack>
+</div>
+
+@code {
+    GymMemberDTO model = new GymMemberDTO();
+    List<ClassDTO> listClassUser = new List<ClassDTO>();
+    private string userRole;
+    string emailUserIdentificate;
+    int idUser;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        userRole = await AuthService.GetRole();
+
+        emailUserIdentificate = await AuthService.GetEmail();
+
+        @if (userRole == "User")
+        {
+            var result = await GymMemberService.GymMemberByEmail(emailUserIdentificate);
+
+            if (result != null)
+            {
+                model = result.GymMemberDTO!;
+                listClassUser = await classService.GetClassesByGymMember(model.emailMember);
+            }
+        }
+    }
+    private void Cerrar()
+    {
+        NavigationManager.NavigateTo("/useradminmanage");
+    }
+
+    private string GetDate(DateTime? date)
+    {
+
+        return date?.ToString("dd-MM-yyyy");
+    }
+
+    private TimeSpan AddMinutes(DateTime time, int minutes)
+    {
+        var addHour = time.AddMinutes(minutes);
+        return addHour.TimeOfDay;
+    }
+
+    private string GetDate(DateTime date)
+    {
+
+        return date.ToString("dd-MM-yyyy");
+    }
+
+
+
+    private async Task HacerReserva(ClassDTO model)
+    {
+        if (model.TotalReservations < model.Capacity)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "¿Deseas Reservar esta clase?",
+                    Icon = SweetAlertIcon.Info,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
+
+            if (resultado.IsConfirmed)
+            {
+                var result = await classService.ReserveClass(model.Id, emailUserIdentificate);
+
+                if (result.EsCorrecto)
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "Reserva realizada con exito",
+                            Icon = SweetAlertIcon.Success
+                        });
+
+
+                    // model.TotalReservations++;
+                    // StateHasChanged();
+                    await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+                }
+                else
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "No se pudo realizar la reserva",
+                            Icon = SweetAlertIcon.Error
+                        });
+
+
+                }
+            }
+        }
+        else
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "No hay cupo disponible",
+                    Icon = SweetAlertIcon.Error
+                });
+            return;
+        }
+
+
+
+    }
+
+    private async Task CancelarReserva(ClassDTO model)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Reserva",
+                Text = "¿Deseas Cancelar la reserva de esta clase?",
+                Icon = SweetAlertIcon.Info,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            var result = await classService.CancelReservation(model.Id, emailUserIdentificate);
+
+            if (result.EsCorrecto)
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "Reserva cancelada con exito",
+                        Icon = SweetAlertIcon.Success
+                    });
+
+                // model.TotalReservations--;
+                // StateHasChanged();
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+            else
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "No se pudo cancelar la reserva",
+                        Icon = SweetAlertIcon.Error
+                    });
+
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+        }
+    }
+}

@@ -639,7 +639,7 @@ banner
 
 .video-overlay {
     position: absolute;
-    background-color: #7a7a7acb;
+    background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
     top: 0;
     left: 0;
     bottom: 7px;
@@ -732,7 +732,8 @@ subscribe
 
 #call-to-action {
     padding: 120px 0px;
-    background-image: url(../img/cta-bg.jpg);
+    background-image: url(../img/backgroundHomeFooter.jpg);
+    background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;

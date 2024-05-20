@@ -78,6 +78,7 @@
             @*             <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="Cerrar" Style="width: 120px" />
             <RadzenButton Click="@Cerrar" Variant="Variant.Flat" Text="Volver" Style="width: 120px" />
          </RadzenStack> *@
+
     </RadzenStack>
 </div>
 
@@ -97,7 +98,6 @@
         model = result.GymMemberDTO!;
          listClassUser = await classService.GetClassesByGymMember(model.emailMember);
     }
-    // <RadzenImage Path="@order.Employee?.Photo" Style="width: 80px; height: 80px; border-radius: 50%" />
 
     private void Cerrar()
     {
