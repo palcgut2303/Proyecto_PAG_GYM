@@ -35,20 +35,36 @@ namespace BlazorFronted.Services
         {
             var listUser = await userService.UserList();
 
-            foreach (var user in listUser.ListUser)
+            if(listUser.ListUser is null || listUser.ListUser.Count() == 0)
             {
-                if (user.Email == registerModel.Email || user.Username == registerModel.Username)
-                {
-                    return new RegisterResult { Successful = false, Errors = new List<string> { "Este email o username ya existe. Inicia Sesión" } };
-                }
-            }
+                var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
+                if (result.IsSuccessStatusCode)
+                    return new RegisterResult { Successful = true, Errors = null };
 
-            var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
+
+                return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
+            }
+            else
+            {
+                foreach (var user in listUser.ListUser)
+                {
+                    if (user.Email == registerModel.Email || user.Username == registerModel.Username)
+                    {
+                        return new RegisterResult { Successful = false, Errors = new List<string> { "Este email o username ya existe. Inicia Sesión" } };
+                    }
+                }
+
+                 var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
             if (result.IsSuccessStatusCode)
                 return new RegisterResult { Successful = true, Errors = null };
 
 
             return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
+            }
+
+            
+
+           
         }
 
 

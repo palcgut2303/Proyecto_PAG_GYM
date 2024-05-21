@@ -1,0 +1,166 @@
+﻿@inject IJSRuntime JSRuntime
+
+<style>
+    footer {
+        color: #fff;
+        padding: 30px 0;
+    }
+
+    .footer-links a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 15px;
+        transition: color 0.3s ease;
+    }
+
+        .footer-links a:hover {
+            color: #adb5bd;
+        }
+
+    .background-footer{
+        background-color: rgb(3, 17, 41 );
+    }
+
+    a:hover{
+        color: #adb5bd;
+    }
+
+    .contact-section {
+        background-color: #f8f9fa; /* Color de fondo claro */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-title {
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .contact-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+        .contact-list li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+            .contact-list li strong {
+                color: #555;
+            }
+
+        .contact-list a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .contact-list a:hover {
+                text-decoration: underline;
+            }
+
+</style>
+<AuthorizeView Roles="User">
+    <Authorized>
+        <footer class="footer background-footer sticky-bottom">
+            <div class="container ">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a class="logo text-white" href="#">GYM <em>PAG</em></a>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-3 contact-section">
+                        <h5 class="contact-title">Contactanos</h5>
+                        <ul class="list-unstyled contact-list">
+                            <li><strong>Email:</strong> <a href="mailto:pabloalcudia18@gmail.com">pabloalcudia18@gmail.com</a></li>
+                            <li class="text-black"><strong>Teléfono:</strong>+34 123 456 789</li>
+                            <li class="text-black"><strong>Dirección:</strong> 14620 C/Sevilla, Córdoba, España</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Siguenos</h5>
+                        <ul class="list-inline footer-links">
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="bi bi-twitter"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#">
+                                    <i class="bi bi-linkedin"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-white">© 2024 GYM PAG. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <ul class="list-inline footer-links">
+                            <li class="list-inline-item">
+                                <a href="#">Politica de Privacidad</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="https://maps.app.goo.gl/VmPy78UnaUwSocx39">Ubicación</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </Authorized>
+    
+</AuthorizeView>
+
+<AuthorizeView Roles="Instructor">
+    <Authorized>
+        <footer class="footer background-footer sticky-bottom">
+            <div class="container ">
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-white">© 2024 GYM PAG. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <ul class="list-inline footer-links">
+                            <li class="list-inline-item">
+                                <a href="#">Politica de Privacidad</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="https://maps.app.goo.gl/VmPy78UnaUwSocx39">Ubicación</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private async Task export()
+    {
+
+        await JSRuntime.InvokeVoidAsync("GenerarMapa");
+
+    }
+}

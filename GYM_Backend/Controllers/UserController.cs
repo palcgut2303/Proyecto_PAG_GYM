@@ -216,10 +216,10 @@ namespace GYM_Backend.Controllers
 
             if(usuarios.Count == 0)
             {
-                return BadRequest(new UserListResult { Successful = false, Error = "No hay usuarios" });
+                return Ok(new UserListResult { Successful = false, Error = "No hay usuarios" });
             }else if(usuarios is null)
             {
-                return BadRequest(new UserListResult { Successful = false, Error = "No hay usuarios" });
+                return Ok(new UserListResult { Successful = false, Error = "No hay usuarios" });
             }
 
             return Ok(new UserListResult { Successful = true, ListUser = usuarios});

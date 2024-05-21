@@ -118,10 +118,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (listClassUser is null)
+                            @if (listClassUser is null || listClassUser.Count() == 0)
                             {
                                 <tr>
-                                    <td colspan="4" class="text-white text-center">
+                                    <td colspan="5" class="text-white text-center">
                                         No hay clases disponibles
                                     </td>
                                 </tr>
@@ -130,16 +130,7 @@
                             }
                             else
                             {
-                                @if (listClassUser.Count() == 0)
-                                {
-                                    <tr>
-                                        <td colspan="4" class="text-white text-center">
-                                            No hay clases disponibles
-                                        </td>
-                                    </tr>
-                                }
-                                else
-                                {
+                               
                                     @foreach (var classes in listClassUser)
                                     {
                                         <tr>
@@ -151,7 +142,7 @@
 
                                         </tr>
                                     }
-                                }
+                                
 
                             }
                         </tbody>

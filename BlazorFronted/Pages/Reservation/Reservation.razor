@@ -262,11 +262,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if (listClass is null)
-                                            {
+                                            @if (listClass is null || listClass.Count == 0)
+                                            { 
                                                 <tr>
-                                                    <td colspan="4">
-                                                        No hay clases disponibles de fuerza
+                                                    <td colspan="5" class="text-center text-white">
+                                                        No hay clases disponibles de @ClassTypeSelected
                                                     </td>
                                                 </tr>
 

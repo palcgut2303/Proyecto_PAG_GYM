@@ -1,8 +1,19 @@
 ﻿@page "/"
 @inject IJSRuntime JSRuntime
 @inject IAuthService AuthService
+
 <PageTitle>Home</PageTitle>
 
+
+<style>
+    .background-footer {
+        background-color: rgba(0, 0, 0, 0.8)
+    }
+
+    #map {
+        height: 180px;
+    }
+</style>
 
 <!-- ***** Main Banner Area Start ***** -->
 <div class="main-banner" id="top">
@@ -14,23 +25,19 @@
         <div class="caption">
             <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
             <h2>FÁCIL CON NUESTRO <em>GIMNASIO</em></h2>
-            
+
         </div>
     </div>
 </div>
 <!-- ***** Main Banner Area End ***** -->
-
-
-
 <!-- ***** Features Item Start ***** -->
 <section class="section" id="features">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 offset-lg-3">
                 <div class="section-heading">
-                    <h2>Escoge el <em>Programa</em></h2>
+                    <h2>Este es tu <em>GIMNASIO IDEAL</em></h2>
                     <img src="img/line-dec.png" alt="waves">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eu tellus sapien. Mauris sagittis ultricies risus, vel venenatis nisi dictum sit amet. Mauris ultrices, velit id sodales hendrerit, quam diam viverra nisi, volutpat interdum libero est vitae ex.</p>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -40,9 +47,9 @@
                             <img src="img/features-first-icon.png" alt="First One">
                         </div>
                         <div class="right-content">
-                            <h4>Basic Fitness</h4>
-                            <p>Morbi id arcu ut ligula rhoncus tempus. Mauris at lacinia dolor, ac semper arcu.</p>
-                            
+                            <h4>Instalaciones Modernas</h4>
+                            <p> Nuestro gimnasio está equipado con máquinas y pesas de última generación para ofrecerte la mejor experiencia de entrenamiento.</p>
+
                         </div>
                     </li>
                     <li class="feature-item">
@@ -50,9 +57,9 @@
                             <img src="img/features-first-icon.png" alt="second one">
                         </div>
                         <div class="right-content">
-                            <h4>New Gym Training</h4>
-                            <p>Quisque vulputate bibendum neque vel gravida. Sed suscipit posuere maximus. Donec eget urna lectus. Sed finibus gravida rhoncus.</p>
-                            
+                            <h4>Entrenadores Profesionales</h4>
+                            <p>Contamos con un equipo de entrenadores certificados y con amplia experiencia.</p>
+
                         </div>
                     </li>
                     <li class="feature-item">
@@ -60,9 +67,9 @@
                             <img src="img/features-first-icon.png" alt="third gym training">
                         </div>
                         <div class="right-content">
-                            <h4>Basic Muscle Course</h4>
-                            <p>Phasellus tincidunt felis nec dolor posuere accumsan. Morbi eu facilisis diam, sit amet porta elit. Integer neque sem, suscipit eget blandit eget, ullamcorper ut arcu.</p>
-                            
+                            <h4>Clases Grupales</h4>
+                            <p>Ofrecemos una variedad de clases grupales que incluyen yoga, TRX, fuerza, y más. Estas clases son una excelente manera de mantenerse motivado y conocer a otros miembros del gimnasio.</p>
+
                         </div>
                     </li>
                 </ul>
@@ -74,9 +81,9 @@
                             <img src="img/features-first-icon.png" alt="fourth muscle">
                         </div>
                         <div class="right-content">
-                            <h4>Advanced Muscle Course</h4>
-                            <p>Nam maximus mauris nisi. Ut sit amet consectetur magna. Etiam placerat suscipit scelerisque. Nunc odio augue, luctus ac justo cursus, porta rhoncus elit.</p>
-                            
+                            <h4>Ambiente Seguro y Limpio</h4>
+                            <p>Mantenemos un alto estándar de limpieza e higiene en todas nuestras instalaciones.</p>
+
                         </div>
                     </li>
                     <li class="feature-item">
@@ -84,9 +91,9 @@
                             <img src="img/features-first-icon.png" alt="training fifth">
                         </div>
                         <div class="right-content">
-                            <h4>Yoga Training</h4>
-                            <p>Aenean viverra metus augue, id lobortis neque facilisis vitae. Maecenas sed bibendum tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            
+                            <h4>Clases Intensas</h4>
+                            <p>Nuestras clases son de una hora de puro esfuerzo y dando mucha caña para poder dar los mejores resultados.</p>
+
                         </div>
                     </li>
                     <li class="feature-item">
@@ -94,9 +101,9 @@
                             <img src="img/features-first-icon.png" alt="gym training">
                         </div>
                         <div class="right-content">
-                            <h4>Body Building Course</h4>
-                            <p>Nulla dui sem, tincidunt quis placerat in, finibus sit amet metus. Sed hendrerit velit velit, quis hendrerit odio tempus eu. </p>
-                            
+                            <h4>Zona de Relajación</h4>
+                            <p>Después de un intenso entrenamiento, relájate en nuestra zona de descanso equipada con sauna y áreas de relajación.</p>
+
                         </div>
                     </li>
                 </ul>
@@ -105,22 +112,26 @@
     </div>
 </section>
 <!-- ***** Features Item End ***** -->
-
 <!-- ***** Call to Action Start ***** -->
-<section class="section bg-black" id="call-to-action">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1">
-                <div class="cta-content ">
-                    <h2>NO LO<em>PIENSES</em>, EMPIEZA <em>AHORA</em>!</h2>
-                    <p>Pellentesque convallis, augue lobortis lacinia venenatis, mi augue sagittis lectus, egestas tristique mi velit vel felis. </p>
-                    
+<div class="background-footer">
+    <section class="section bg-black" id="call-to-action">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 offset-lg-1">
+                    <div class="cta-content ">
+                        <h2>NO LO<em>PIENSES</em>, EMPIEZA <em>AHORA</em>!</h2>
+                        <p>Pellentesque convallis, augue lobortis lacinia venenatis, mi augue sagittis lectus, egestas tristique mi velit vel felis. </p>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- ***** Call to Action End ***** -->
+    </section>
+    <!-- ***** Call to Action End ***** -->
+</div>
+
+
+
 
 @code {
     private string userRole;
@@ -129,4 +140,12 @@
     {
         userRole = await AuthService.GetRole();
     }
+
+    private async Task export()
+    {
+        
+        await JSRuntime.InvokeVoidAsync("GenerarMapa");
+
+    }
+
 }

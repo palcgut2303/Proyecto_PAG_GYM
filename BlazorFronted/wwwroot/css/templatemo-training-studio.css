@@ -733,7 +733,7 @@ subscribe
 #call-to-action {
     padding: 120px 0px;
     background-image: url(../img/backgroundHomeFooter.jpg);
-    background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+    background-color: rgba(0, 0, 0, 0.8);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
