@@ -1,20 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
 <style>
-    .contenedorBody{
+    .contenedorBody {
         margin-top: 7%
+    }
+
+
+
+    body {
+        /* display: flex;
+        flex-direction: column; */
+/*         border: 10px solid red;
+ */        min-height: 100vh;
+        grid-template-rows: auto 1fr auto;
+        position: relative;
+        display: grid;
+
     }
 </style>
 
-<div class="page">
-    
-    <main>
+<main>
 
-        <BlazorFronted.Pages.MenuConfig.Menu></BlazorFronted.Pages.MenuConfig.Menu>
+    <BlazorFronted.Pages.MenuConfig.Menu></BlazorFronted.Pages.MenuConfig.Menu>
 
-        <div class="contenedorBody">
-            @Body
-        </div>
-        <BlazorFronted.Pages.Footer></BlazorFronted.Pages.Footer>
-    </main>
-</div>
+    @Body
+
+
+</main>

@@ -1,0 +1,14 @@
+﻿<button @onclick="ScrollToTopp" class="scroll-to-top">
+    <i class="bi bi-arrow-up"></i>
+</button>
+
+@code {
+
+    private void ScrollToTopp()
+    {
+        JS.InvokeVoidAsync("scrollToTop");
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; }
+}
