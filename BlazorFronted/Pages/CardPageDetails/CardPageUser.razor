@@ -142,9 +142,19 @@
                                             <td class="text-center text-white">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
                                             <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
 
+                                        @if(classes.Schedule < DateTime.Now)
+                                        {
+                                            <td>
+                                                <button class="btn btn-info">Clase Completada</button>
+                                            </td>
+                                        }
+                                        else
+                                        {
                                             <td>
                                                 <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
                                             </td>
+                                        }
+                                        
 
 
 

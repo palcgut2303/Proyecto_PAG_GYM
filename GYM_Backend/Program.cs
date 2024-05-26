@@ -93,8 +93,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.Configure<GmailSettings>(builder.Configuration.GetSection("GmailSettings"));
 builder.Services.AddTransient<IMessage, Message>();
+builder.Services.AddHealthChecks(); //Comprobar que esta funcionando la API
 
 var app = builder.Build();
+app.MapHealthChecks("/health"); //Comprobar que esta funcionando la API
 app.UseCors("AllowAllOrigins");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -724,21 +724,8 @@ features
             font-weight: 500;
         }
 
-/*
----------------------------------------------
-subscribe
----------------------------------------------
-*/
 
-#call-to-action {
-    padding: 120px 0px;
-    background-image: url(../img/backgroundHomeFooter.jpg);
-    background-color: rgba(0, 0, 0, 0.8);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    text-align: center;
-}
+
 
 .cta-content h2 {
     font-size: 36px;
