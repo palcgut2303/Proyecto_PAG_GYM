@@ -16,18 +16,18 @@ namespace GYM_Backend.Controllers
             _message = message;
         }
 
-        [HttpGet("{email}")]
-        public IActionResult SendEmail([FromRoute] string email)
+        [HttpPost]
+        public IActionResult SendEmail([FromBody] SendEmailRequest model)
         {
-            var cadenaEnviar = _message.RandomString();
-           var result = _message.SendEmail("Código de verificación de GYM PAG", cadenaEnviar, email);
+            
+           var result = _message.SendEmail(model);
 
             if (!result.EsCorrecto)
             {
                 return BadRequest(new ResponseAPI<string> { EsCorrecto = false, Mensaje = result.Mensaje });
             }
 
-            return Ok(new ResponseAPI<string> { EsCorrecto = true, Mensaje = cadenaEnviar });
+            return Ok(new ResponseAPI<string> { EsCorrecto = true });
         }
 
         

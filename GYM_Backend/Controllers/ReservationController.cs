@@ -61,8 +61,14 @@ namespace GYM_Backend.Controllers
             var emailUser = data.email;
             var idClass = data.id;
 
-            //Cojer el id del usuario a traves de su email
             var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
+
+            var resultCheckReservationByMoth = await _reservationRepository.CheckReservationsByMonth(emailUser);
+
+            if (!resultCheckReservationByMoth.EsCorrecto)
+            {
+                return BadRequest(new ResponseAPI<string> { EsCorrecto = false, Mensaje = resultCheckReservationByMoth.Mensaje });
+            }
 
             var respuesta = await _classRepository.ReservarClase(idClass, idUsuario);
 

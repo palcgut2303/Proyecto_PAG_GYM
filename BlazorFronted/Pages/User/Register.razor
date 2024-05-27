@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 
 
-<section class="vh-100" style="background-color: #eee;">
+<section class="pt-3 pb-3" style="background-color: #eee;">
 
     <div class="container h-80">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -49,7 +49,7 @@
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <InputText Id="username" class="form-control" @bind-Value="RegisterModel.Username" />
                                                 <ValidationMessage For="@(() => RegisterModel.Username)" />
-                                                <label class="form-label" for="form3Example1c">Username</label>
+                                                <label class="form-label" for="form3Example1c">Nombre Usuario</label>
                                             </div>
                                         </div>
 
@@ -58,7 +58,7 @@
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <InputText Id="fullname" class="form-control" @bind-Value="RegisterModel.FullName" />
                                                 <ValidationMessage For="@(() => RegisterModel.FullName)" />
-                                                <label class="form-label" for="form3Example1c">FullName</label>
+                                                <label class="form-label" for="form3Example1c">Nombre Completo</label>
                                             </div>
                                         </div>
 
@@ -68,7 +68,7 @@
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <InputText Id="email" class="form-control" @bind-Value="RegisterModel.Email" />
                                                 <ValidationMessage For="@(() => RegisterModel.Email)" />
-                                                <label class="form-label" for="form3Example3c">Email</label>
+                                                <label class="form-label" for="form3Example3c">Correo Electrónico</label>
                                             </div>
                                         </div>
 
@@ -77,12 +77,12 @@
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                                 <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
                                                 <ValidationMessage For="@(() => RegisterModel.Password)" />
-                                                <label class="form-label" for="form3Example4c">Password</label>
+                                                <label class="form-label" for="form3Example4c">Contraseña</label>
                                             </div>
                                         </div>
                                         <span><a href="login">¿Tienes una cuenta?, Inicia sesión aquí</a></span>
 
-                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4  mt-2">
 
                                             <button @onclick="enterCodeValidation" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Registrarse</button>
                                         </div>
@@ -98,7 +98,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 ">
 
                                             <button @onclick="SubmitRegistration" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Confirmar</button>
                                         </div>
@@ -106,7 +106,7 @@
 
                                 </EditForm>
                             </div>
-                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 ">
 
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                                      class="img-fluid" alt="Sample image">
@@ -141,7 +141,14 @@
             Errors = null;
             ShowErrors = false;
 
-            var result = await AuthService.SendEmail(RegisterModel.Email);
+            codeEmailSend = AuthService.RandomString();
+
+            var sendEmailRequest = new SendEmailRequest(RegisterModel.Email, "Código de validación en GYM PAG", "Tu código de validación es: " + codeEmailSend);
+
+
+            var result = await AuthService.SendEmail(sendEmailRequest);
+
+
 
             if (!result.EsCorrecto)
             {
@@ -155,7 +162,6 @@
 
                 Confirm = new List<string> { "Se ha enviado un correo con el código de validación" };
                 ShowConfirm = true;
-                codeEmailSend = result.Mensaje!;
             }
 
         }
@@ -184,9 +190,25 @@
 
             if (result.Successful)
             {
+                var sendEmailRequest = new SendEmailRequest(RegisterModel.Email, "Confirmacion de registro en GYM PAG",
+                                            "¡BIENVENIDO A GYM PAG, TE HAS REGISTRADO CORRECTAMENTE!\n -Empieza a reservar clases en el apartado de 'RESERVAR', y disfruta de nuestras magnificas clases");
 
 
-                NavigationManager.NavigateTo("/login");
+                var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+
+
+                if (!resultSendEmail.EsCorrecto)
+                {
+                    Errors = new List<string> { "Error al enviar el correo" };
+                    ShowErrors = true;
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/login");
+                }
+
+
             }
             else
             {

@@ -101,16 +101,42 @@ namespace BlazorFronted.Services
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<ResponseAPI<string>> SendEmail(string email)
+        public async Task<ResponseAPI<SendEmailRequest>> SendEmail(SendEmailRequest model)
         {
-            var result = await _httpClient.GetFromJsonAsync<ResponseAPI<string>>($"api/Email/{email}");
+            var result = await _httpClient.PostAsJsonAsync($"api/Email",model);
 
-            if(result is null)
+            if(!result.IsSuccessStatusCode)
             {
-                return null;
+                return new ResponseAPI<SendEmailRequest>
+                {
+                    EsCorrecto = false,
+                    Mensaje = "Error al enviar el correo"
+                   
+                };
+                
             }
 
-            return result;
+            return new ResponseAPI<SendEmailRequest>
+            {
+                EsCorrecto = true,
+                Valor = model,
+            };
+        }
+
+        public string RandomString()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[6];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            var finalString = new String(stringChars);
+
+            return finalString;
         }
 
         public async Task<string> GetRole()

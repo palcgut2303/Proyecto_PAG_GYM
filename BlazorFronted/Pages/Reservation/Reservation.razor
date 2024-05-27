@@ -250,8 +250,17 @@
                                     </div>
 
                                     <h4 class="text-white text-center">Clases de @ClassTypeSelected</h4>
+                                    @if (ShowErrors)
+                                    {
+                                        <div class="alert alert-danger" role="alert">
+                                            @foreach (var error in Errors!)
+                                            {
+                                                <p>@error</p>
+                                            }
+                                        </div>
+                                    }
                                     <div class="table-responsive">
-
+                                        
                                         <table class="table">
                                             <thead>
                                                 <tr>
@@ -336,15 +345,19 @@
     List<ClassDTO> listClass = null;
     List<ClassDTO> listClassByUser = null;
 
+    private bool ShowErrors;
+    private IEnumerable<string>? Errors;
+
     string ClassTypeSelected = string.Empty;
-    string email = string.Empty;
+    string emailUserIdentificate = string.Empty;
+
 
     protected override async Task OnInitializedAsync()
     {
         showReservationSection = false;
         classTypeResult = await classTypeService.ClassTypeList();
         listClassType = classTypeResult.ListClass;
-        email = await AuthService.GetEmail();
+        emailUserIdentificate = await AuthService.GetEmail();
     }
 
     private async Task ToggleReservationSection(bool value, string classType = null)
@@ -358,7 +371,7 @@
             listClass = listClass.Where(x => x.Schedule.Date >= DateTime.Now.Date).ToList();
             ClassTypeSelected = classType;
         }
-        listClassByUser = await classService.GetClassesByGymMember(email);
+        listClassByUser = await classService.GetClassesByGymMember(emailUserIdentificate);
 
     }
 
@@ -411,7 +424,7 @@
 
             if (resultado.IsConfirmed)
             {
-                var result = await classService.ReserveClass(model.Id, email);
+                var result = await classService.ReserveClass(model.Id, emailUserIdentificate);
 
                 if (result.EsCorrecto)
                 {
@@ -422,6 +435,18 @@
                             Icon = SweetAlertIcon.Success
                         });
 
+                   
+
+                    var sendEmailRequest = new SendEmailRequest(emailUserIdentificate, "Clase reservada en GYM PAG",
+                                        "Reserva realizada con éxito, la clase con fecha: " + GetDate(model.Schedule) + "\nTipo de Clase: " + model.ClassTypeName + "\nInstructor: " + model.GymInstructorName);
+
+                    var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+                    if (!resultSendEmail.EsCorrecto)
+                    {
+                        Errors = new List<string> { "Error al enviar el correo" };
+                        ShowErrors = true;
+                    }
 
                     // model.TotalReservations++;
                     // StateHasChanged();
@@ -470,7 +495,7 @@
 
         if (resultado.IsConfirmed)
         {
-            var result = await classService.CancelReservation(model.Id, email);
+            var result = await classService.CancelReservation(model.Id, emailUserIdentificate);
 
             if (result.EsCorrecto)
             {
@@ -481,8 +506,19 @@
                         Icon = SweetAlertIcon.Success
                     });
 
-                // model.TotalReservations--;
-                // StateHasChanged();
+                
+                var sendEmailRequest = new SendEmailRequest(emailUserIdentificate, "Cancelación de clase en GYM PAG",
+                                    "Cancelación realizada con éxito, la clase con fecha: " + GetDate(model.Schedule) + "\n, -Tipo de Clase: " + model.ClassTypeName + "\n, -Instructor: " + model.GymInstructorName);
+
+                var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+                if (!resultSendEmail.EsCorrecto)
+                {
+                    Errors = new List<string> { "Error al enviar el correo" };
+                    ShowErrors = true;
+                }
+
+
                 await JSRuntime.InvokeVoidAsync("window.location.reload");
 
             }

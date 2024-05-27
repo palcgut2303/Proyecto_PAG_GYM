@@ -99,8 +99,6 @@
                     <RadzenStack Gap="0" Class="rz-text-truncate">
                         <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Inscripción</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.JoinDate)</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Fecha de Salida</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>@GetDate(model.EndDate)</b></RadzenText>
                     </RadzenStack>
                 </RadzenColumn>
             </RadzenRow>
@@ -109,6 +107,15 @@
                 <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-m-0 text-white" Style="font-weight: bold">Mis Reservas</RadzenText>
             </RadzenStack>
             <div class="card no-background-card">
+                @if (ShowErrors)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @foreach (var error in Errors!)
+                        {
+                            <p>@error</p>
+                        }
+                    </div>
+                }
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -125,7 +132,7 @@
                             {
                                 <tr>
                                     <td colspan="5" class="text-white text-center">
-                                        No hay clases disponibles
+                                        <p class="fw-bold fs-6">No tienes ninguna reserva realizada</p>
                                     </td>
                                 </tr>
 
@@ -133,7 +140,6 @@
                             }
                             else
                             {
-                               
                                     @foreach (var classes in listClassUser)
                                     {
                                         <tr>
@@ -145,7 +151,7 @@
                                         @if(classes.Schedule < DateTime.Now)
                                         {
                                             <td>
-                                                <button class="btn btn-info">Clase Completada</button>
+                                                <button class="btn btn-info">Clase Cerrada</button>
                                             </td>
                                         }
                                         else
@@ -154,14 +160,8 @@
                                                 <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
                                             </td>
                                         }
-                                        
-
-
-
                                         </tr>
                                     }
-                                
-                                
                             }
                         </tbody>
                     </table>
@@ -178,6 +178,10 @@
     private string userRole;
     string emailUserIdentificate;
     int idUser;
+
+    private bool ShowErrors;
+    private IEnumerable<string>? Errors;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -222,66 +226,7 @@
 
 
 
-    private async Task HacerReserva(ClassDTO model)
-    {
-        if (model.TotalReservations < model.Capacity)
-        {
-            var resultado = await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "¿Deseas Reservar esta clase?",
-                    Icon = SweetAlertIcon.Info,
-                    ShowCancelButton = true,
-                    ConfirmButtonText = "Si",
-                    CancelButtonText = "No"
-                });
-
-            if (resultado.IsConfirmed)
-            {
-                var result = await classService.ReserveClass(model.Id, emailUserIdentificate);
-
-                if (result.EsCorrecto)
-                {
-                    await Swal.FireAsync(new SweetAlertOptions
-                        {
-                            Title = "Reserva",
-                            Text = "Reserva realizada con exito",
-                            Icon = SweetAlertIcon.Success
-                        });
-
-
-                    // model.TotalReservations++;
-                    // StateHasChanged();
-                    await JSRuntime.InvokeVoidAsync("window.location.reload");
-
-                }
-                else
-                {
-                    await Swal.FireAsync(new SweetAlertOptions
-                        {
-                            Title = "Reserva",
-                            Text = "No se pudo realizar la reserva",
-                            Icon = SweetAlertIcon.Error
-                        });
-
-
-                }
-            }
-        }
-        else
-        {
-            await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "No hay cupo disponible",
-                    Icon = SweetAlertIcon.Error
-                });
-            return;
-        }
-
-
-
-    }
+    
 
     private async Task CancelarReserva(ClassDTO model)
     {
@@ -308,8 +253,19 @@
                         Icon = SweetAlertIcon.Success
                     });
 
-                // model.TotalReservations--;
-                // StateHasChanged();
+
+                var sendEmailRequest = new SendEmailRequest(emailUserIdentificate, "Cancelación de clase en GYM PAG",
+                                    "Cancelación realizada con éxito, la clase con fecha: " + GetDate(model.Schedule) + "\n, -Tipo de Clase: " + model.ClassTypeName + "\n, -Instructor: " + model.GymInstructorName);
+
+                var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+                if (!resultSendEmail.EsCorrecto)
+                {
+                    Errors = new List<string> { "Error al enviar el correo" };
+                    ShowErrors = true;
+                }
+
+
                 await JSRuntime.InvokeVoidAsync("window.location.reload");
 
             }

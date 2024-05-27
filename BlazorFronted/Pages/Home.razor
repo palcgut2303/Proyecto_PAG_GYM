@@ -30,8 +30,24 @@
 
     <div class="video-overlay header-text">
         <div class="caption">
-            <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
-            <h2>FÁCIL CON NUESTRO GIMNASIO</h2>
+            <AuthorizeView Roles="User">
+                <Authorized>
+                    <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
+                    <h2>FÁCIL CON NUESTRO GIMNASIO</h2>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Instructor">
+                <Authorized>
+                    <h6>LIDERA CON EJEMPLO, INSPIRA A TODOS</h6>
+                    <h2>¡BIENVENIDO ADMIN!</h2>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView>
+                  <NotAuthorized>
+                    <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
+                    <h2>FÁCIL CON NUESTRO GIMNASIO</h2>
+                </NotAuthorized>
+            </AuthorizeView>
 
         </div>
     </div>
@@ -128,7 +144,6 @@
                     <div class="cta-content ">
 
                         <h2>NO LO PIENSES, EMPIEZA AHORA!</h2>
-                        <p>Puedes unirte a nosotros registrandote en nuestra pagina.</p>
 
                     </div>
                 </div>

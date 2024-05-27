@@ -14,7 +14,7 @@ namespace GYM_Backend.Service
             _gmailSettings = gmailSettings.Value;
         }
 
-        public ResponseAPI<string> SendEmail(string subject, string body, string to)
+        public ResponseAPI<string> SendEmail(SendEmailRequest model)
         {
             try
             {
@@ -23,9 +23,9 @@ namespace GYM_Backend.Service
 
                 var message = new MailMessage();
                 message.From = new MailAddress(fromEmail);
-                message.Subject = subject;
-                message.To.Add(new MailAddress(to));
-                message.Body = body;
+                message.Subject = model.Subject;
+                message.To.Add(new MailAddress(model.To));
+                message.Body = model.Body;
                 message.IsBodyHtml = true;
 
                 var smtpClient = new SmtpClient("smtp.gmail.com")

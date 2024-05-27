@@ -8,6 +8,7 @@ namespace GYM_Backend.Interfaces
 {
     public interface IReservationRepository
     {
+        Task<ResponseAPI<string>> CheckReservationsByMonth(string email);
         Task<Reservation> CreateReservation(CreateReservationRequestDTO model);
         Task<string> DeleteReservation(int id);
         IEnumerable<ReservationDTO> GetAll();

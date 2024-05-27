@@ -186,6 +186,39 @@ namespace GYM_Backend.Repositories
             return new ResponseAPI<int> { EsCorrecto = true, Valor = count};
         }
         
+        public async Task<ResponseAPI<string>> CheckReservationsByMonth(string email)
+        {
+            var user = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
+
+            if (user == null)
+            {
+                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Usuario no encontrado" };
+            }
+
+            var reservations = await _contextDb.Reservations.Include(x => x.Classes).Where(x => x.GymMemberId == user.Id).ToListAsync();
+
+            if (reservations == null)
+            {
+                return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario no tiene reservas" };
+            }
+
+            int count = 0;
+
+            foreach (var item in reservations)
+            {
+                if (item.Classes.Schedule.Month == DateTime.Now.Month)
+                {
+                    count++;
+                }
+            }
+
+            if (count >= 9)
+            {
+                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Este usuario ya tiene 9 reservas en este mes" };
+            }
+
+            return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario puede reservar" };
+        }
 
     }
 }

@@ -10,6 +10,7 @@ namespace BlazorFronted.Services
         Task Logout();
         Task<string> GetRole();
         Task<string> GetEmail();
-        Task<ResponseAPI<string>> SendEmail(string email);
+        string RandomString();
+        Task<ResponseAPI<SendEmailRequest>> SendEmail(SendEmailRequest model);
     }
 }
