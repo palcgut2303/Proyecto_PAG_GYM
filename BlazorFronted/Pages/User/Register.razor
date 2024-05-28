@@ -5,8 +5,35 @@
 
 @inject NavigationManager NavigationManager
 
+<style>
+    .page-background-class {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/backgroungUser.jpg'); /* Ruta de la imagen de fondo */
+        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
+        background-repeat: no-repeat; /* Evitar que la imagen se repita */
+        background-position: center; /* Posición de la imagen de fondo */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
 
-<section class="pt-3 pb-3" style="background-color: #eee;">
+    .overlay {
+        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
+        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
+    }
+</style>
+
+<div class="page-background-class"></div>
+<div class="overlay"></div>
+
+<section class="pt-3 pb-3">
 
     <div class="container h-80">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -46,19 +73,22 @@
                                     {
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="bi bi-person-fill me-3"></i>
+                                            
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example1c">Nombre Usuario</label>
                                                 <InputText Id="username" class="form-control" @bind-Value="RegisterModel.Username" />
                                                 <ValidationMessage For="@(() => RegisterModel.Username)" />
-                                                <label class="form-label" for="form3Example1c">Nombre Usuario</label>
+                                                
                                             </div>
                                         </div>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="bi bi-person-fill me-3"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example1c">Nombre Completo</label>
                                                 <InputText Id="fullname" class="form-control" @bind-Value="RegisterModel.FullName" />
                                                 <ValidationMessage For="@(() => RegisterModel.FullName)" />
-                                                <label class="form-label" for="form3Example1c">Nombre Completo</label>
+                                                
                                             </div>
                                         </div>
 
@@ -66,18 +96,20 @@
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="bi bi-envelope-at-fill me-3"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example3c">Correo Electrónico</label>
                                                 <InputText Id="email" class="form-control" @bind-Value="RegisterModel.Email" />
                                                 <ValidationMessage For="@(() => RegisterModel.Email)" />
-                                                <label class="form-label" for="form3Example3c">Correo Electrónico</label>
+                                                
                                             </div>
                                         </div>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="bi bi-lock-fill me-3"></i>
                                             <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="form3Example4c">Contraseña</label>
                                                 <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
                                                 <ValidationMessage For="@(() => RegisterModel.Password)" />
-                                                <label class="form-label" for="form3Example4c">Contraseña</label>
+                                                
                                             </div>
                                         </div>
                                         <span><a href="login">¿Tienes una cuenta?, Inicia sesión aquí</a></span>

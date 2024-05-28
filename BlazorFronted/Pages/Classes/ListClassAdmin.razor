@@ -30,7 +30,7 @@
         background-color: #f2f2f2;
     }
 
-    tr:hover {
+    table tbody tr:hover {
         background-color: rgb(106, 160, 248,0.2 );
         
     }
@@ -73,10 +73,10 @@
 
     <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
     <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-primary" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
-        <h3 class="text-white">Registros del mes de @NombreMesActual</h3>
+        <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
+        <h3 class="text-white ms-3">Registros del mes de @NombreMesActual</h3>
 
-        <button class="btn btn-primary" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
+        <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
     </div>
     <div class="table-responsive">
         <table class="table border-3">

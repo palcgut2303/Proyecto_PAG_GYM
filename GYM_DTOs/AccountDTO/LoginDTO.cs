@@ -10,9 +10,10 @@ namespace GYM_DTOs.AccountDTO
     public class LoginDTO
     {
 
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage = "Obligatorio")]
+        [EmailAddress(ErrorMessage = "El formato del correo electrónico no es válido.")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage = "Obligatorio")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }
