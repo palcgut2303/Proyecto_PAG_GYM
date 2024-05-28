@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JSRuntime
 
 <style>
-    
+
 
     .footer-links a {
         color: #fff;
@@ -11,9 +11,9 @@
         margin-top: auto;
     }
 
-    .footer-links a:hover {
-      color: #adb5bd;
-    }
+        .footer-links a:hover {
+            color: #adb5bd;
+        }
 
     a:hover {
         color: #adb5bd;
@@ -40,39 +40,47 @@
         list-style: none;
     }
 
-    .contact-list li {
-       margin-bottom: 10px;
-      font-size: 1rem;
-    }
+        .contact-list li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
 
-    .contact-list li strong {
-        color: #555;
-     }
+            .contact-list li strong {
+                color: #555;
+            }
 
-    .contact-list a {
-       color: #007bff;
-       text-decoration: none;
-    }
+        .contact-list a {
+            color: #007bff;
+            text-decoration: none;
+        }
 
-    .contact-list a:hover {
-       text-decoration: underline;
-    }
+            .contact-list a:hover {
+                text-decoration: underline;
+            }
+
+            .logoFooter{
+        /* margin-left: 30px; */
+        line-height: 80px;
+        font-size: 28px;
+        font-weight: 600;
+        text-transform: uppercase;
+        /* float: left;*/
+            }
 
 </style>
 
-    
+
 
 <AuthorizeView Roles="User,Instructor">
     <Authorized>
-        <div class="container" id="contact">
+        <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <a class="logo text-white" href="#">GYM <em>PAG</em></a>
+                <div class="col-md-3 text-center text-md-start">
+                    <a class="logoFooter text-white" href="#">GYM <em>PAG</em></a>
                 </div>
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-3">
-                    
                 </div>
                 <div class="col-md-3">
                     <h5>Siguenos</h5>
@@ -102,10 +110,10 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 text-md-start">
                     <p class="text-white">© 2024 GYM PAG. Todos los derechos reservados.</p>
                 </div>
-                <div class="col-md-6 text-end">
+                <div class="col-md-6 text-md-end">
                     <ul class="list-inline footer-links">
                         <li class="list-inline-item">
                             <a href="privacypolicy">Politica de Privacidad</a>
@@ -117,8 +125,8 @@
                 </div>
             </div>
         </div>
-                
-        
+
+
     </Authorized>
 </AuthorizeView>
 
@@ -126,65 +134,63 @@
 
     <NotAuthorized>
 
-        
-            <div class="container ">
-                <div class="row">
-                    <div class="col-md-3">
-                        <a class="logo text-white" href="#">GYM <em>PAG</em></a>
-                    </div>
-                    <div class="col-md-3 ">
 
-                    </div>
-                    <div class="col-md-3">
-                        
-                    </div>
-                    <div class="col-md-3">
-                        <h5>Siguenos</h5>
-                        <ul class="list-inline footer-links">
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="bi bi-facebook"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="bi bi-twitter"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="bi bi-instagram"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#">
-                                    <i class="bi bi-linkedin"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="logoFooter text-white" href="#">GYM <em>PAG</em></a>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="text-white">© 2024 GYM PAG. Todos los derechos reservados.</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <ul class="list-inline footer-links">
-                            <li class="list-inline-item">
-                                <a href="#">Politica de Privacidad</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="register">Registrate</a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://maps.app.goo.gl/VmPy78UnaUwSocx39">Ubicación</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="col-md-3 ">
+                </div>
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-3">
+                    <h5>Siguenos</h5>
+                    <ul class="list-inline footer-links">
+                        <li class="list-inline-item">
+                            <a href="https://www.facebook.com/?stype=lo&deoia=1&jlou=AfdmnxrzujNx9-HCxeA7CmUkj6s5b6iT6OhaA4kuU7Zk9TDDHvJuL8Om2Zo3BiLlwP0BxfbSsDahG1bNSOzkgv54N-5rwuMpW7H0afUgQxt4lw&smuh=42600&lh=Ac_l-kvjqZO6rRkz4k0">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwiu7Yz026uGAxVrVqQEHSfxDxkQFnoECAcQAQ&url=https%3A%2F%2Ftwitter.com%2Flogin%3F&usg=AOvVaw2uUQ3oCKn8t-f-iYUxeXYo&opi=89978449">
+                                <i class="bi bi-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://www.instagram.com">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://www.linkedin.com/in/pablo-alcudia-gutierrez-480220295/">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-md-start">
+                    <p class="text-white">© 2024 GYM PAG. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline footer-links">
+                        <li class="list-inline-item">
+                            <a href="#">Politica de Privacidad</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="register">Registrate</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://maps.app.goo.gl/VmPy78UnaUwSocx39">Ubicación</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </NotAuthorized>
 </AuthorizeView>
 

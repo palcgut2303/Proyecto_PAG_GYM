@@ -1,5 +1,6 @@
 ﻿@inject SweetAlertService Swal
 @inject IClassService classService;
+@using System.Globalization
 
 @page "/listclassadmin"
 @using CurrieTechnologies.Razor.SweetAlert2
@@ -31,12 +32,12 @@
 
     tr:hover {
         background-color: rgb(106, 160, 248,0.2 );
-        font-weight: bold;
         
     }
 
     tbody {
         font-size: 18px;
+        font-weight: bold;
     }
 
         .page-background-class {
@@ -71,6 +72,12 @@
     <h3 class="text-white">Clases Disponibles</h3>
 
     <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
+    <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-primary" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
+        <h3 class="text-white">Registros del mes de @NombreMesActual</h3>
+
+        <button class="btn btn-primary" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
+    </div>
     <div class="table-responsive">
         <table class="table border-3">
             <thead>
@@ -89,7 +96,7 @@
                     @if (resultClass.Error != null)
                     {
                         <tr>
-                            <td colspan="5" align="center">
+                            <td colspan="6" align="center">
                                 @resultClass.Error
                             </td>
                         </tr>
@@ -97,7 +104,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" align="center">
+                            <td colspan="6" align="center">
                                 <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
                             </td>
                         </tr>
@@ -106,25 +113,39 @@
                 }
                 else
                 {
-                    @foreach (var classes in listClass)
-                    {
-                        <tr class="text-white">
-                            <td class="text-center">@classes.GymInstructorName</td>
-                            <td class="text-center">@classes.ClassTypeName</td>
-                            <td class="text-center">@GetDate(classes.Schedule)</td>
-                            <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
-                            <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
 
-                            <td>
-                                <a class="btn btn-primary btn-sm ms-2" href="createdclasses/@classes.Id">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </a>
-                                <button type="button" class="btn btn-danger btn-sm ms-2" @onclick="(() => Eliminar(classes.Id))">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
+                    @if (RegistrosFiltradosPorMes.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" align="center" class="text-white text-center">
+                                No hay clases disponibles
                             </td>
                         </tr>
                     }
+                    else
+                    {
+                        @foreach (var classes in RegistrosFiltradosPorMes)
+                        {
+                            <tr class="text-white">
+                                <td class="text-center">@classes.GymInstructorName</td>
+                                <td class="text-center">@classes.ClassTypeName</td>
+                                <td class="text-center">@GetDate(classes.Schedule)</td>
+                                <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm ms-2 mt-1" href="createdclasses/@classes.Id">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => Eliminar(classes.Id))">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                    
                 }
 
             </tbody>
@@ -139,13 +160,28 @@
 @code {
     ClassListResult resultClass = new ClassListResult();
     IEnumerable<ClassDTO> listClass = null;
-    
+    private List<ClassDTO> RegistrosFiltradosPorMes { get; set; } = new List<ClassDTO>();
+    private DateTime MesActual { get; set; } = DateTime.Now;
+    private string NombreMesActual => MesActual.ToString("MMMM yyyy", new CultureInfo("es-ES"));
+
 
     protected override async Task OnInitializedAsync()
     {
         resultClass.ListClass = null;
         resultClass = await classService.ClassesList();
         listClass = resultClass.ListClass!;
+        FiltrarRegistrosPorMes(MesActual);
+    }
+
+    private void FiltrarRegistrosPorMes(DateTime mes)
+    {
+        RegistrosFiltradosPorMes = listClass.Where(r => r.Schedule.Month == mes.Month && r.Schedule.Year == mes.Year).ToList();
+    }
+
+    private void CambiarMes(int incremento)
+    {
+        MesActual = MesActual.AddMonths(incremento);
+        FiltrarRegistrosPorMes(MesActual);
     }
 
     private async Task Eliminar(int id)
