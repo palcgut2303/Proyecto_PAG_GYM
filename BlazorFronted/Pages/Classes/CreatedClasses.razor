@@ -46,9 +46,9 @@
 
 <div class="container container-createdClass">
 
-    <h3 class="text-white">@titulo</h3>
+    <h2 class="text-white mt-2">@titulo</h2>
 
-    <EditForm Model="@clase" OnValidSubmit="SubmitForm">
+    <EditForm Model="@clase" OnValidSubmit="SubmitForm" class="mb-3">
         <DataAnnotationsValidator />
         @if (ShowErrors)
         {
@@ -58,20 +58,20 @@
         }
 
         <div class="mb-3">
-            <label for="capacity" class="form-label text-white">Capacidad de la clase:</label>
+            <label for="capacity" class="form-label text-white fw-bolder">Capacidad de la clase:</label>
             <InputNumber class="form-control " id="capacity" @bind-Value="@clase.Capacity" />
             <ValidationMessage For="@(() => clase.Capacity)" />
         </div>
 
         <div class="mb-3">
-            <label for="schedule" class="form-label text-white">Fecha:</label>
+            <label for="schedule" class="form-label text-white fw-bolder">Horario:</label>
             <RadzenDatePicker @bind-Value=@clase.Schedule ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
 
 
         </div>
 
         <div class="mb-3">
-            <label for="ClassTypeName" class="form-label text-white">Tipo de clase:</label>
+            <label for="ClassTypeName" class="form-label text-white fw-bolder">Tipo de clase:</label>
             <select @bind="@selectedClassType" id="ClassTypeName" class="form-control">
                 @if (listClassType != null)
                 {

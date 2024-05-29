@@ -35,9 +35,9 @@
 <div class="page-background-class"></div>
 <div class="overlay"></div>
 <div class="container">
-    <h3 class="text-white">@title</h3>
+    <h2 class="text-white mt-3">@title</h2>
 
-    <EditForm Model="@classType" OnValidSubmit="SubmitForm">
+    <EditForm Model="@classType" OnValidSubmit="SubmitForm" class="mb-3">
         <DataAnnotationsValidator />
         @if (ShowErrors)
         {
@@ -47,13 +47,13 @@
         }
 
         <div class="mb-3">
-            <label for="name" class="form-label text-white">Nombre:</label>
+            <label for="name" class="form-label text-white fw-bolder">Nombre:</label>
             <InputText class="form-control " id="name" @bind-Value="@classType.Name" />
             <ValidationMessage For="@(() => classType.Name)" />
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label text-white">Descripcion:</label>
+            <label for="description" class="form-label text-white fw-bolder">Descripcion:</label>
             <InputText class="form-control " id="description" @bind-Value="@classType.Description" />
             <ValidationMessage For="@(() => classType.Description)" />
         </div>

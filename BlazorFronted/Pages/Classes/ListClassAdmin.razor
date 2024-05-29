@@ -91,12 +91,14 @@
                 </tr>
             </thead>
             <tbody>
+
+
                 @if (resultClass.ListClass == null)
                 {
                     @if (resultClass.Error != null)
                     {
                         <tr>
-                            <td colspan="6" align="center">
+                            <td colspan="6" align="center" class="text-white text-center">
                                 @resultClass.Error
                             </td>
                         </tr>
@@ -104,7 +106,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="6" align="center">
+                            <td colspan="6" align="center" class="text-center">
                                 <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
                             </td>
                         </tr>
@@ -114,7 +116,7 @@
                 else
                 {
 
-                    @if (RegistrosFiltradosPorMes.Count == 0)
+                    @if (RegistrosFiltradosPorMes.Count == 0 || RegistrosFiltradosPorMes is null)
                     {
                         <tr>
                             <td colspan="6" align="center" class="text-white text-center">
@@ -175,7 +177,15 @@
 
     private void FiltrarRegistrosPorMes(DateTime mes)
     {
-        RegistrosFiltradosPorMes = listClass.Where(r => r.Schedule.Month == mes.Month && r.Schedule.Year == mes.Year).ToList();
+        if(listClass is null || listClass.Count() == 0)
+        {
+            RegistrosFiltradosPorMes = new List<ClassDTO>();
+        }
+        else
+        {
+            RegistrosFiltradosPorMes = listClass.Where(r => r.Schedule.Month == mes.Month && r.Schedule.Year == mes.Year).ToList();
+        }
+
     }
 
     private void CambiarMes(int incremento)

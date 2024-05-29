@@ -222,9 +222,19 @@
                             {
                                 @if (listClassType is null)
                                 {
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                                    </div>
+                                    @if (Errors != null)
+                                    {
+                                        <div class="d-flex justify-content-center align-items-center text-white fw-bolder mt-5">
+                                            @Errors.FirstOrDefault()
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                                        </div>
+                                    }
+                                    
                                 }
                                 else
                                 {
@@ -358,6 +368,11 @@
         showReservationSection = false;
         classTypeResult = await classTypeService.ClassTypeList();
         listClassType = classTypeResult.ListClass;
+        if(listClassType is null)
+        {
+            Errors = new List<string> { "No hay tipos de clases actualmente.\n¡VUELVE PRONTO!" };
+            ShowErrors = true;
+        }
         emailUserIdentificate = await AuthService.GetEmail();
     }
 
