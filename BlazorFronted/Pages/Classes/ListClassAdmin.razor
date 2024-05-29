@@ -4,6 +4,8 @@
 
 @page "/listclassadmin"
 @using CurrieTechnologies.Razor.SweetAlert2
+@inject IJSRuntime JSRuntime
+
 @attribute [Authorize(Roles = "Instructor")]
 <style>
     
@@ -63,6 +65,8 @@
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
 
+   
+
 </style>
 
 <div class="page-background-class"></div>
@@ -79,7 +83,7 @@
         <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
     </div>
     <div class="table-responsive">
-        <table class="table border-3">
+        <table class="table">
             <thead>
                 <tr class="text-white">
                     <th class="text-center ">Instructor</th>
@@ -132,7 +136,7 @@
                                 <td class="text-center">@classes.GymInstructorName</td>
                                 <td class="text-center">@classes.ClassTypeName</td>
                                 <td class="text-center">@GetDate(classes.Schedule)</td>
-                                <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                <td class="text-center">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
                                 <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
 
                                 <td>
@@ -218,6 +222,8 @@
 
                 resultClass = await classService.ClassesList();
                 listClass = resultClass.ListClass!;
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
             }
             else
             {
@@ -232,17 +238,17 @@
     }
 
     //Metodo que me añada una hora a la hora de la clase
-    private TimeSpan AddMinutes(DateTime time, int minutes)
+    private string AddMinutes(DateTime time, int minutes)
     {
         var addHour = time.AddMinutes(minutes);
-        return addHour.TimeOfDay;
+        return addHour.TimeOfDay.ToString(@"hh\:mm");
     }
 
     //Metodo que me devuelva la fecha de la clase
     private string GetDate(DateTime date)
     {
         
-        return date.ToString("dd-MM-yyyy");
+        return date.ToString("dd/MM/yyyy");
     }
 
 }

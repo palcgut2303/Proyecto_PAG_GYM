@@ -191,6 +191,12 @@ namespace BlazorFronted.Services
                 return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No puedes crear clases con fechas anterior a la de hoy" };
             }
 
+            if (classModel.Schedule.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No puedes crear clases un domingo" };
+            }
+            
+
 
 
             var listClasses = classes.ListClass;

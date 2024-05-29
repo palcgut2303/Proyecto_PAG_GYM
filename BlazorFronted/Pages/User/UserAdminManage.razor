@@ -23,7 +23,7 @@
         border-radius: .25rem;
     }
 
-    .row-user {
+    /* .row-user {
         display: -ms-flexbox;
         display: flex;
         -ms-flex-wrap: wrap;
@@ -34,8 +34,7 @@
         display: flex;
         flex-wrap: wrap;
         margin-top: calc(var(--bs-gutter-y)* -1);
-        
-    }
+    } */
 
     .page-background-class {
         position: fixed; /* Fijar la posición para cubrir toda la pantalla */
@@ -60,6 +59,10 @@
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
 
+    .card-custom {
+        width: 18rem; /* Tamaño fijo */
+        margin: 10px; /* Espaciado entre cards */
+    }
 </style>
 <div class="page-background-class"></div>
 <div class="overlay"></div>
@@ -68,26 +71,28 @@
 
     <h2 class="mt-5 text-white text-center">Administradores</h2>
 
-    <div class="row-user row-cols-1 row-cols-md-2 row-cols-lg-3">
+    <div class="row ">
         @if (listAdmin is null)
         {
-            <img class="align-items-center" style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+            <div class="col mb-4 text-center">
+                <img class="align-items-center" style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+            </div>
         }
         else
         {
             @foreach (var user in listAdmin)
             {
-                <div class="col mb-4">
-                    <div class="card h-100">
-                        <img src="img/CardUserImg.png" class="card-img-top mx-auto imgCard" alt="Imagen de usuario">
+                <div class="col-sm-6 col-md-4 col-lg-2  d-flex justify-content-center">
+                    <div class="card card-custom">
+                        <img src="img/CardUserImg.png" class="card-img-top mx-auto imgCard mt-2" alt="Imagen de usuario">
                         <div class="card-body text-center">
                             <h5 class="card-title">@user.Username</h5>
                             <p class="card-text">Correo electrónico: @user.Email</p>
                             <p class="card-text">Rol: @user.Rol</p>
                             @* @if (email == user.Email)
-                            {
-                                <button href="#" class="btn btn-primary">Editar</button>
-                            } *@
+                    {
+                    <button href="#" class="btn btn-primary">Editar</button>
+                    } *@
                         </div>
                     </div>
                 </div>
@@ -97,10 +102,12 @@
 
     <h2 class="mt-5 text-white text-center">Usuarios</h2>
 
-    <div class="row-user row-cols-1 row-cols-md-2 row-cols-lg-3">
+    <div class="row">
         @if (listUser is null)
         {
-            <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+            <div class="col mb-4 text-center">
+                <img class="align-items-center" style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+            </div>
 
         }
         else
@@ -108,9 +115,9 @@
 
             @foreach (var user in listUser)
             {
-                <div class="col mb-4">
-                    <div class="card h-100">
-                        <img src="img/CardUserImg.png" class="card-img-top mx-auto imgCard" alt="Imagen de usuario">
+                <div class="col-sm-6 col-md-4 col-lg-2  d-flex justify-content-center">
+                    <div class="card card-custom">
+                        <img src="img/CardUserImg.png" class="card-img-top mx-auto imgCard mt-2" alt="Imagen de usuario">
                         <div class="card-body text-center">
                             <h5 class="card-title">@user.Username</h5>
                             <p class="card-text">Correo electrónico: @user.Email</p>
@@ -133,7 +140,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             }
         }
     </div>

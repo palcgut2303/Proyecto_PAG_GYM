@@ -1,4 +1,4 @@
-﻿@page "/clases"
+﻿
 @inject IAuthService AuthService
 @inject IJSRuntime JSRuntime
 
@@ -9,48 +9,12 @@
 @inject SweetAlertService Swal
 @inject IClassService classService;
 
-<PageTitle>Clases</PageTitle>
+@using System.Globalization
+
 
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    thead{
-        background-color: rgb(3, 17, 41 );
-        color: white;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    table tbody tr:hover {
-        background-color: rgb(106, 160, 248,0.2 );
-        
-        
-    }
-
-    tbody {
-        font-size: 18px;
-    }
-
-    .contenido-clases {
-        margin-top: 2%
-    }
-
-
+    
     .page-background-class {
         position: fixed; /* Fijar la posición para cubrir toda la pantalla */
         top: 0;
@@ -74,124 +38,96 @@
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
 
+    .calendar-container {
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 800px;
+        background-color: #222;
+        color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 3; /* Asegurar que esté por encima de la superposición */
+    }
+
+    .days-buttons {
+        display: flex;
+        flex-wrap: wrap; /* Permitir que los botones se ajusten en varias líneas */
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .day-button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        flex: 1 1 100px; /* Ajustar el tamaño de los botones */
+        margin: 5px; /* Agregar margen para el espacio entre botones */
+    }
+
+        .day-button.active {
+            background-color: rgb(3, 17, 41);
+        }
+
+    .classes-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .class-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #444;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .time {
+        width: 100px;
+    }
+
+    .class-name {
+        flex-grow: 1;
+        padding-left: 10px;
+        border-left: 5px solid rgb(3, 17, 41);
+    }
+
+
+
 </style>
 <div class="page-background-class"></div>
 <div class="overlay"></div>
 
-<div class="container mb-5 contenido-clases border border-primary rounded table-responsive mt-5">
-    <div>
-        <h3 class="align-items-center text-white">Clases</h3>
+<div class="calendar-container">
+    <h2>Clases</h2>
+    <div class="days-buttons">
+        @foreach (var day in GetOrderedDaysOfWeek())
+        {
+            <button class="day-button mr-2 @(selectedDay == day ? "active" : "")" @onclick="() => SelectDay(day)">
+                @GetDayName(day)
+            </button>
+        }
     </div>
 
-    <EditForm Model="classDTO">
-        <DataAnnotationsValidator />
-        <div class="mt-3">
-            <input type="date" class="form-control" @onchange="mostrarDia" value="@fecha" />
-            <ValidationMessage For="@(() => classDTO.Schedule)"></ValidationMessage>
-            @*             <button class="btn btn-primary mt-3 mb-3" @onclick="mostrarDia" >Obtener Clases</button>
-            *@
-        </div>
-
-        
-        <table class="table text-white">
-            <thead>
-                <tr>
-                    <th class="text-center">
-                        Instructor
-                    </th>
-                    <th class="text-center">
-                        Tipo
-                    </th>
-                    <th colspan="2" class="text-center">
-                        Horario
-                    </th >
-                    <th class="text-center">
-                        Capacidad
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (clasesPorDia is not null)
-                {
-                    @if (clasesEnEseDia is not null)
-                    {
-                        @foreach (var classes in clasesEnEseDia)
-                        {
-                            if (classes.Schedule.Date == dateTime)
-                            {
-                                <tr>
-                                    <td class="text-center">@classes.GymInstructorName</td>
-                                    <td class="text-center">@classes.ClassTypeName</td>
-                                    <td class="text-right">@GetDate(classes.Schedule)</td>
-                                    <td class="text-center">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
-                                    <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
-
-
-                                    @if (ClaseEstaReservadaPorUsuario(classes))
-                                    {
-                                        <td>
-                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        @if (classes.TotalReservations == classes.Capacity)
-                                        {
-                                            <td>
-                                                <button class="btn btn-secondary">Clase llena</button>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
-                                            </td>
-                                        }
-
-                                    }
-
-
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="5" class="text-center">No hay clases disponibles</td>
-                                </tr>
-                            }
-
-
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="5" align="center">
-                                <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5" align="center">
-                            <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-
-        </table>
-
-    </EditForm>
-
-
-
-
+    <div class="classes-list">
+        @foreach (var clase in GetClasesForSelectedDay())
+        {
+            <div class="class-item">
+                <div class="time">
+                    @clase.Schedule.ToString("HH:mm") - @AddMinutes(clase.Schedule, 60)
+                </div>
+                <div class="class-name" style="border-left: 5px solid rgb(3, 17, 41 )">
+                    @clase.ClassTypeName
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 
@@ -199,191 +135,77 @@
 
 
 @code {
+    // Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
+    // List<DateTime>? diasMostrados;
+    // DateTime diaActual = DateTime.Now.Date;
+    // List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
+    // ClassDTO classDTO = new ClassDTO();
+    // string email = null;
+    // bool reservada = false;
+    // List<ClassDTO> listClassByUser = null;
+    // List<GymMemberDTO> listUserByClass = null;
+    // DateTime fecha = DateTime.Now;
 
-    Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
-    List<DateTime>? diasMostrados;
-    DateTime diaActual = DateTime.Now.Date;
-    List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
-    ClassDTO classDTO = new ClassDTO();
-    string email = null;
-    bool reservada = false;
-    List<ClassDTO> listClassByUser = null;
-    List<GymMemberDTO> listUserByClass = null;
-    DateTime fecha = DateTime.Now;
+    private ClassListResult resultListClass;
+    private IEnumerable<ClassDTO> clases = new List<ClassDTO>();
+    private Dictionary<DayOfWeek, List<ClassDTO>> clasesPorDia;
+
+    private IEnumerable<DayOfWeek> GetOrderedDaysOfWeek()
+    {
+        return new List<DayOfWeek>
+        {
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday,
+            DayOfWeek.Saturday,
+            DayOfWeek.Sunday
+        };
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        clasesPorDia = await classService.GetClassesByDayOfTheWeek();
-        diasMostrados = clasesPorDia.Keys.ToList();
-        classDTO.Schedule = DateTime.Now.Date;
-        dateTime = DateTime.Now.Date;
-        email = await AuthService.GetEmail();
-        foreach (var item in clasesPorDia)
+        resultListClass = await classService.ClassesList();
+
+        if (resultListClass.Successful)
         {
-            if (item.Key.Date == classDTO.Schedule.Date)
+            if(resultListClass.ListClass != null)
             {
-                clasesEnEseDia = item.Value;
+                clases = resultListClass.ListClass;
             }
         }
-        fecha = DateTime.Now;
-        listClassByUser = await classService.GetClassesByGymMember(email);
+
+        clasesPorDia = clases.GroupBy(c => c.Schedule.DayOfWeek)
+                              .ToDictionary(g => g.Key, g => g.ToList());
+
     }
 
-    private bool ClaseEstaReservadaPorUsuario(ClassDTO clase)
+    private string GetDayName(DayOfWeek dayOfWeek)
     {
-        if (listClassByUser == null || listClassByUser.Count == 0)
-        {
-            return false;
-        }
-
-        foreach (var item in listClassByUser)
-        {
-            if (item.Id == clase.Id)
-            {
-
-                return true;
-            }
-        }
-
-
-
-        return false;
+        return CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek).ToUpper();
     }
 
-    private async Task HacerReserva(ClassDTO model)
+    private DayOfWeek selectedDay = DateTime.Now.DayOfWeek;
+
+    private IEnumerable<ClassDTO> GetClasesForSelectedDay()
     {
-        if (model.TotalReservations < model.Capacity)
-        {
-            var resultado = await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "¿Deseas Reservar esta clase?",
-                    Icon = SweetAlertIcon.Info,
-                    ShowCancelButton = true,
-                    ConfirmButtonText = "Si",
-                    CancelButtonText = "No"
-                });
-
-            if (resultado.IsConfirmed)
-            {
-                var result = await classService.ReserveClass(model.Id, email);
-
-                if (result.EsCorrecto)
-                {
-                    await Swal.FireAsync(new SweetAlertOptions
-                        {
-                            Title = "Reserva",
-                            Text = "Reserva realizada con exito",
-                            Icon = SweetAlertIcon.Success
-                        });
-
-
-                    // model.TotalReservations++;
-                    // StateHasChanged();
-                    await JSRuntime.InvokeVoidAsync("window.location.reload");
-
-                }
-                else
-                {
-                    await Swal.FireAsync(new SweetAlertOptions
-                        {
-                            Title = "Reserva",
-                            Text = "No se pudo realizar la reserva",
-                            Icon = SweetAlertIcon.Error
-                        });
-
-                    reservada = false;
-                    // await JSRuntime.InvokeVoidAsync("window.location.reload");
-
-                }
-            }
-        }
-        else
-        {
-            await Swal.FireAsync(new SweetAlertOptions
-                {
-                    Title = "Reserva",
-                    Text = "No hay cupo disponible",
-                    Icon = SweetAlertIcon.Error
-                });
-            return;
-        }
-
-
-
+        DateTime currentDate = DateTime.Now.Date;
+        int numero = (int)selectedDay;
+        int numeroActual = (int)currentDate.DayOfWeek;
+        DateTime selectedDate = currentDate.AddDays(numero - numeroActual);
+        return clases.Where(c => c.Schedule.Date == selectedDate.Date);
     }
 
-    private async Task CancelarReserva(ClassDTO model)
+    private void SelectDay(DayOfWeek day)
     {
-        var resultado = await Swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "Reserva",
-                Text = "¿Deseas Cancelar la reserva de esta clase?",
-                Icon = SweetAlertIcon.Info,
-                ShowCancelButton = true,
-                ConfirmButtonText = "Si",
-                CancelButtonText = "No"
-            });
-
-        if (resultado.IsConfirmed)
-        {
-            var result = await classService.CancelReservation(model.Id, email);
-
-            if (result.EsCorrecto)
-            {
-                await Swal.FireAsync(new SweetAlertOptions
-                    {
-                        Title = "Reserva",
-                        Text = "Reserva cancelada con exito",
-                        Icon = SweetAlertIcon.Success
-                    });
-
-                // model.TotalReservations--;
-                // StateHasChanged();
-                await JSRuntime.InvokeVoidAsync("window.location.reload");
-
-            }
-            else
-            {
-                await Swal.FireAsync(new SweetAlertOptions
-                    {
-                        Title = "Reserva",
-                        Text = "No se pudo cancelar la reserva",
-                        Icon = SweetAlertIcon.Error
-                    });
-                reservada = false;
-                await JSRuntime.InvokeVoidAsync("window.location.reload");
-
-            }
-        }
+        selectedDay = day;
     }
 
-    DateTime dateTime = new DateTime();
-    string fecha1 = null;
-    private void mostrarDia(ChangeEventArgs e)
-    {
-        fecha1 = e.Value.ToString();
-        dateTime = DateTime.Parse(fecha1);
-
-        foreach (var item in clasesPorDia)
-        {
-            if (item.Key.Date == dateTime)
-            {
-                clasesEnEseDia = item.Value;
-            }
-        }
-    }
-
-    private TimeSpan AddMinutes(DateTime time, int minutes)
+    private string AddMinutes(DateTime time, int minutes)
     {
         var addHour = time.AddMinutes(minutes);
-        return addHour.TimeOfDay;
+        return addHour.ToString("HH:mm");
     }
-
-    private string GetDate(DateTime date)
-    {
-
-        return date.ToString("dd-MM-yyyy");
-    }
-
-
+   
 }

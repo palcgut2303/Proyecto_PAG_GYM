@@ -144,8 +144,8 @@
                                     {
                                         <tr>
                                             <td class="text-center text-white">@classes.GymInstructorName</td>
-                                            <td class="text-right text-white">@GetDate(classes.Schedule)</td>
-                                            <td class="text-center text-white">@classes.Schedule.TimeOfDay - @AddMinutes(classes.Schedule, 60)</td>
+                                            <td class="text-center text-white">@GetDate(classes.Schedule)</td>
+                                        <td class="text-center text-white">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
                                             <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
 
                                         @if(classes.Schedule < DateTime.Now)
@@ -206,22 +206,18 @@
         NavigationManager.NavigateTo("/useradminmanage");
     }
 
-    private string GetDate(DateTime? date)
-    {
+    
 
-        return date?.ToString("dd-MM-yyyy");
-    }
-
-    private TimeSpan AddMinutes(DateTime time, int minutes)
+    private string AddMinutes(DateTime time, int minutes)
     {
         var addHour = time.AddMinutes(minutes);
-        return addHour.TimeOfDay;
+        return addHour.TimeOfDay.ToString(@"hh\:mm");
     }
 
     private string GetDate(DateTime date)
     {
 
-        return date.ToString("dd-MM-yyyy");
+        return date.ToString("dd/MM/yyyy");
     }
 
 
