@@ -1,5 +1,4 @@
-﻿
-@inject IAuthService AuthService
+﻿@inject IAuthService AuthService
 @inject IJSRuntime JSRuntime
 
 @using GYM_DTOs;
@@ -14,34 +13,10 @@
 
 
 <style>
-    
-    .page-background-class {
-        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('img/backgroungUser.jpg'); /* Ruta de la imagen de fondo */
-        background-size: cover; /* Ajustar la imagen de fondo para cubrir toda la pantalla */
-        background-repeat: no-repeat; /* Evitar que la imagen se repita */
-        background-position: center; /* Posición de la imagen de fondo */
-        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
-    }
-
-    .overlay {
-        position: fixed; /* Fijar la posición para cubrir toda la pantalla */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8); /* Color de fondo con opacidad */
-        z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
-    }
 
     .calendar-container {
-        margin: 20px auto;
+        margin: 20px;
         padding: 20px;
-        max-width: 800px;
         background-color: #222;
         color: #fff;
         border-radius: 10px;
@@ -96,21 +71,29 @@
         flex-grow: 1;
         padding-left: 10px;
         border-left: 5px solid rgb(3, 17, 41);
+        font-weight: bold;
     }
 
-
+    .class-button {
+        flex-grow: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
 
 </style>
-<div class="page-background-class"></div>
-<div class="overlay"></div>
+
+
 
 <div class="calendar-container">
     <h2>Clases</h2>
+    <div class="text-center text-white fw-bolder">
+        <span>@selectedDateTime.ToString("dd MMMM yyyy", cultureInfo)</span>
+    </div>
     <div class="days-buttons">
         @foreach (var day in GetOrderedDaysOfWeek())
         {
-            <button class="day-button mr-2 @(selectedDay == day ? "active" : "")" @onclick="() => SelectDay(day)">
-                @GetDayName(day)
+            <button class="day-button mr-2 fw-bolder @(selectedDay == day ? "active" : "")" @onclick="() => SelectDay(day)">
+                @GetDayNameInSpanish(day)
             </button>
         }
     </div>
@@ -125,6 +108,31 @@
                 <div class="class-name" style="border-left: 5px solid rgb(3, 17, 41 )">
                     @clase.ClassTypeName
                 </div>
+                <div class="class-button">
+                    <span class="mr-2 p-2">@clase.TotalReservations/@clase.Capacity</span>
+                    @if (ClaseEstaReservadaPorUsuario(clase))
+                    {
+                        <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase))">
+                            <span class="d-none d-sm-inline">Cancelar Reserva</span>
+                            <span class="d-inline d-sm-none">Cancerlar Res.</span>
+                        </button>
+
+                    }
+                    else
+                    {
+                        @if (clase.TotalReservations == clase.Capacity)
+                        {
+                            <button class="btn btn-secondary">Clase llena</button>
+
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" @onclick="(() => HacerReserva(clase))">Reservar</button>
+
+                        }
+                    }
+                </div>
+
             </div>
         }
     </div>
@@ -135,20 +143,46 @@
 
 
 @code {
-    // Dictionary<DateTime, List<ClassDTO>> clasesPorDia;
-    // List<DateTime>? diasMostrados;
-    // DateTime diaActual = DateTime.Now.Date;
-    // List<ClassDTO> clasesEnEseDia = new List<ClassDTO>();
-    // ClassDTO classDTO = new ClassDTO();
-    // string email = null;
-    // bool reservada = false;
-    // List<ClassDTO> listClassByUser = null;
-    // List<GymMemberDTO> listUserByClass = null;
-    // DateTime fecha = DateTime.Now;
+
 
     private ClassListResult resultListClass;
     private IEnumerable<ClassDTO> clases = new List<ClassDTO>();
     private Dictionary<DayOfWeek, List<ClassDTO>> clasesPorDia;
+    private DayOfWeek selectedDay = DateTime.Now.DayOfWeek;
+
+    private DateTime selectedDateTime;
+    CultureInfo cultureInfo = new CultureInfo("es-ES");
+
+    private bool ShowErrors;
+    private IEnumerable<string>? Errors;
+    string emailUserIdentificate = string.Empty;
+
+
+    List<ClassDTO> listClassByUser = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedDateTime = DateTime.Now;
+        resultListClass = await classService.ClassesList();
+        if (resultListClass.Successful)
+        {
+            if (resultListClass.ListClass != null)
+            {
+                clases = resultListClass.ListClass;
+                clasesPorDia = clases.GroupBy(c => c.Schedule.DayOfWeek)
+                             .ToDictionary(g => g.Key, g => g.ToList());
+            }
+        }
+        else
+        {
+            clases = new List<ClassDTO>();
+
+        }
+
+        emailUserIdentificate = await AuthService.GetEmail();
+        listClassByUser = await classService.GetClassesByGymMember(emailUserIdentificate);
+
+    }
 
     private IEnumerable<DayOfWeek> GetOrderedDaysOfWeek()
     {
@@ -159,26 +193,14 @@
             DayOfWeek.Wednesday,
             DayOfWeek.Thursday,
             DayOfWeek.Friday,
-            DayOfWeek.Saturday,
-            DayOfWeek.Sunday
+            DayOfWeek.Saturday
         };
     }
 
-    protected override async Task OnInitializedAsync()
+    private string GetDayNameInSpanish(DayOfWeek dayOfWeek)
     {
-        resultListClass = await classService.ClassesList();
-
-        if (resultListClass.Successful)
-        {
-            if(resultListClass.ListClass != null)
-            {
-                clases = resultListClass.ListClass;
-            }
-        }
-
-        clasesPorDia = clases.GroupBy(c => c.Schedule.DayOfWeek)
-                              .ToDictionary(g => g.Key, g => g.ToList());
-
+        var cultureInfo = new CultureInfo("es-ES");
+        return cultureInfo.DateTimeFormat.GetDayName(dayOfWeek).ToUpper();
     }
 
     private string GetDayName(DayOfWeek dayOfWeek)
@@ -186,20 +208,20 @@
         return CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek).ToUpper();
     }
 
-    private DayOfWeek selectedDay = DateTime.Now.DayOfWeek;
-
     private IEnumerable<ClassDTO> GetClasesForSelectedDay()
     {
         DateTime currentDate = DateTime.Now.Date;
-        int numero = (int)selectedDay;
-        int numeroActual = (int)currentDate.DayOfWeek;
-        DateTime selectedDate = currentDate.AddDays(numero - numeroActual);
+        DateTime selectedDate = currentDate.AddDays((int)selectedDay - (int)currentDate.DayOfWeek);
+
         return clases.Where(c => c.Schedule.Date == selectedDate.Date);
     }
 
     private void SelectDay(DayOfWeek day)
     {
         selectedDay = day;
+        DateTime currentDate = DateTime.Now.Date;
+        DateTime selectedDate = currentDate.AddDays((int)selectedDay - (int)currentDate.DayOfWeek);
+        selectedDateTime = selectedDate;
     }
 
     private string AddMinutes(DateTime time, int minutes)
@@ -207,5 +229,158 @@
         var addHour = time.AddMinutes(minutes);
         return addHour.ToString("HH:mm");
     }
-   
+
+    private async Task HacerReserva(ClassDTO model)
+    {
+        if (model.TotalReservations < model.Capacity)
+        {
+            var resultado = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "¿Deseas Reservar esta clase?",
+                    Icon = SweetAlertIcon.Info,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
+
+            if (resultado.IsConfirmed)
+            {
+                var result = await classService.ReserveClass(model.Id, emailUserIdentificate);
+
+                if (result.EsCorrecto)
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "Reserva realizada con exito",
+                            Icon = SweetAlertIcon.Success
+                        });
+
+
+
+                    var sendEmailRequest = new SendEmailRequest(emailUserIdentificate, "Clase reservada en GYM PAG",
+                                        "Reserva realizada con éxito, la clase con fecha: " + GetDate(model.Schedule) + "\nTipo de Clase: " + model.ClassTypeName + "\nInstructor: " + model.GymInstructorName);
+
+                    var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+                    if (!resultSendEmail.EsCorrecto)
+                    {
+                        Errors = new List<string> { "Error al enviar el correo" };
+                        ShowErrors = true;
+                    }
+
+                    // model.TotalReservations++;
+                    // StateHasChanged();
+                    await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+                }
+                else
+                {
+                    await Swal.FireAsync(new SweetAlertOptions
+                        {
+                            Title = "Reserva",
+                            Text = "No se pudo realizar la reserva",
+                            Icon = SweetAlertIcon.Error
+                        });
+
+
+                }
+            }
+        }
+        else
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Reserva",
+                    Text = "No hay cupo disponible",
+                    Icon = SweetAlertIcon.Error
+                });
+            return;
+        }
+    }
+
+    private async Task CancelarReserva(ClassDTO model)
+    {
+        var resultado = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Reserva",
+                Text = "¿Deseas Cancelar la reserva de esta clase?",
+                Icon = SweetAlertIcon.Info,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (resultado.IsConfirmed)
+        {
+            var result = await classService.CancelReservation(model.Id, emailUserIdentificate);
+
+            if (result.EsCorrecto)
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "Reserva cancelada con exito",
+                        Icon = SweetAlertIcon.Success
+                    });
+
+
+                var sendEmailRequest = new SendEmailRequest(emailUserIdentificate, "Cancelación de clase en GYM PAG",
+                                    "Cancelación realizada con éxito, la clase con fecha: " + GetDate(model.Schedule) + "\n, -Tipo de Clase: " + model.ClassTypeName + "\n, -Instructor: " + model.GymInstructorName);
+
+                var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
+
+                if (!resultSendEmail.EsCorrecto)
+                {
+                    Errors = new List<string> { "Error al enviar el correo" };
+                    ShowErrors = true;
+                }
+
+
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+            else
+            {
+                await Swal.FireAsync(new SweetAlertOptions
+                    {
+                        Title = "Reserva",
+                        Text = "No se pudo cancelar la reserva",
+                        Icon = SweetAlertIcon.Error
+                    });
+
+                await JSRuntime.InvokeVoidAsync("window.location.reload");
+
+            }
+        }
+    }
+
+    private string GetDate(DateTime date)
+    {
+
+        return date.ToString("dd/MM/yyyy");
+    }
+
+    private bool ClaseEstaReservadaPorUsuario(ClassDTO clase)
+    {
+        if (listClassByUser == null || listClassByUser.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var item in listClassByUser)
+        {
+            if (item.Id == clase.Id)
+            {
+
+                return true;
+            }
+        }
+
+
+
+        return false;
+    }
+
 }

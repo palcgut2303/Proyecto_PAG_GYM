@@ -45,7 +45,7 @@
     }
 
     .container-reservation {
-        max-width: 1200px;
+        max-width: 1500px;
         margin: 0 auto;
     }
 
@@ -66,7 +66,7 @@
     }
 
     .img-fluid {
-        max-width: 100%;
+        max-width: 80%;
         opacity: 0.8;
         margin-bottom: 2%;
         border-radius: 10px;
@@ -199,7 +199,6 @@
 
     .custom-card {
         background-color: #222;
-        color: #fff;
         display: flex;
         align-items: center;
         padding: 10px;
@@ -218,169 +217,184 @@
             margin-left: auto;
             color: #d0e0ff;
         }
+
+        .no-padding{
+            padding: 0;
+        }
+
+        .custom-card:hover{
+        background-color: #646460;
+        }
+
+        .custom-button:hover{
+            background-color: #646460;
+        }
 </style>
 <div class="page-background-class"></div>
 <div class="overlay"></div>
 
-<div class="container-general">
-    <div class="container-reservation">
+    
+    <div class="container-general">
+        <div class="container-reservation">
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="left-section mt-5">
+            <div class="row w-100 m-auto">
+                <div class="col-md-4">
+                    <div class="left-section mt-5">
 
-                    <img src="img/fondo-reservas.png" alt="Imagen" class="img-fluid">
+                        <img src="img/fondo-reservas.png" alt="Imagen" class="img-fluid">
 
 
-                    <div class="container mb-3">
-                        <button class="btn custom-button w-100 fw-bolder text-white" @onclick="(() => ShowScheduleSection())">Reservar</button>
-                            <button class="custom-card mt-3 w-100" @onclick="(() => ShowScheduleReservation())">
-                            <i class="icon bi bi-calendar-event-fill ms-4"></i>
-                            <span class="text fw-bolder">Horario</span>
-                            <i class="icon bi bi-arrow-right"></i>
+                        <div class="container mb-3">
+                            <button class="btn custom-button w-100 fw-bolder text-white" @onclick="(() => ShowScheduleSection())">Reservar por <em>TIPOS DE CLASES</em></button>
+                            <button class="btn custom-card mt-3 w-100" @onclick="(() => ShowScheduleReservation())">
+                                <i class="icon bi bi-calendar-event-fill ms-4"></i>
+                                <span class="text fw-bolder text-white">Horarios</span>
+                                <i class="icon bi bi-arrow-right"></i>
                             </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="right-section">
-                    <div id="accordion">
-                        <div class="card no-background-card">
-                            @if (!showScheduleSection)
-                            {
-                                <BlazorFronted.Pages.Classes.Classes>   </BlazorFronted.Pages.Classes.Classes>
-                            }
-                            else
-                            {
-                                @if (!showReservationSection)
+                <div class="col-md-8">
+                    <div class="right-section">
+                        <div id="accordion">
+                            <div class="card no-background-card">
+                                @if (!showScheduleSection)
                                 {
-                                    @if (listClassType is null)
-                                    {
-                                        @if (Errors != null)
-                                        {
-                                            <div class="d-flex justify-content-center align-items-center text-white fw-bolder mt-5">
-                                                @Errors.FirstOrDefault()
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="d-flex justify-content-center align-items-center">
-                                                <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                                            </div>
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        @foreach (var item in listClassType)
-                                        {
-                                            <div class="container mt-2">
-                                                <div class="icon-button-container">
-                                                    <i class="bi bi-geo-alt"></i>
-                                                    <button class="btn btn-custom text-black" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="(() => ToggleReservationSection(true,item.Name))">
-                                                        @item.Name
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
+                                    <BlazorFronted.Pages.Classes.Classes>   </BlazorFronted.Pages.Classes.Classes>
                                 }
                                 else
                                 {
-                                    <div class="container mt-2">
-                                        <div class="contenedor-volver">
-                                            <button class="bg-light border-0" @onclick="(() => ToggleReservationSection(false))">
-                                                <i class="bi bi-arrow-left"></i>
-                                            </button>
-                                        </div>
-
-                                        <h4 class="text-white text-center">Clases de @ClassTypeSelected</h4>
-                                        @if (ShowErrors)
+                                    @if (!showReservationSection)
+                                    {
+                                        @if (listClassType is null)
                                         {
-                                            <div class="alert alert-danger" role="alert">
-                                                @foreach (var error in Errors!)
-                                                {
-                                                    <p>@error</p>
-                                                }
-                                            </div>
+                                            @if (Errors != null)
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center text-white fw-bolder mt-5">
+                                                    @Errors.FirstOrDefault()
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <img style="width:50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                                                </div>
+                                            }
+
                                         }
-                                        <div class="table-responsive">
+                                        else
+                                        {
+                                            @foreach (var item in listClassType)
+                                            {
+                                                <div class="container mt-2">
+                                                    <div class="icon-button-container">
+                                                        <i class="bi bi-geo-alt"></i>
+                                                        <button class="btn btn-custom text-black" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="(() => ToggleReservationSection(true,item.Name))">
+                                                            @item.Name
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="container mt-2">
+                                            <div class="contenedor-volver">
+                                                <button class="bg-light border-0" @onclick="(() => ToggleReservationSection(false))">
+                                                    <i class="bi bi-arrow-left"></i>
+                                                </button>
+                                            </div>
 
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center ">Instructor</th>
-                                                        <th class="text-center">Fecha</th>
-                                                        <th class="text-center">Hora</th>
-                                                        <th class="text-center">Capacidad</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if (listClass is null || listClass.Count == 0)
+                                            <h4 class="text-white text-center">Clases de @ClassTypeSelected</h4>
+                                            @if (ShowErrors)
+                                            {
+                                                <div class="alert alert-danger" role="alert">
+                                                    @foreach (var error in Errors!)
                                                     {
-                                                        <tr>
-                                                            <td colspan="5" class="text-center text-white">
-                                                                No hay clases disponibles de @ClassTypeSelected
-                                                            </td>
-                                                        </tr>
-
-
+                                                        <p>@error</p>
                                                     }
-                                                    else
-                                                    {
-                                                        @foreach (var classes in listClass)
+                                                </div>
+                                            }
+                                            <div class="table-responsive">
+
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center ">Instructor</th>
+                                                            <th class="text-center">Fecha</th>
+                                                            <th class="text-center">Hora</th>
+                                                            <th class="text-center">Capacidad</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (listClass is null || listClass.Count == 0)
                                                         {
                                                             <tr>
-                                                                <td class="text-center text-white">@classes.GymInstructorName</td>
-                                                                <td class="text-center text-white">@GetDate(classes.Schedule)</td>
-                                                                <td class="text-center text-white">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
-                                                                <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+                                                                <td colspan="5" class="text-center text-white">
+                                                                    No hay clases disponibles de @ClassTypeSelected
+                                                                </td>
+                                                            </tr>
 
 
-                                                                @if (ClaseEstaReservadaPorUsuario(classes))
-                                                                {
-                                                                    <td>
-                                                                        <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
-                                                                    </td>
-                                                                }
-                                                                else
-                                                                {
-                                                                    @if (classes.TotalReservations == classes.Capacity)
+                                                        }
+                                                        else
+                                                        {
+                                                            @foreach (var classes in listClass)
+                                                            {
+                                                                <tr>
+                                                                    <td class="text-center text-white">@classes.GymInstructorName</td>
+                                                                    <td class="text-center text-white">@GetDate(classes.Schedule)</td>
+                                                                    <td class="text-center text-white">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
+                                                                    <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+
+
+                                                                    @if (ClaseEstaReservadaPorUsuario(classes))
                                                                     {
                                                                         <td>
-                                                                            <button class="btn btn-secondary">Clase llena</button>
+                                                                            <button class="btn btn-danger" @onclick="(() => CancelarReserva(classes))">Cancelar Reserva</button>
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <td>
-                                                                            <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
-                                                                        </td>
+                                                                        @if (classes.TotalReservations == classes.Capacity)
+                                                                        {
+                                                                            <td>
+                                                                                <button class="btn btn-secondary">Clase llena</button>
+                                                                            </td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td>
+                                                                                <button class="btn btn-primary" @onclick="(() => HacerReserva(classes))">Hacer Reserva</button>
+                                                                            </td>
+                                                                        }
+
                                                                     }
 
-                                                                }
 
-
-                                                            </tr>
+                                                                </tr>
+                                                            }
                                                         }
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
 
 
+                                    }
                                 }
-                            }
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+
 
 
 
