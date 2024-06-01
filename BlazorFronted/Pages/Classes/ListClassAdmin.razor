@@ -8,8 +8,8 @@
 
 @attribute [Authorize(Roles = "Instructor")]
 <style>
-    
-     table {
+
+    table {
         width: 100%;
         border-collapse: collapse;
         border: 1px solid #ddd;
@@ -23,7 +23,7 @@
         border-bottom: 1px solid #ddd;
     }
 
-    thead{
+    thead {
         background-color: rgb(3, 17, 41 );
         color: white;
     }
@@ -34,7 +34,6 @@
 
     table tbody tr:hover {
         background-color: rgb(106, 160, 248,0.2 );
-        
     }
 
     tbody {
@@ -42,7 +41,7 @@
         font-weight: bold;
     }
 
-        .page-background-class {
+    .page-background-class {
         position: fixed; /* Fijar la posición para cubrir toda la pantalla */
         top: 0;
         left: 0;
@@ -65,7 +64,34 @@
         z-index: -1; /* Colocar la imagen de fondo detrás de los demás elementos */
     }
 
-   
+    .table-container {
+        width: 50%;
+        margin: 0 auto; /* Centra el contenedor horizontalmente */
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+    .contenedor-volver button {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        padding: 0;
+    }
+
+    .contenedor-volver i {
+        font-size: 24px;
+    }
 
 </style>
 
@@ -76,92 +102,163 @@
     <h3 class="text-white">Clases Disponibles</h3>
 
     <a class="btn btn-success btn-sm mb-3" href="createdclasses">Nueva Clase</a>
-    <div class="d-flex justify-content-between mb-3">
-        <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
-        <h3 class="text-white ms-3">Registros del mes de @NombreMesActual</h3>
+    @if (!showParticipants)
+    {
+        <div class="d-flex justify-content-between mb-3">
+            <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
+            <h3 class="text-white ms-3">Registros del mes de @NombreMesActual</h3>
 
-        <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
-    </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr class="text-white">
-                    <th class="text-center ">Instructor</th>
-                    <th class="text-center">Tipo</th>
-                    <th class="text-center">Fecha</th>
-                    <th class="text-center">Horario</th>
-                    <th class="text-center">Capacidad</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+            <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+
+                <thead>
+                    <tr class="text-white">
+                        <th class="text-center ">Instructor</th>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Horario</th>
+                        <th class="text-center">Capacidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
 
 
-                @if (resultClass.ListClass == null)
-                {
-                    @if (resultClass.Error != null)
+                    @if (resultClass.ListClass == null)
                     {
-                        <tr>
-                            <td colspan="6" align="center" class="text-white text-center">
-                                @resultClass.Error
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6" align="center" class="text-center">
-                                <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
-                            </td>
-                        </tr>
-                    }
-
-                }
-                else
-                {
-
-                    @if (RegistrosFiltradosPorMes.Count == 0 || RegistrosFiltradosPorMes is null)
-                    {
-                        <tr>
-                            <td colspan="6" align="center" class="text-white text-center">
-                                No hay clases disponibles
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        @foreach (var classes in RegistrosFiltradosPorMes)
+                        @if (resultClass.Error != null)
                         {
-                            <tr class="text-white">
-                                <td class="text-center">@classes.GymInstructorName</td>
-                                <td class="text-center">@classes.ClassTypeName</td>
-                                <td class="text-center">@GetDate(classes.Schedule)</td>
-                                <td class="text-center">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
-                                <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
-
-                                <td>
-                                    <a class="btn btn-primary btn-sm ms-2 mt-1" href="createdclasses/@classes.Id">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => Eliminar(classes.Id))">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-info btn-sm ms-2 mt-1">
-                                       Ver participantes
-                                    </button>
+                            <tr>
+                                <td colspan="6" align="center" class="text-white text-center">
+                                    @resultClass.Error
                                 </td>
                             </tr>
                         }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" align="center" class="text-center">
+                                    <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    else
+                    {
+
+                        @if (RegistrosFiltradosPorMes.Count == 0 || RegistrosFiltradosPorMes is null)
+                        {
+                            <tr>
+                                <td colspan="6" align="center" class="text-white text-center">
+                                    No hay clases disponibles
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var classes in RegistrosFiltradosPorMes)
+                            {
+                                <tr class="text-white">
+                                    <td class="text-center">@classes.GymInstructorName</td>
+                                    <td class="text-center">@classes.ClassTypeName</td>
+                                    <td class="text-center">@GetDate(classes.Schedule)</td>
+                                    <td class="text-center">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
+                                    <td class="text-center">@classes.TotalReservations/@classes.Capacity</td>
+
+                                    <td>
+                                        <a class="btn btn-primary btn-sm ms-2 mt-1" href="createdclasses/@classes.Id">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => Eliminar(classes.Id))">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-info btn-sm ms-2 mt-1" @onclick="(() =>  showParticipantsSection(true,classes))">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
                     }
 
-                    
-                }
+                </tbody>
 
-            </tbody>
 
-        </table>
-    </div>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="contenedor-volver">
+            <button class="bg-light border-0" @onclick="(() => showParticipantsSection(false))">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+        </div>
+        <div class="d-flex justify-content-center mb-3">
+            <h3 class="text-white ms-3">@classDTO.ClassTypeName - @GetDate(classDTO.Schedule)</h3>
+        </div>
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table">
+
+                    <thead>
+                        <tr class="text-white">
+                            <th class="text-center fw-bolder">Participantes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (listUserByClass == null)
+                        {
+                            @if (resultClass.Error != null)
+                            {
+                                <tr>
+                                    <td colspan="6" align="center" class="text-white text-center">
+                                        @resultClass.Error
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" align="center" class="text-center">
+                                        <img style="width: 50px" src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @if (listUserByClass.Count == 0 || listUserByClass is null)
+                            {
+                                <tr>
+                                    <td colspan="6" align="center" class="text-white text-center">
+                                        No hay usuario disponibles
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var gymMember in listUserByClass)
+                                {
+                                    <tr class="text-white">
+                                        <td class="text-center">@gymMember.FullName</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 </div>
 
 
@@ -173,10 +270,14 @@
     private List<ClassDTO> RegistrosFiltradosPorMes { get; set; } = new List<ClassDTO>();
     private DateTime MesActual { get; set; } = DateTime.Now;
     private string NombreMesActual => MesActual.ToString("MMMM yyyy", new CultureInfo("es-ES"));
+    private List<GymMemberDTO> listUserByClass = new List<GymMemberDTO>();
+    private ClassDTO classDTO = new ClassDTO();
+    private bool showParticipants;
 
 
     protected override async Task OnInitializedAsync()
     {
+        showParticipants = false;
         resultClass.ListClass = null;
         resultClass = await classService.ClassesList();
         listClass = resultClass.ListClass!;
@@ -185,7 +286,7 @@
 
     private void FiltrarRegistrosPorMes(DateTime mes)
     {
-        if(listClass is null || listClass.Count() == 0)
+        if (listClass is null || listClass.Count() == 0)
         {
             RegistrosFiltradosPorMes = new List<ClassDTO>();
         }
@@ -214,7 +315,7 @@
 
         if (resultado.IsConfirmed)
         {
-            var eliminado = await classService.DeleteClass(id); 
+            var eliminado = await classService.DeleteClass(id);
             if (eliminado)
             {
                 var isDelete = await Swal.FireAsync(new SweetAlertOptions
@@ -241,18 +342,28 @@
         }
     }
 
-    //Metodo que me añada una hora a la hora de la clase
     private string AddMinutes(DateTime time, int minutes)
     {
         var addHour = time.AddMinutes(minutes);
         return addHour.TimeOfDay.ToString(@"hh\:mm");
     }
 
-    //Metodo que me devuelva la fecha de la clase
     private string GetDate(DateTime date)
     {
-        
+
         return date.ToString("dd/MM/yyyy");
     }
 
+    private async Task showParticipantsSection(bool value, ClassDTO model = null)
+    {
+        showParticipants = value;
+        if(model != null)
+        {
+            classDTO = model;
+            listUserByClass = await classService.GetGymMembersByClass(model.Id);
+        }
+        
+
+
+    }
 }

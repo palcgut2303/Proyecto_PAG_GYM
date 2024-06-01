@@ -492,7 +492,7 @@
     private async Task HacerReserva(ClassDTO model)
     {
         var fechaActual = DateTime.Now;
-        if (model.Schedule.Date < fechaActual)
+        if (model.Schedule.Date > fechaActual.Date)
         {
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {

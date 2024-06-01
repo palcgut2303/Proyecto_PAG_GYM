@@ -24,6 +24,8 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGymMemberService, GymMemberService>();
 builder.Services.AddTransient<IGymInstructorService, GymInstructorService>();
 
+
+
 builder.Services.AddSweetAlert2();
 builder.Services.AddRadzenComponents();
 builder.Services.AddBlazorBootstrap();
