@@ -17,7 +17,6 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
-
         public IActionResult SendEmail([FromBody] SendEmailRequest model)
         {
             
@@ -30,8 +29,5 @@ namespace GYM_Backend.Controllers
 
             return Ok(new ResponseAPI<string> { EsCorrecto = true });
         }
-
-        
-
     }
 }

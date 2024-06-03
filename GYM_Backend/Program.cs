@@ -53,6 +53,7 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
 builder.Services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddTransient<IClassRepository,ClassRepository>();
 builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
