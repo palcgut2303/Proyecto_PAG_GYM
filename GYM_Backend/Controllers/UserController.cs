@@ -226,7 +226,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("CambiarRolAInstructor/{userId}")]
-        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CambiarRolUsuario([FromRoute] string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
