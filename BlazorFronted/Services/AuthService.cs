@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using GYM_DTOs;
 using GYM_DTOs.EntityDTO;
+using BlazorFronted.Interfaces;
 
 namespace BlazorFronted.Services
 {

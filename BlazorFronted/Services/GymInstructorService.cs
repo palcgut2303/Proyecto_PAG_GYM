@@ -1,4 +1,5 @@
-﻿using GYM_DTOs;
+﻿using BlazorFronted.Interfaces;
+using GYM_DTOs;
 using System.Net.Http.Json;
 
 namespace BlazorFronted.Services

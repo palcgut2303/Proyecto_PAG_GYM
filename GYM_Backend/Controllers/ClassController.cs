@@ -7,6 +7,7 @@ using GYM_DTOs.AccountDTO;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace GYM_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClassController : ControllerBase
     {
         private readonly IClassRepository _classRepository;
@@ -32,6 +34,7 @@ namespace GYM_Backend.Controllers
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
         //[Authorize(Roles = "Instructor")]
+
         public IActionResult GetAll() {
 
             var classes = _classRepository.GetAll();

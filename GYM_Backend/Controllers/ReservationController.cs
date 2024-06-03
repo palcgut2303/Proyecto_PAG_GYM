@@ -5,6 +5,8 @@ using GYM_Backend.Repositories;
 using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.UpdateDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -13,6 +15,8 @@ namespace GYM_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class ReservationController : ControllerBase
     {
         private readonly IReservationRepository _reservationRepository;
@@ -63,7 +67,7 @@ namespace GYM_Backend.Controllers
 
             var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
 
-            var resultCheckReservationByMoth = await _reservationRepository.CheckReservationsByMonth(emailUser);
+            var resultCheckReservationByMoth = await _reservationRepository.CheckReservationsByMonth(emailUser,idClass);
 
             if (!resultCheckReservationByMoth.EsCorrecto)
             {
@@ -74,7 +78,7 @@ namespace GYM_Backend.Controllers
 
             if (!respuesta)
             {
-                return NotFound(new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Reserva no creada" });
+                return NotFound(new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No se ha podido reservar esta clase" });
             }
 
             return Ok(new ResponseAPI<string> { EsCorrecto = true, Valor = "Reserva Creada"});

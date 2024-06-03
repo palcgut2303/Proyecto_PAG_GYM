@@ -1,6 +1,7 @@
 ﻿@inject IAuthService AuthService
 @inject IJSRuntime JSRuntime
 
+@using BlazorFronted.Interfaces
 @using GYM_DTOs;
 @using CurrieTechnologies.Razor.SweetAlert2;
 @using BlazorFronted.Services;
@@ -110,7 +111,7 @@
                 </div>
                 <div class="class-button">
                     <span class="mr-2 p-2">@clase.TotalReservations/@clase.Capacity</span>
-                    @if(clase.Schedule < DateTime.Now)
+                    @if (clase.Schedule < DateTime.Now)
                     {
                         <button class="btn btn-info">Clase Cerrada</button>
                     }
@@ -280,7 +281,7 @@
                     await Swal.FireAsync(new SweetAlertOptions
                         {
                             Title = "Reserva",
-                            Text = "No se pudo realizar la reserva",
+                            Text = result.Mensaje,
                             Icon = SweetAlertIcon.Error
                         });
 

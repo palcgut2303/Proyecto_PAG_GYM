@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using BlazorFronted;
+using BlazorFronted.Interfaces;
 using BlazorFronted.Services;
 using BlazorFronted.Utility;
 using CurrieTechnologies.Razor.SweetAlert2;
@@ -23,8 +24,6 @@ builder.Services.AddTransient<IClassTypeService, ClassTypeService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IGymMemberService, GymMemberService>();
 builder.Services.AddTransient<IGymInstructorService, GymInstructorService>();
-
-
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddRadzenComponents();

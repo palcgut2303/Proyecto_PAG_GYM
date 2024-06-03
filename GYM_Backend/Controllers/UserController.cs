@@ -5,6 +5,7 @@ using GYM_Backend.Repositories;
 using GYM_Backend.Service;
 using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -87,11 +88,11 @@ namespace GYM_Backend.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var rolJWT = await _userRepository.GetUserRolesAsync(usuarioId);
 
-            var claims = new[]
+            var userClaims = new[]
             {
                 new Claim(ClaimTypes.Name,login.Email!),
                 new Claim("username",username!),
-                new Claim(ClaimTypes.Role, rolJWT.FirstOrDefault())
+                new Claim(ClaimTypes.Role, rolJWT.FirstOrDefault()!)
             };
 
             //foreach (var rol in rolJWT)
@@ -100,13 +101,11 @@ namespace GYM_Backend.Controllers
             //}
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
 
             var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtAudience"],
-                claims,
+                claims: userClaims,
                 expires: expiry,
                 signingCredentials: creds
             );
@@ -193,6 +192,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("AllFields")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<IdentityUser>>> ListarUsuariosAll()
         {
             var usuarios = await _userManager.Users.ToListAsync();
@@ -226,6 +226,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("CambiarRolAInstructor/{userId}")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CambiarRolUsuario([FromRoute] string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -283,6 +284,7 @@ namespace GYM_Backend.Controllers
 
 
         [HttpGet("disableUser/{userId}")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DesactivarUsuario([FromRoute]string userId)
         {
             var success = await _userRepository.DisableUser(userId);
@@ -295,6 +297,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("enableUser/{userId}")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> ActivarUsuario([FromRoute]string userId)
         {
             var success = await _userRepository.EnableUser(userId);

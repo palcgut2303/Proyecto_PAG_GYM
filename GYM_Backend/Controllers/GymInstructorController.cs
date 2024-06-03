@@ -1,6 +1,8 @@
 ﻿using GYM_Backend.Interfaces;
 using GYM_DTOs;
 using GYM_DTOs.EntityDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,6 +11,8 @@ namespace GYM_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class GymInstructorController : ControllerBase
     {
         private readonly IGymInstructorRepository _instructorRepository;
@@ -22,6 +26,8 @@ namespace GYM_Backend.Controllers
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
         //[Authorize(Roles = "Instructor")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public IActionResult GetAll()
         {
 
@@ -37,6 +43,8 @@ namespace GYM_Backend.Controllers
 
         [HttpGet("{id}")]
         [SwaggerResponse(404, "No hay elementos en la lista")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<IActionResult> findById([FromRoute] int id)
         {
             var gymInstructor = _instructorRepository.GetById(id);
@@ -51,6 +59,8 @@ namespace GYM_Backend.Controllers
 
         [HttpGet("email/{email}")]
         [SwaggerResponse(404, "No hay elementos en la lista")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<IActionResult> findByEmail([FromRoute] string email)
         {
             var gymInstructor = _instructorRepository.GetByEmail(email);

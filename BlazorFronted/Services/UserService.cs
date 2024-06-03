@@ -1,4 +1,5 @@
-﻿using GYM_DTOs;
+﻿using BlazorFronted.Interfaces;
+using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 using GYM_DTOs.EntityDTO;
 using System.Net.Http.Json;

@@ -17,6 +17,7 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
+
         public IActionResult SendEmail([FromBody] SendEmailRequest model)
         {
             

@@ -1,4 +1,5 @@
 ﻿@page "/reservation"
+@using BlazorFronted.Interfaces
 @using GYM_DTOs.EntityDTO
 
 @inject IClassTypeService classTypeService;
@@ -540,7 +541,7 @@
                     await Swal.FireAsync(new SweetAlertOptions
                         {
                             Title = "Reserva",
-                            Text = "No se pudo realizar la reserva",
+                            Text = result.Mensaje,
                             Icon = SweetAlertIcon.Error
                         });
 

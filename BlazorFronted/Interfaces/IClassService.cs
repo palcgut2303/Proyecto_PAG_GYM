@@ -3,7 +3,7 @@ using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
 
-namespace BlazorFronted.Services
+namespace BlazorFronted.Interfaces
 {
     public interface IClassService
     {

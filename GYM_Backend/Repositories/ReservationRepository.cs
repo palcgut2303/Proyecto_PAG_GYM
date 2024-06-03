@@ -186,7 +186,7 @@ namespace GYM_Backend.Repositories
             return new ResponseAPI<int> { EsCorrecto = true, Valor = count};
         }
         
-        public async Task<ResponseAPI<string>> CheckReservationsByMonth(string email)
+        public async Task<ResponseAPI<string>> CheckReservationsByMonth(string email, int idClass)
         {
             var user = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.emailMember == email);
 
@@ -202,11 +202,18 @@ namespace GYM_Backend.Repositories
                 return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario no tiene reservas" };
             }
 
+            var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == idClass);
+
+            if (classes == null)
+            {
+                return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Esta clase no existe" };
+            }
+
             int count = 0;
 
             foreach (var item in reservations)
             {
-                if (item.Classes.Schedule.Month == DateTime.Now.Month)
+                if (item.Classes.Schedule.Month == classes.Schedule.Month)
                 {
                     count++;
                 }
@@ -214,7 +221,7 @@ namespace GYM_Backend.Repositories
 
             if (count >= 9)
             {
-                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Este usuario ya tiene 9 reservas en este mes" };
+                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Ya tienes 9 reservas en este mes" };
             }
 
             return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario puede reservar" };

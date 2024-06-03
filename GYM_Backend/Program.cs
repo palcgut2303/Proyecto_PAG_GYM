@@ -28,7 +28,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "API GYM_PABLO", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "API GYM_PABLO", Version = "v1.0.0" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(option =>
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
-        Scheme = "Bearer"
+        Scheme = "bearer"
     });
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -69,12 +69,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["JwtIssuer"],
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["JwtAudience"],
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSecurityKey"]!)),
         };
     });
 
@@ -98,6 +96,7 @@ builder.Services.AddHealthChecks(); //Comprobar que esta funcionando la API
 var app = builder.Build();
 app.MapHealthChecks("/health"); //Comprobar que esta funcionando la API
 app.UseCors("AllowAllOrigins");
+ 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

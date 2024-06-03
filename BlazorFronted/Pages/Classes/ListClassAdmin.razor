@@ -1,9 +1,7 @@
 ﻿@inject SweetAlertService Swal
 @inject IClassService classService;
-@using System.Globalization
 
 @page "/listclassadmin"
-@using CurrieTechnologies.Razor.SweetAlert2
 @inject IJSRuntime JSRuntime
 
 @attribute [Authorize(Roles = "Instructor")]
@@ -202,7 +200,7 @@
             </button>
         </div>
         <div class="d-flex justify-content-center mb-3">
-            <h3 class="text-white ms-3">@classDTO.ClassTypeName - @GetDate(classDTO.Schedule)</h3>
+            <h3 class="text-white ms-3">@classDTO.ClassTypeName - @GetDate(classDTO.Schedule) - @classDTO.Schedule.TimeOfDay.ToString(@"hh\:mm")/@AddMinutes(classDTO.Schedule, 60)</h3>
         </div>
         <div class="table-container">
             <div class="table-responsive">

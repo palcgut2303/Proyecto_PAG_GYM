@@ -6,6 +6,8 @@ using GYM_DTOs;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
 using GYM_DTOs.UpdateDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,6 +16,7 @@ namespace GYM_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class ClassTypeController : ControllerBase
     {
         private readonly IClassTypeRepository _typeofclassRepository;
@@ -55,6 +58,8 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<IActionResult> Post([FromBody] CreatedClassTypeRequestDTO model)
         {
             ClassType typeOfClassCreated = await _typeofclassRepository.CreateClassType(model);
@@ -64,6 +69,8 @@ namespace GYM_Backend.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassTypeRequestDTO requestDTO)
         {
             ClassType classType = await _typeofclassRepository.UpdateClassType(requestDTO, id);
@@ -78,6 +85,8 @@ namespace GYM_Backend.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var respuesta = await _typeofclassRepository.DeleteClassType(id);

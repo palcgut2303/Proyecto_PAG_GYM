@@ -1,7 +1,7 @@
 ﻿using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 
-namespace BlazorFronted.Services
+namespace BlazorFronted.Interfaces
 {
     public interface IAuthService
     {

@@ -1,6 +1,6 @@
 ﻿using GYM_DTOs;
 
-namespace BlazorFronted.Services
+namespace BlazorFronted.Interfaces
 {
     public interface IGymMemberService
     {

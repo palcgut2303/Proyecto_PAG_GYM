@@ -1,4 +1,5 @@
-﻿using GYM_DTOs;
+﻿using BlazorFronted.Interfaces;
+using GYM_DTOs;
 using GYM_DTOs.AccountDTO;
 using GYM_DTOs.CreateDTO;
 using GYM_DTOs.EntityDTO;
@@ -132,7 +133,12 @@ namespace BlazorFronted.Services
             var result = await _http.PostAsJsonAsync("api/reservation", data);
 
             if (!result.IsSuccessStatusCode)
-                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = "No se ha podido reservar" };
+            {
+                var result2 = await result.Content.ReadFromJsonAsync<ResponseAPI<string>>();
+
+                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = result2.Mensaje };
+            }
+                
 
             return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
         }
