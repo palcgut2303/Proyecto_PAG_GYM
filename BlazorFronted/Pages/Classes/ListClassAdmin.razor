@@ -5,6 +5,10 @@
 @inject IJSRuntime JSRuntime
 
 @attribute [Authorize(Roles = "Instructor")]
+
+<PageTitle>Clases</PageTitle>
+
+
 <style>
 
     table {
@@ -103,10 +107,10 @@
     @if (!showParticipants)
     {
         <div class="d-flex justify-content-between mb-3">
-            <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(-1)">Mes Anterior</button>
+            <button class="btn btn-primary btn-sm" @onclick="() => ChangeMonth(-1)">Mes Anterior</button>
             <h3 class="text-white ms-3">Registros del mes de @NombreMesActual</h3>
 
-            <button class="btn btn-primary btn-sm" @onclick="() => CambiarMes(1)">Mes Siguiente</button>
+            <button class="btn btn-primary btn-sm" @onclick="() => ChangeMonth(1)">Mes Siguiente</button>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -266,8 +270,8 @@
     ClassListResult resultClass = new ClassListResult();
     IEnumerable<ClassDTO> listClass = null;
     private List<ClassDTO> RegistrosFiltradosPorMes { get; set; } = new List<ClassDTO>();
-    private DateTime MesActual { get; set; } = DateTime.Now;
-    private string NombreMesActual => MesActual.ToString("MMMM yyyy", new CultureInfo("es-ES"));
+    private DateTime CurrentMonth { get; set; } = DateTime.Now;
+    private string NombreMesActual => CurrentMonth.ToString("MMMM yyyy", new CultureInfo("es-ES"));
     private List<GymMemberDTO> listUserByClass = new List<GymMemberDTO>();
     private ClassDTO classDTO = new ClassDTO();
     private bool showParticipants;
@@ -279,7 +283,7 @@
         resultClass.ListClass = null;
         resultClass = await classService.ClassesList();
         listClass = resultClass.ListClass!;
-        FiltrarRegistrosPorMes(MesActual);
+        FiltrarRegistrosPorMes(CurrentMonth);
     }
 
     private void FiltrarRegistrosPorMes(DateTime mes)
@@ -295,10 +299,10 @@
 
     }
 
-    private void CambiarMes(int incremento)
+    private void ChangeMonth(int incremento)
     {
-        MesActual = MesActual.AddMonths(incremento);
-        FiltrarRegistrosPorMes(MesActual);
+        CurrentMonth = CurrentMonth.AddMonths(incremento);
+        FiltrarRegistrosPorMes(CurrentMonth);
     }
 
     private async Task DeleteClass(int id)
