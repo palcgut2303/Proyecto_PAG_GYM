@@ -46,9 +46,9 @@
 
 <div class="container container-createdClass">
 
-    <h2 class="text-white mt-2">@titulo</h2>
+    <h2 class="text-white mt-2">@title</h2>
 
-    <EditForm Model="@clase" OnValidSubmit="SubmitForm" class="mb-3">
+    <EditForm Model="@classes" OnValidSubmit="SubmitForm" class="mb-3">
         <DataAnnotationsValidator />
         @if (ShowErrors)
         {
@@ -59,13 +59,13 @@
 
         <div class="mb-3">
             <label for="capacity" class="form-label text-white fw-bolder">Capacidad de la clase:</label>
-            <InputNumber class="form-control " id="capacity" @bind-Value="@clase.Capacity" />
-            <ValidationMessage For="@(() => clase.Capacity)" />
+            <InputNumber class="form-control " id="capacity" @bind-Value="@classes.Capacity" />
+            <ValidationMessage For="@(() => classes.Capacity)" />
         </div>
 
         <div class="mb-3">
             <label for="schedule" class="form-label text-white fw-bolder">Horario:</label>
-            <RadzenDatePicker @bind-Value=@clase.Schedule ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
+            <RadzenDatePicker @bind-Value=@classes.Schedule ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" DateFormat="MM/dd/yyyy HH:mm" Name="DatePickerWithTime" />
 
 
         </div>
@@ -87,11 +87,11 @@
                 }
 
             </select>
-            <ValidationMessage For="@(() => clase.ClassTypeName)"></ValidationMessage>
+            <ValidationMessage For="@(() => classes.ClassTypeName)"></ValidationMessage>
         </div>
 
 
-        <button type="submit" class="btn btn-primary">@btnTexto</button>
+        <button type="submit" class="btn btn-primary">@btnText</button>
     </EditForm>
 </div>
 
@@ -99,9 +99,9 @@
     [Parameter]
     public int idClass { get; set; } = 0;
 
-    string titulo = String.Empty;
-    string btnTexto = string.Empty;
-    private CreateClassRequestDTO clase = new CreateClassRequestDTO();
+    string title = String.Empty;
+    string btnText = string.Empty;
+    private CreateClassRequestDTO classes = new CreateClassRequestDTO();
     ClassTypeListResult classTypeResult = new ClassTypeListResult();
     IEnumerable<ClassTypeDTO>? listClassType;
     private bool ShowErrors;
@@ -110,22 +110,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        clase.Schedule = DateTime.Now;
+        classes.Schedule = DateTime.Now;
         classTypeResult = await classTypeService.ClassTypeList();
         listClassType = classTypeResult.ListClass;
 
         if (idClass != 0)
         {
-            titulo = "Editar Clase";
-            btnTexto = "Editar Clase";
+            title = "Editar Clase";
+            btnText = "Editar Clase";
             var resutlClass = await classService.findByIdClass(idClass);
-            clase = resutlClass;
-            selectedClassType = clase.ClassTypeName;
+            classes = resutlClass;
+            selectedClassType = classes.ClassTypeName!;
         }
         else
         {
-            titulo = "Crear Clase";
-            btnTexto = "Crear Clase";
+            title = "Crear Clase";
+            btnText = "Crear Clase";
         }
 
     }
@@ -134,38 +134,34 @@
     private async void SubmitForm()
     {
 
-
         ShowErrors = false;
-
-
-
 
         var email = await AuthService.GetEmail();
 
 
-        clase.emailInstructor = email;
-        clase.ClassTypeName = selectedClassType;
+        classes.emailInstructor = email;
+        classes.ClassTypeName = selectedClassType;
 
-        if (btnTexto == "Editar Clase")
+        if (btnText == "Editar Clase")
         {
             var id = idClass;
 
             var updateClass = new UpdateClassRequestDTO
                 {
-                    ClassTypeName = clase.ClassTypeName,
-                    Schedule = clase.Schedule,
-                    emailInstructor = clase.emailInstructor,
-                    Capacity = clase.Capacity
+                    ClassTypeName = classes.ClassTypeName,
+                    Schedule = classes.Schedule,
+                    emailInstructor = classes.emailInstructor,
+                    Capacity = classes.Capacity
                 };
 
             var result = await classService.UpdateClass(id, updateClass);
 
-            if (!result.EsCorrecto)
+            if (!result.Correct)
             {
                 var resultado = await Swal.FireAsync(new SweetAlertOptions
                     {
                         Title = "Error",
-                        Text = result.Mensaje,
+                        Text = result.Menssage,
                         Icon = SweetAlertIcon.Error,
                         ShowCancelButton = true,
                         ConfirmButtonText = "Si",
@@ -174,7 +170,7 @@
 
                 var confirmado = !string.IsNullOrEmpty(resultado.Value);
 
-                Error = result.Mensaje;
+                Error = result.Menssage!;
                 ShowErrors = true;
             }
             else
@@ -196,21 +192,21 @@
         }
         else
         {
-            var checkedClass = await CheckClassDate(clase);
+            var checkedClass = await CheckClassDate(classes);
 
-            if (!checkedClass.EsCorrecto)
+            if (!checkedClass.Correct)
             {
                 var resultado = await Swal.FireAsync(new SweetAlertOptions
                     {
                         Title = "Error",
-                        Text = checkedClass.Mensaje,
+                        Text = checkedClass.Menssage,
                         Icon = SweetAlertIcon.Error,
                         ShowCancelButton = true,
                     });
             }
             else
             {
-                var result = await classService.CreateClass(clase);
+                var result = await classService.CreateClass(classes);
 
                 if (result.Successful)
                 {
@@ -225,7 +221,7 @@
 
                     NavigationManager.NavigateTo("/listclassadmin");
 
-                    clase = new CreateClassRequestDTO();
+                    classes = new CreateClassRequestDTO();
 
                 }
                 else

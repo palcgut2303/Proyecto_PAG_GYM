@@ -163,14 +163,14 @@ namespace GYM_Backend.Repositories
 
             if (user == null)
             {
-                return new ResponseAPI<int> { EsCorrecto = false, Mensaje = "Usuario no encontrado" };
+                return new ResponseAPI<int> { Correct = false, Menssage = "Usuario no encontrado" };
             }
 
             var reservations = await _contextDb.Reservations.Include(x => x.Classes).Where(x => x.GymMemberId == user.Id).ToListAsync();
 
             if (reservations == null)
             {
-                return new ResponseAPI<int> { EsCorrecto = true, Mensaje = "Este usuario no tiene reservas" };
+                return new ResponseAPI<int> { Correct = true, Menssage = "Este usuario no tiene reservas" };
             }
 
             int count = 0;
@@ -183,7 +183,7 @@ namespace GYM_Backend.Repositories
                 }
             }
 
-            return new ResponseAPI<int> { EsCorrecto = true, Valor = count};
+            return new ResponseAPI<int> { Correct = true, Value = count};
         }
         
         public async Task<ResponseAPI<string>> CheckReservationsByMonth(string email, int idClass)
@@ -192,21 +192,21 @@ namespace GYM_Backend.Repositories
 
             if (user == null)
             {
-                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Usuario no encontrado" };
+                return new ResponseAPI<string> { Correct = false, Menssage = "Usuario no encontrado" };
             }
 
             var reservations = await _contextDb.Reservations.Include(x => x.Classes).Where(x => x.GymMemberId == user.Id).ToListAsync();
 
             if (reservations == null)
             {
-                return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario no tiene reservas" };
+                return new ResponseAPI<string> { Correct = true, Menssage = "Este usuario no tiene reservas" };
             }
 
             var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == idClass);
 
             if (classes == null)
             {
-                return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Esta clase no existe" };
+                return new ResponseAPI<string> { Correct = true, Menssage = "Esta clase no existe" };
             }
 
             int count = 0;
@@ -221,10 +221,10 @@ namespace GYM_Backend.Repositories
 
             if (count >= 9)
             {
-                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Ya tienes 9 reservas en este mes" };
+                return new ResponseAPI<string> { Correct = false, Menssage = "Ya tienes 9 reservas en este mes" };
             }
 
-            return new ResponseAPI<string> { EsCorrecto = true, Mensaje = "Este usuario puede reservar" };
+            return new ResponseAPI<string> { Correct = true, Menssage = "Este usuario puede reservar" };
         }
 
     }

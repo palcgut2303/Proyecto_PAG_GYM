@@ -14,17 +14,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 builder.Services.AddControllers();
-    //.AddJsonOptions(options =>
-    //{
-    //    options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
-    //    options.JsonSerializerOptions.IgnoreNullValues = true;
-    //    
-    //});
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+   
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
@@ -98,7 +90,6 @@ var app = builder.Build();
 app.MapHealthChecks("/health"); //Comprobar que esta funcionando la API
 app.UseCors("AllowAllOrigins");
  
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -110,7 +101,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
-//app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
+
 app.MapControllers();
 
 app.Run();

@@ -41,19 +41,19 @@ namespace BlazorFronted.Services
             var result = await _http.PostAsJsonAsync("api/classtype", classType);
             if (result.IsSuccessStatusCode)
             {
-                return new ResponseAPI<bool> { EsCorrecto = true };
+                return new ResponseAPI<bool> { Correct = true };
             }
 
-            return new ResponseAPI<bool> { EsCorrecto = false };
+            return new ResponseAPI<bool> { Correct = false };
         }
 
         public async Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType, int id)
         {
             var result = await _http.PutAsJsonAsync($"api/classtype/{id}", classType);
             if (!result.IsSuccessStatusCode)
-                return new ResponseAPI<UpdateClassTypeRequestDTO> { EsCorrecto = false, Mensaje = "No se ha podido actualizar" };
+                return new ResponseAPI<UpdateClassTypeRequestDTO> { Correct = false, Menssage = "No se ha podido actualizar" };
 
-            return new ResponseAPI<UpdateClassTypeRequestDTO> { EsCorrecto = true, Mensaje = null };
+            return new ResponseAPI<UpdateClassTypeRequestDTO> { Correct = true, Menssage = null };
         }
 
         public async Task<bool> Delete(int id)
@@ -76,7 +76,7 @@ namespace BlazorFronted.Services
 
             if (result is null)
             {
-                return new ResponseAPI<List<ClassDTO>> { EsCorrecto = false, Mensaje = "No se ha podido obtener las clases" };
+                return new ResponseAPI<List<ClassDTO>> { Correct = false, Menssage = "No se ha podido obtener las clases" };
             }
 
 

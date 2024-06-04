@@ -103,10 +103,10 @@
                 };
 
             var result = await classService.Update(updateModel, idClassType);
-            if (result.Mensaje != null)
+            if (result.Menssage != null)
             {
                 ShowErrors = true;
-                Error = result.Mensaje;
+                Error = result.Menssage;
             }
             else
             {
@@ -116,10 +116,10 @@
         else
         {
             var result = await classService.Save(classType);
-            if (result.Mensaje != null)
+            if (result.Menssage != null)
             {
                 ShowErrors = true;
-                Error = result.Mensaje;
+                Error = result.Menssage;
             }
             else
             {

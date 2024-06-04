@@ -107,9 +107,9 @@ namespace BlazorFronted.Services
         {
             var result = await _http.PutAsJsonAsync($"api/class/{id}", classModel);
             if (!result.IsSuccessStatusCode)
-                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = "No se ha podido actualizar" };
+                return new ResponseAPI<ClassDTO> { Correct = false, Menssage = "No se ha podido actualizar" };
 
-            return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
+            return new ResponseAPI<ClassDTO> { Correct = true, Menssage = null };
         }
 
         public async Task<bool> DeleteClass(int id)
@@ -126,7 +126,7 @@ namespace BlazorFronted.Services
             }
         }
 
-        public async Task<ResponseAPI<ClassDTO>> ReserveClass(int id, string email)
+        public async Task<ResponseAPI<ClassDTO>> MakeReservation(int id, string email)
         {
             CreateReservationRequest data = new CreateReservationRequest { id = id, email = email };
 
@@ -136,11 +136,11 @@ namespace BlazorFronted.Services
             {
                 var result2 = await result.Content.ReadFromJsonAsync<ResponseAPI<string>>();
 
-                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = result2.Mensaje };
+                return new ResponseAPI<ClassDTO> { Correct = false, Menssage = result2.Menssage };
             }
                 
 
-            return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
+            return new ResponseAPI<ClassDTO> { Correct = true, Menssage = null };
         }
 
         public async Task<ResponseAPI<ClassDTO>> CancelReservation(int id, string email)
@@ -151,9 +151,9 @@ namespace BlazorFronted.Services
             var result = await _http.DeleteAsync($"api/reservation/{idReservation}");
 
             if (!result.IsSuccessStatusCode)
-                return new ResponseAPI<ClassDTO> { EsCorrecto = false, Mensaje = "No se ha podido cancelar la reserva" };
+                return new ResponseAPI<ClassDTO> { Correct = false, Menssage = "No se ha podido cancelar la reserva" };
 
-            return new ResponseAPI<ClassDTO> { EsCorrecto = true, Mensaje = null };
+            return new ResponseAPI<ClassDTO> { Correct = true, Menssage = null };
         }
 
         public async Task<List<ClassDTO>> GetClassesByGymMember(string email)
@@ -187,19 +187,19 @@ namespace BlazorFronted.Services
 
             if (!classes.Successful)
             {
-                return new ResponseAPI<string> { EsCorrecto = true };
+                return new ResponseAPI<string> { Correct = true };
             }
 
             var fechaHoy = DateTime.Now;
 
             if (classModel.Schedule < fechaHoy)
             {
-                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No puedes crear clases con fechas anterior a la de hoy" };
+                return new ResponseAPI<string> { Correct = false, Menssage = "No puedes crear clases con fechas anterior a la de hoy" };
             }
 
             if (classModel.Schedule.DayOfWeek == DayOfWeek.Sunday)
             {
-                return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No puedes crear clases un domingo" };
+                return new ResponseAPI<string> { Correct = false, Menssage = "No puedes crear clases un domingo" };
             }
             
 
@@ -214,14 +214,14 @@ namespace BlazorFronted.Services
                 {
                     if (item.Schedule.Hour == classModel.Schedule.Hour)
                     {
-                        return new ResponseAPI<string> { EsCorrecto = false, Mensaje = "Ya hay una clase en esta misma fecha y hora" };
+                        return new ResponseAPI<string> { Correct = false, Menssage = "Ya hay una clase en esta misma fecha y hora" };
                     }
                 }
 
 
             }
 
-            return new ResponseAPI<string> { EsCorrecto = true };
+            return new ResponseAPI<string> { Correct = true };
         }
 
 

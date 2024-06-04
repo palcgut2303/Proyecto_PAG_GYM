@@ -22,12 +22,12 @@ namespace GYM_Backend.Controllers
             
            var result = _message.SendEmail(model);
 
-            if (!result.EsCorrecto)
+            if (!result.Correct)
             {
-                return BadRequest(new ResponseAPI<string> { EsCorrecto = false, Mensaje = result.Mensaje });
+                return BadRequest(new ResponseAPI<string> { Correct = false, Menssage = result.Menssage });
             }
 
-            return Ok(new ResponseAPI<string> { EsCorrecto = true });
+            return Ok(new ResponseAPI<string> { Correct = true });
         }
     }
 }

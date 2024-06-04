@@ -39,8 +39,8 @@ namespace GYM_Backend.Service
 
                 return new ResponseAPI<string>
                 {
-                    EsCorrecto = true,
-                    Mensaje = "Correo enviado correctamente"
+                    Correct = true,
+                    Menssage = "Correo enviado correctamente"
                 };
 
             }
@@ -48,8 +48,8 @@ namespace GYM_Backend.Service
             {
                 return new ResponseAPI<string>
                 {
-                    EsCorrecto = false,
-                    Mensaje = ex.Message
+                    Correct = false,
+                    Menssage = ex.Message
                 };
             }
         }

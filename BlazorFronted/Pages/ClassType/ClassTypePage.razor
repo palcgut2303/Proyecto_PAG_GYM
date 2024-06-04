@@ -111,7 +111,7 @@
                                         <a class="btn btn-primary btn-sm ms-2 mt-1" href="classtypeconf/@classType.Id">
                                     <i class="bi bi-pencil-fill"></i>
                                 </a>
-                                <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => Eliminar(classType.Id))">
+                                <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => DeleteClass(classType.Id))">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>
                             </td>
@@ -137,7 +137,7 @@
         listClassType = resultClassType.ListClass!;
     }
 
-    private async Task Eliminar(int id)
+    private async Task DeleteClass(int id)
     {
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -149,8 +149,8 @@
 
         if (resultado.IsConfirmed)
         {
-            var eliminado = await classTypeService.Delete(id);
-            if (eliminado)
+            var delete = await classTypeService.Delete(id);
+            if (delete)
             {
                 var isDelete = await Swal.FireAsync(new SweetAlertOptions
                     {

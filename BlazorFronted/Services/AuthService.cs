@@ -110,8 +110,8 @@ namespace BlazorFronted.Services
             {
                 return new ResponseAPI<SendEmailRequest>
                 {
-                    EsCorrecto = false,
-                    Mensaje = "Error al enviar el correo"
+                    Correct = false,
+                    Menssage = "Error al enviar el correo"
                    
                 };
                 
@@ -119,8 +119,8 @@ namespace BlazorFronted.Services
 
             return new ResponseAPI<SendEmailRequest>
             {
-                EsCorrecto = true,
-                Valor = model,
+                Correct = true,
+                Value = model,
             };
         }
 

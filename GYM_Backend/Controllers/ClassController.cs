@@ -33,8 +33,6 @@ namespace GYM_Backend.Controllers
 
         [HttpGet]
         [SwaggerResponse(404, "No hay elementos en la lista")]
-        //[Authorize(Roles = "Instructor")]
-
         public IActionResult GetAll() {
 
             var classes = _classRepository.GetAll();
@@ -157,10 +155,10 @@ namespace GYM_Backend.Controllers
 
             if (classes == null)
             {
-                return NotFound(new ResponseAPI<List<ClassDTO>> { EsCorrecto = false, Mensaje = "No se ha encontrado clases con este tipo" });
+                return NotFound(new ResponseAPI<List<ClassDTO>> { Correct = false, Menssage = "No se ha encontrado clases con este tipo" });
             }
 
-            return Ok(new ResponseAPI<List<ClassDTO>> { EsCorrecto = true, Valor = classes.ToList()});
+            return Ok(new ResponseAPI<List<ClassDTO>> { Correct = true, Value = classes.ToList()});
         }
     }
 }

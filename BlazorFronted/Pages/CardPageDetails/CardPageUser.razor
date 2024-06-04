@@ -243,7 +243,7 @@
         {
             var result = await classService.CancelReservation(model.Id, emailUserIdentificate);
 
-            if (result.EsCorrecto)
+            if (result.Correct)
             {
                 await Swal.FireAsync(new SweetAlertOptions
                     {
@@ -258,7 +258,7 @@
 
                 var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
 
-                if (!resultSendEmail.EsCorrecto)
+                if (!resultSendEmail.Correct)
                 {
                     Errors = new List<string> { "Error al enviar el correo" };
                     ShowErrors = true;

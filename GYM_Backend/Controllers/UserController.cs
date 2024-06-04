@@ -95,11 +95,6 @@ namespace GYM_Backend.Controllers
                 new Claim(ClaimTypes.Role, rolJWT.FirstOrDefault()!)
             };
 
-            //foreach (var rol in rolJWT)
-            //{
-            //    claims.Append(new Claim("rol", rol));
-            //}
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
@@ -226,30 +221,28 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("CambiarRolAInstructor/{userId}")]
-        //[Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CambiarRolUsuario([FromRoute] string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Usuario no encontrado" });
+                return NotFound(new ResponseAPI<UserDTO> { Correct = false, Menssage = "Usuario no encontrado" });
             }
 
             
 
-            // Quita el rol de USER
             var removeUserFromRoleResult = await _userManager.RemoveFromRoleAsync(user, "User");
             if (!removeUserFromRoleResult.Succeeded)
             {
-                return BadRequest(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Error al quitar el rol de USER"});
+                return BadRequest(new ResponseAPI<UserDTO> { Correct = false, Menssage = "Error al quitar el rol de USER"});
             }
 
             user.Role = "Instructor";
-            // Agrega el rol de ADMIN
+
             var addAdminRoleResult = await _userManager.AddToRoleAsync(user, "Instructor");
             if (!addAdminRoleResult.Succeeded)
             {
-                return BadRequest(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Rol no cambiado a ADMIN" });
+                return BadRequest(new ResponseAPI<UserDTO> { Correct = false, Menssage = "Rol no cambiado a ADMIN" });
             }
 
             var listaMiembros = await _context.GymMembers.ToListAsync();
@@ -279,7 +272,7 @@ namespace GYM_Backend.Controllers
             _context.GymInstructors.Add(nuevoInstructor);
             await _context.SaveChangesAsync();
 
-            return Ok(new ResponseAPI<UserDTO> {EsCorrecto = true, Mensaje = "Rol cambiado exitosamente a ADMIN" });
+            return Ok(new ResponseAPI<UserDTO> {Correct = true, Menssage = "Rol cambiado exitosamente a ADMIN" });
         }
 
 
@@ -290,10 +283,10 @@ namespace GYM_Backend.Controllers
             var success = await _userRepository.DisableUser(userId);
             if (!success)
             {
-                return Ok(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "No se puede desactivar esta cuenta" });
+                return Ok(new ResponseAPI<UserDTO> { Correct = false, Menssage = "No se puede desactivar esta cuenta" });
             }
 
-            return Ok(new ResponseAPI<UserDTO> { EsCorrecto = true, Mensaje = "Cuenta Deshabilitada" });
+            return Ok(new ResponseAPI<UserDTO> { Correct = true, Menssage = "Cuenta Deshabilitada" });
         }
 
         [HttpGet("enableUser/{userId}")]
@@ -303,10 +296,10 @@ namespace GYM_Backend.Controllers
             var success = await _userRepository.EnableUser(userId);
             if (!success)
             {
-                return Ok(new ResponseAPI<UserDTO> { EsCorrecto = false, Mensaje = "Error, no se puede habilitar" });
+                return Ok(new ResponseAPI<UserDTO> { Correct = false, Menssage = "Error, no se puede habilitar" });
             }
 
-            return Ok(new ResponseAPI<UserDTO> { EsCorrecto = true, Mensaje = "Cuenta Habilitada" });
+            return Ok(new ResponseAPI<UserDTO> { Correct = true, Menssage = "Cuenta Habilitada" });
         }
 
     }

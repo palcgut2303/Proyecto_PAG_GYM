@@ -87,10 +87,6 @@
                             <h5 class="card-title">@user.Username</h5>
                             <p class="card-text">Correo electrónico: @user.Email</p>
                             <p class="card-text">Rol: @user.Rol</p>
-                            @* @if (email == user.Email)
-                    {
-                    <button href="#" class="btn btn-primary">Editar</button>
-                    } *@
                         </div>
                     </div>
                 </div>
@@ -125,7 +121,7 @@
                             <RadzenButton class="m-2" Text=@($"Detalles") ButtonStyle="ButtonStyle.Secondary" Click="(() => OpenOrder(user.Email))" />
 
 
-                            <RadzenButton class="m-2" Text=@($"Hacer Instructor") ButtonStyle="ButtonStyle.Success" Click="(() => HacerAdmin(user.Id))" />
+                            <RadzenButton class="m-2" Text=@($"Hacer Instructor") ButtonStyle="ButtonStyle.Success" Click="(() => EnableAdmin(user.Id))" />
                             @if (user.isEnable)
                             {
 
@@ -180,13 +176,13 @@
 
     }
 
-    private async Task HacerAdmin(string id)
+    private async Task EnableAdmin(string id)
     {
         string idUser = id;
 
         var result = await userService.MakeAdmin(idUser);
 
-        if (result.EsCorrecto)
+        if (result.Correct)
         {
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
@@ -203,7 +199,7 @@
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
                     Title = "Error",
-                    Text = result.Mensaje,
+                    Text = result.Menssage,
                     Icon = SweetAlertIcon.Error
                 });
         }
@@ -213,7 +209,7 @@
     {
         var result = await userService.InactiveUser(id);
 
-        if (result.EsCorrecto)
+        if (result.Correct)
         {
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
@@ -230,7 +226,7 @@
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
                     Title = "Error",
-                    Text = result.Mensaje,
+                    Text = result.Menssage,
                     Icon = SweetAlertIcon.Error
                 });
         }
@@ -240,7 +236,7 @@
     {
         var result = await userService.EnableUser(id);
 
-        if (result.EsCorrecto)
+        if (result.Correct)
         {
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
@@ -257,7 +253,7 @@
             var resultado = await Swal.FireAsync(new SweetAlertOptions
                 {
                     Title = "Error",
-                    Text = result.Mensaje,
+                    Text = result.Menssage,
                     Icon = SweetAlertIcon.Error
                 });
         }

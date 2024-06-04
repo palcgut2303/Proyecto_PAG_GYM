@@ -8,8 +8,8 @@ namespace GYM_DTOs
 {
     public class ResponseAPI<T>
     {
-        public bool EsCorrecto { get; set; }
-        public T? Valor { get; set; }
-        public string? Mensaje { get; set; }
+        public bool Correct { get; set; }
+        public T? Value { get; set; }
+        public string? Menssage { get; set; }
     }
 }

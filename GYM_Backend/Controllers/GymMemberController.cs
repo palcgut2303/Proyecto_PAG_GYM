@@ -32,10 +32,10 @@ namespace GYM_Backend.Controllers
 
             if (listGymInstructor == null || listGymInstructor.Count() == 0)
             {
-                return Ok(new ResponseAPI<IEnumerable<GymMemberDTO>> { EsCorrecto = false, Mensaje = "No hay miembros disponibles" });
+                return Ok(new ResponseAPI<IEnumerable<GymMemberDTO>> { Correct = false, Menssage = "No hay miembros disponibles" });
             }
 
-            return Ok(new ResponseAPI<IEnumerable<GymMemberDTO>> { EsCorrecto = true, Valor = listGymInstructor });
+            return Ok(new ResponseAPI<IEnumerable<GymMemberDTO>> { Correct = true, Value = listGymInstructor });
         }
 
         [HttpGet("email/{email}")]

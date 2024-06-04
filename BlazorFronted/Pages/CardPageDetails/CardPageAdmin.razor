@@ -81,9 +81,9 @@
 <div class="m-3">
     <RadzenStack Gap="1rem" Orientation="Radzen.Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
         <RadzenStack>
-            <RadzenRow >
+            <RadzenRow>
                 <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1 bg-white" Style="border: var(--rz-grid-cell-border)">
-                    <RadzenText  TextStyle="TextStyle.Subtitle1">Contacto</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Contacto</RadzenText>
                     <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="AlignItems.Center">
 
                         <RadzenStack Gap="0" Class="rz-text-truncate">
@@ -95,7 +95,7 @@
                     </RadzenStack>
                 </RadzenColumn>
                 <RadzenColumn Size="12" SizeMD="6" Class="rz-p-4 rz-border-radius-1 bg-white" Style="border: var(--rz-grid-cell-border)">
-                    <RadzenText  TextStyle="TextStyle.Subtitle1">Informacion del Instructor</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Subtitle1">Informacion del Instructor</RadzenText>
                     <RadzenStack Gap="0" Class="rz-text-truncate">
                         <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2 rz-my-0" Style="color: var(--rz-text-tertiary-color);">Rol</RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-truncate"><b>Instructor</b></RadzenText>
@@ -131,19 +131,19 @@
                             }
                             else
                             {
-                               
-                                    @foreach (var classes in listClassUser)
-                                    {
-                                        <tr>
-                                            <td class="text-center text-white">@classes.ClassTypeName</td>
-                                            <td class="text-center text-white">@GetDate(classes.Schedule)</td>
+
+                                @foreach (var classes in listClassUser)
+                                {
+                                    <tr>
+                                        <td class="text-center text-white">@classes.ClassTypeName</td>
+                                        <td class="text-center text-white">@GetDate(classes.Schedule)</td>
                                         <td class="text-center text-white">@classes.Schedule.TimeOfDay.ToString(@"hh\:mm") - @AddMinutes(classes.Schedule, 60)</td>
-                                            <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
+                                        <td class="text-center text-white">@classes.TotalReservations/@classes.Capacity</td>
 
 
-                                        </tr>
-                                    }
-                                
+                                    </tr>
+                                }
+
 
                             }
                         </tbody>
@@ -151,10 +151,6 @@
                 </div>
             </div>
         </RadzenStack>
-        @* <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
-            @*             <RadzenButton Click="@((args) => dialogService.Close(true))" Variant="Variant.Flat" Text="Cerrar" Style="width: 120px" />
-            <RadzenButton Click="@Cerrar" Variant="Variant.Flat" Text="Volver" Style="width: 120px" />
-        </RadzenStack> *@
     </RadzenStack>
 
 </div>
@@ -177,7 +173,6 @@
         model = result.GymInstructorDTO!;
         listClassUser = await classService.ClassesListByGymInstructor(model.Id);
     }
-    // <RadzenImage Path="@order.Employee?.Photo" Style="width: 80px; height: 80px; border-radius: 50%" />
 
     private void Cerrar()
     {
@@ -195,5 +190,5 @@
         var addHour = time.AddMinutes(minutes);
         return addHour.TimeOfDay.ToString(@"hh\:mm");
     }
-    
+
 }

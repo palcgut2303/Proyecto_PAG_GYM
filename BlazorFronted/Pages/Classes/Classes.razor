@@ -115,9 +115,9 @@
                     {
                         <button class="btn btn-info">Clase Cerrada</button>
                     }
-                    else if (ClaseEstaReservadaPorUsuario(clase))
+                    else if (ClassIsReservationByUser(clase))
                     {
-                        <button class="btn btn-danger" @onclick="(() => CancelarReserva(clase))">
+                        <button class="btn btn-danger" @onclick="(() => CancelReservation(clase))">
                             <span class="d-none d-sm-inline">Cancelar Reserva</span>
                             <span class="d-inline d-sm-none">Cancerlar Res.</span>
                         </button>
@@ -247,9 +247,9 @@
 
             if (resultado.IsConfirmed)
             {
-                var result = await classService.ReserveClass(model.Id, emailUserIdentificate);
+                var result = await classService.MakeReservation(model.Id, emailUserIdentificate);
 
-                if (result.EsCorrecto)
+                if (result.Correct)
                 {
                     await Swal.FireAsync(new SweetAlertOptions
                         {
@@ -265,7 +265,7 @@
 
                     var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
 
-                    if (!resultSendEmail.EsCorrecto)
+                    if (!resultSendEmail.Correct)
                     {
                         Errors = new List<string> { "Error al enviar el correo" };
                         ShowErrors = true;
@@ -281,7 +281,7 @@
                     await Swal.FireAsync(new SweetAlertOptions
                         {
                             Title = "Reserva",
-                            Text = result.Mensaje,
+                            Text = result.Menssage,
                             Icon = SweetAlertIcon.Error
                         });
 
@@ -301,7 +301,7 @@
         }
     }
 
-    private async Task CancelarReserva(ClassDTO model)
+    private async Task CancelReservation(ClassDTO model)
     {
         var resultado = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -317,7 +317,7 @@
         {
             var result = await classService.CancelReservation(model.Id, emailUserIdentificate);
 
-            if (result.EsCorrecto)
+            if (result.Correct)
             {
                 await Swal.FireAsync(new SweetAlertOptions
                     {
@@ -332,7 +332,7 @@
 
                 var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
 
-                if (!resultSendEmail.EsCorrecto)
+                if (!resultSendEmail.Correct)
                 {
                     Errors = new List<string> { "Error al enviar el correo" };
                     ShowErrors = true;
@@ -363,7 +363,7 @@
         return date.ToString("dd/MM/yyyy");
     }
 
-    private bool ClaseEstaReservadaPorUsuario(ClassDTO clase)
+    private bool ClassIsReservationByUser(ClassDTO clase)
     {
         if (listClassByUser == null || listClassByUser.Count == 0)
         {

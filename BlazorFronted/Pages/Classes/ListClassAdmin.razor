@@ -170,7 +170,7 @@
                                         <a class="btn btn-primary btn-sm ms-2 mt-1" href="createdclasses/@classes.Id">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
-                                        <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => Eliminar(classes.Id))">
+                                        <button type="button" class="btn btn-danger btn-sm ms-2 mt-1" @onclick="(() => DeleteClass(classes.Id))">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
 
@@ -301,9 +301,9 @@
         FiltrarRegistrosPorMes(MesActual);
     }
 
-    private async Task Eliminar(int id)
+    private async Task DeleteClass(int id)
     {
-        var resultado = await Swal.FireAsync(new SweetAlertOptions
+        var confirmDeleteClass = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Eliminar Clase",
                 Text = "Deseas eliminar la clase?",
@@ -311,7 +311,7 @@
                 ShowCancelButton = true,
             });
 
-        if (resultado.IsConfirmed)
+        if (confirmDeleteClass.IsConfirmed)
         {
             var eliminado = await classService.DeleteClass(id);
             if (eliminado)

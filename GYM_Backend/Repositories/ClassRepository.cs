@@ -102,7 +102,7 @@ namespace GYM_Backend.Repositories
 
             var classDTOList = classDTO.ToList();
 
-            return new ResponseAPI<List<ClassDTO>> { EsCorrecto = true, Valor = classDTOList };
+            return new ResponseAPI<List<ClassDTO>> { Correct = true, Value = classDTOList };
         }
 
         public async Task<bool> BorradoClass(int id)

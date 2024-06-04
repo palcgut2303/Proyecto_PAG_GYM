@@ -69,19 +69,19 @@ namespace GYM_Backend.Controllers
 
             var resultCheckReservationByMoth = await _reservationRepository.CheckReservationsByMonth(emailUser,idClass);
 
-            if (!resultCheckReservationByMoth.EsCorrecto)
+            if (!resultCheckReservationByMoth.Correct)
             {
-                return BadRequest(new ResponseAPI<string> { EsCorrecto = false, Mensaje = resultCheckReservationByMoth.Mensaje });
+                return BadRequest(new ResponseAPI<string> { Correct = false, Menssage = resultCheckReservationByMoth.Menssage });
             }
 
             var respuesta = await _classRepository.ReservarClase(idClass, idUsuario);
 
             if (!respuesta)
             {
-                return NotFound(new ResponseAPI<string> { EsCorrecto = false, Mensaje = "No se ha podido reservar esta clase" });
+                return NotFound(new ResponseAPI<string> { Correct = false, Menssage = "No se ha podido reservar esta clase" });
             }
 
-            return Ok(new ResponseAPI<string> { EsCorrecto = true, Valor = "Reserva Creada"});
+            return Ok(new ResponseAPI<string> { Correct = true, Value = "Reserva Creada"});
         }
 
         [HttpPut]
@@ -161,12 +161,12 @@ namespace GYM_Backend.Controllers
         {
             var respuesta = await _reservationRepository.GetReservationsByWeek(email);
 
-            if (respuesta.EsCorrecto)
+            if (respuesta.Correct)
             {
-                return Ok(new ResponseAPI<int> { EsCorrecto = true, Valor = respuesta.Valor });
+                return Ok(new ResponseAPI<int> { Correct = true, Value = respuesta.Value });
             }
 
-            return NotFound(new ResponseAPI<int> { EsCorrecto = false, Valor = respuesta.Valor });
+            return NotFound(new ResponseAPI<int> { Correct = false, Value = respuesta.Value });
         }
 
 
