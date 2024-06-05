@@ -74,9 +74,9 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpGet("porDia")]
-        public async Task<IActionResult> encontrarClasesPorDia()
+        public async Task<IActionResult> FindClassesPerDay()
         {
-            var classes = await _classRepository.ObtenerClasesPorDiaDeLaSemana();
+            var classes = await _classRepository.GetClassesByDayOfTheWeek();
 
 
             if (classes == null)
@@ -120,7 +120,7 @@ namespace GYM_Backend.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var respuesta = await _classRepository.BorradoClass(id);
+            var respuesta = await _classRepository.DeletedClass(id);
 
             if(!respuesta)
             {
@@ -136,9 +136,9 @@ namespace GYM_Backend.Controllers
         {
 
             //Cojer el id del usuario a traves de su email
-            var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
+            var idUsuario = await _classRepository.GetIdGymMember(emailUser);
 
-            var respuesta = await _classRepository.ReservarClase(id,idUsuario);
+            var respuesta = await _classRepository.ReserveClass(id,idUsuario);
 
             if (!respuesta)
             {

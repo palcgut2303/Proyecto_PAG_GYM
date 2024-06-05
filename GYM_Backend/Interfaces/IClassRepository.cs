@@ -8,17 +8,17 @@ namespace GYM_Backend.Interfaces
 {
     public interface IClassRepository
     {
-        Task<bool> BorradoClass(int id);
+        Task<bool> DeletedClass(int id);
         Task<Classes> CreateClass(CreateClassRequestDTO model);
         IEnumerable<ClassDTO> GetAll();
         ClassDTO GetById(int id);
         IEnumerable<ClassDTO> GetClassByGymInstructor(int idInstructor);
         Task<IEnumerable<ClassDTO>> GetClassByType(string type);
-        Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana();
+        Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek();
         
-        Task<int> ObtenerIdGymInstructor(string email);
-        Task<int> ObtenerIdGymMember(string email);
-        Task<bool> ReservarClase(int idClase, int idUsuario);
+        Task<int> GetIdGymInstructor(string email);
+        Task<int> GetIdGymMember(string email);
+        Task<bool> ReserveClass(int idClase, int idUsuario);
         Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

@@ -113,18 +113,24 @@
                     <span class="mr-2 p-2">@clase.TotalReservations/@clase.Capacity</span>
                     @if (clase.Schedule < DateTime.Now)
                     {
-                        <button class="btn btn-info">Clase Cerrada</button>
+                        <button class="btn btn-info">
+                            <span class="d-none d-sm-inline">Clase Cerrada</span>
+                            <span class="d-inline d-sm-none">Cla. Cerr.</span>
+                        </button>
                     }
                     else if (ClassIsReservationByUser(clase))
                     {
                         <button class="btn btn-danger" @onclick="(() => CancelReservation(clase))">
                             <span class="d-none d-sm-inline">Cancelar Reserva</span>
-                            <span class="d-inline d-sm-none">Cancerlar Res.</span>
+                            <span class="d-inline d-sm-none">Canc. Res.</span>
                         </button>
                     }
                     else if (clase.TotalReservations == clase.Capacity)
                     {
-                        <button class="btn btn-secondary">Clase llena</button>
+                        <button class="btn btn-secondary">
+                            <span class="d-none d-sm-inline">Clase Llena</span>
+                            <span class="d-inline d-sm-none">Cla. Llena</span>
+                        </button>
                     }
                     else
                     {

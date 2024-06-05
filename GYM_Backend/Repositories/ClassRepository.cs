@@ -41,9 +41,9 @@ namespace GYM_Backend.Repositories
 
         public async Task<Classes> CreateClass(CreateClassRequestDTO model)
         {
-            var idClassType = await ObtenerIdClassType(model.ClassTypeName);
+            var idClassType = await GetIdClassType(model.ClassTypeName);
 
-            var idGymInstructor = await ObtenerIdGymInstructor(model.emailInstructor);
+            var idGymInstructor = await GetIdGymInstructor(model.emailInstructor);
 
             var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(x => x.emailUser == model.emailInstructor);
             var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Name == model.ClassTypeName);
@@ -105,7 +105,7 @@ namespace GYM_Backend.Repositories
             return new ResponseAPI<List<ClassDTO>> { Correct = true, Value = classDTOList };
         }
 
-        public async Task<bool> BorradoClass(int id)
+        public async Task<bool> DeletedClass(int id)
         {
             var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == id);    
 
@@ -121,7 +121,7 @@ namespace GYM_Backend.Repositories
             return true;
         }
 
-        public async Task<Dictionary<DateTime, List<ClassDTO>>> ObtenerClasesPorDiaDeLaSemana()
+        public async Task<Dictionary<DateTime, List<ClassDTO>>> GetClassesByDayOfTheWeek()
         {
             // Consulta LINQ para obtener todas las clases
             var clases =  await _contextDb.Classes.Include(x => x.ClassType).Include(x => x.GymInstructor).Include(x => x.Reservations).Select(x=> x.toClassesDTO()).ToListAsync();
@@ -133,7 +133,7 @@ namespace GYM_Backend.Repositories
             return clasesPorDia;
         }
 
-        public async Task<int> ObtenerIdGymInstructor(string email)
+        public async Task<int> GetIdGymInstructor(string email)
         {
             var gymInstructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(gi => gi.emailUser == email);
             if(gymInstructor == null)
@@ -143,7 +143,7 @@ namespace GYM_Backend.Repositories
             return gymInstructor.Id;
         }
 
-        public async Task<int> ObtenerIdGymMember(string email)
+        public async Task<int> GetIdGymMember(string email)
         {
             var gymMembers = await _contextDb.GymMembers.FirstOrDefaultAsync(gi => gi.emailMember == email);
             if (gymMembers == null)
@@ -153,7 +153,7 @@ namespace GYM_Backend.Repositories
             return gymMembers.Id;
         }
 
-        public async Task<int> ObtenerIdClassType(string nombreClase)
+        public async Task<int> GetIdClassType(string nombreClase)
         {
             var classType = await _contextDb.ClassType.FirstOrDefaultAsync(ct => ct.Name == nombreClase);
             if (classType == null)
@@ -164,7 +164,7 @@ namespace GYM_Backend.Repositories
             
         }
 
-        public async Task<bool> ReservarClase(int idClase, int idUsuario)
+        public async Task<bool> ReserveClass(int idClase, int idUsuario)
         {
             var clase = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == idClase);
             var usuario = await _contextDb.GymMembers.FirstOrDefaultAsync(x => x.Id == idUsuario);

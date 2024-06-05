@@ -7,40 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\img\backgroundHomeFooter.jpg" />
-    <Content Remove="wwwroot\img\backgroundImage.jpg" />
-    <Content Remove="wwwroot\img\backgroungUser.jpg" />
-    <Content Remove="wwwroot\img\CardUserImg.png" />
-    <Content Remove="wwwroot\img\CardUserImg2.jpeg" />
-    <Content Remove="wwwroot\img\contact-bg.jpg" />
-    <Content Remove="wwwroot\img\cta-bg.jpg" />
-    <Content Remove="wwwroot\img\fondo-reservas.png" />
-    <Content Remove="wwwroot\img\gym-video.mp4" />
-    <Content Remove="wwwroot\img\line-dec.png" />
-    <Content Remove="wwwroot\img\Logo_AppPAG.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\fonts\flexslider-icon.svg" />
     <None Include="wwwroot\fonts\fontawesome-webfont.svg" />
     <None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
     <None Include="wwwroot\fonts\slick.svg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="wwwroot\img\backgroundHomeFooter.jpg" />
-    <Resource Include="wwwroot\img\backgroundImage.jpg" />
-    <Resource Include="wwwroot\img\backgroungUser.jpg" />
-    <Resource Include="wwwroot\img\CardUserImg.png" />
-    <Resource Include="wwwroot\img\CardUserImg2.jpeg" />
-    <Resource Include="wwwroot\img\contact-bg.jpg" />
-    <Resource Include="wwwroot\img\cta-bg.jpg" />
-    <Resource Include="wwwroot\img\fondo-reservas.png" />
-    <Resource Include="wwwroot\img\gym-video.mp4" />
-    <Resource Include="wwwroot\img\line-dec.png" />
-    <Resource Include="wwwroot\img\Logo_AppPAG.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +30,42 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GYM_DTOs\GYM_DTOs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\img\backgroundHomeFooter.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\backgroundImage.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\backgroungUser.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\CardUserImg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\CardUserImg2.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\contact-bg.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\cta-bg.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\fondo-reservas.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\gym-video.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\line-dec.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\Logo_AppPAG.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

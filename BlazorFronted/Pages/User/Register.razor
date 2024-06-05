@@ -1,4 +1,5 @@
 ﻿@page "/register"
+@using System.Text.RegularExpressions
 
 @inject IAuthService AuthService
 
@@ -183,33 +184,41 @@
     {
         if (RegisterModel.Email != null && RegisterModel.FullName != null && RegisterModel.Password != null && RegisterModel.Username != null)
         {
-            loadCodePage = true;
-            Errors = null;
-            ShowErrors = false;
-
-            codeEmailSend = AuthService.RandomString();
-
-            var sendEmailRequest = new SendEmailRequest(RegisterModel.Email, "Código de validación en GYM PAG", "Tu código de validación es: " + codeEmailSend);
-
-
-            var result = await AuthService.SendEmail(sendEmailRequest);
-
-
-
-            if (!result.Correct)
+            if (!isEmailGmail(RegisterModel.Email))
             {
-                Errors = new List<string> { "Error al enviar el correo" };
                 ShowErrors = true;
+                Errors = new List<string> { "Solo se permiten correos de Gmail" };
+                return;
             }
             else
             {
+                loadCodePage = true;
                 Errors = null;
                 ShowErrors = false;
 
-                Confirm = new List<string> { "Se ha enviado un correo con el código de validación" };
-                ShowConfirm = true;
-            }
+                codeEmailSend = AuthService.RandomString();
 
+                var sendEmailRequest = new SendEmailRequest(RegisterModel.Email, "Código de validación en GYM PAG", "Tu código de validación es: " + codeEmailSend);
+
+
+                var result = await AuthService.SendEmail(sendEmailRequest);
+
+
+
+                if (!result.Correct)
+                {
+                    Errors = new List<string> { "Error al enviar el correo" };
+                    ShowErrors = true;
+                }
+                else
+                {
+                    Errors = null;
+                    ShowErrors = false;
+
+                    Confirm = new List<string> { "Se ha enviado un correo con el código de validación" };
+                    ShowConfirm = true;
+                }
+            }
         }
         else
         {
@@ -217,6 +226,20 @@
             Errors = new List<string> { "Todos los campos son requeridos" };
         }
 
+    }
+
+    public static bool isEmailGmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return false;
+        }
+
+        // Expresión regular para validar correos de Gmail
+        string pattern = @"^[a-zA-Z0-9._%+-]+@gmail\.com$";
+        Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+        return regex.IsMatch(email);
     }
 
     private async Task SubmitRegistration()

@@ -59,13 +59,13 @@ namespace GYM_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReservarClase(CreateReservationRequest data)
+        public async Task<IActionResult> ReserveClass(CreateReservationRequest data)
         {
 
             var emailUser = data.email;
             var idClass = data.id;
 
-            var idUsuario = await _classRepository.ObtenerIdGymMember(emailUser);
+            var idUsuario = await _classRepository.GetIdGymMember(emailUser);
 
             var resultCheckReservationByMoth = await _reservationRepository.CheckReservationsByMonth(emailUser,idClass);
 
@@ -74,7 +74,7 @@ namespace GYM_Backend.Controllers
                 return BadRequest(new ResponseAPI<string> { Correct = false, Menssage = resultCheckReservationByMoth.Menssage });
             }
 
-            var respuesta = await _classRepository.ReservarClase(idClass, idUsuario);
+            var respuesta = await _classRepository.ReserveClass(idClass, idUsuario);
 
             if (!respuesta)
             {
