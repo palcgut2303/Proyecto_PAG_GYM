@@ -65,6 +65,30 @@
         font-size: 18px;
         font-weight: bold;
     }
+
+    .scrollable-table {
+        /* display: block; */
+        max-height: 400px; /* Ajusta este valor según tus necesidades */
+        overflow-y: auto;
+        margin: 0 auto; /* Centrar el contenedor */
+    }
+
+        .scrollable-table::-webkit-scrollbar {
+            width: 10px; /* Ajusta el ancho del scrollbar */
+        }
+
+        .scrollable-table::-webkit-scrollbar-track {
+            background: transparent; /* Color de fondo del track */
+        }
+
+        .scrollable-table::-webkit-scrollbar-thumb {
+            background: #888; /* Color de la barra */
+            border-radius: 5px; /* Bordes redondeados de la barra */
+        }
+
+            .scrollable-table::-webkit-scrollbar-thumb:hover {
+                background: #555; /* Color de la barra al pasar el cursor por encima */
+            }
 </style>
 <div class="page-background-class"></div>
 <div class="overlay"></div>
@@ -73,7 +97,7 @@
     <h3 class="text-white">Tipos de clases</h3>
 
     <a class="btn btn-success btn-sm mb-3" href="classtypeconf">Crear Tipo de Clase</a>
-    <div class="table-responsive">
+    <div class="table-responsive scrollable-table">
         <table class="table">
             <thead>
                 <tr class="text-white">
