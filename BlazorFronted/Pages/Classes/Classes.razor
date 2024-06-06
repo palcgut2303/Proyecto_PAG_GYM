@@ -220,7 +220,7 @@
         DateTime currentDate = DateTime.Now.Date;
         DateTime selectedDate = currentDate.AddDays((int)selectedDay - (int)currentDate.DayOfWeek);
 
-        return clases.Where(c => c.Schedule.Date == selectedDate.Date);
+        return clases.Where(c => c.Schedule.Date == selectedDate.Date).OrderBy(x => x.Schedule);
     }
 
     private void SelectDay(DayOfWeek day)

@@ -321,7 +321,7 @@
         }
         else
         {
-            RegistrosFiltradosPorMes = listClass.Where(r => r.Schedule.Month == mes.Month && r.Schedule.Year == mes.Year).ToList();
+            RegistrosFiltradosPorMes = listClass.Where(r => r.Schedule.Month == mes.Month && r.Schedule.Year == mes.Year).OrderBy(x => x.Schedule).ToList();
         }
 
     }

@@ -466,7 +466,7 @@
             resultAPI = await classTypeService.GetClassByType(classType);
 
             listClass = resultAPI.Value!;
-            listClass = listClass.Where(x => x.Schedule.Date >= DateTime.Now.Date).ToList();
+            listClass = listClass.Where(x => x.Schedule.Date >= DateTime.Now.Date).OrderBy(X => X.Schedule).ToList();
             ClassTypeSelected = classType;
         }
         listClassByUser = await classService.GetClassesByGymMember(emailUserIdentificate);

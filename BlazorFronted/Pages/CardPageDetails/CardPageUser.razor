@@ -225,6 +225,10 @@
             {
                 model = result.GymMemberDTO!;
                 listClassUser = await classService.GetClassesByGymMember(model.emailMember);
+                if(listClassUser.Count() != 0)
+                {
+                   listClassUser = listClassUser.OrderBy(x => x.Schedule).ToList();
+                }
             }
         }
     }
