@@ -8,6 +8,9 @@
 @inject IAuthService AuthService
 @inject IJSRuntime JSRuntime
 
+@attribute [Authorize(Roles = "User")]
+
+
 <PageTitle>Reservar</PageTitle>
 
 

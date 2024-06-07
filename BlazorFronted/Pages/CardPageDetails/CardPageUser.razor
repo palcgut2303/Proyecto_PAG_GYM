@@ -12,6 +12,9 @@
 @inject IJSRuntime JSRuntime
 @inject SweetAlertService Swal
 
+@attribute [Authorize(Roles = "User")]
+
+
 <style>
     table {
         width: 100%;
