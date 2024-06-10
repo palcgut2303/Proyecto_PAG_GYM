@@ -123,14 +123,10 @@ namespace GYM_Backend.Controllers
                 {
                     if (user.Email == model.Email || user.UserName == model.Username)
                     {
-                        return BadRequest(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
+                        return Ok(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
                     }
                 }
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
 
                 var usuario = new User()
                 {

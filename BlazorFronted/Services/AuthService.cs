@@ -55,10 +55,13 @@ namespace BlazorFronted.Services
                     }
                 }
 
-                 var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
-            if (result.IsSuccessStatusCode)
-                return new RegisterResult { Successful = true, Errors = null };
+                var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
 
+                if (result.IsSuccessStatusCode)
+                {
+                    return new RegisterResult { Successful = true, Errors = null };
+                }
+                
 
             return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
             }

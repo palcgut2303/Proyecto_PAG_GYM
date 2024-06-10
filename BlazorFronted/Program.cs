@@ -16,7 +16,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://apigympag.somee.com") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://gympagapi.somee.com") });
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IClassService, ClassService>();
