@@ -119,14 +119,21 @@ namespace GYM_Backend.Controllers
 
                 var listUser = await _userManager.Users.ToListAsync();
 
-                foreach (var user in listUser)
-                {
-                    if (user.Email == model.Email || user.UserName == model.Username)
-                    {
-                        return Ok(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
-                    }
-                }
 
+                ////foreach (var user in listUser)
+                ////{
+                ////    if (user.Email == model.Email || user.UserName == model.Username)
+                ////    {
+                ////        return Ok(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
+                ////    }
+                ////}
+
+                var existingUser = listUser.Where(x => x.Email == model.Email).FirstOrDefault();
+
+                if(existingUser != null)
+                {
+                    return Ok(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
+                }
 
                 var usuario = new User()
                 {

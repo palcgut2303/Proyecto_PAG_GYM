@@ -46,6 +46,17 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Password settings.
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 0;
+});
+
 builder.Services.AddDbContext<ApplicationContextDb>(options => options.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddTransient<IClassRepository,ClassRepository>();
 builder.Services.AddTransient<IClassTypeRepository, ClassTypeRepository>();
