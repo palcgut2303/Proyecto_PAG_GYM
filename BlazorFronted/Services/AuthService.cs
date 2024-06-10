@@ -36,7 +36,7 @@ namespace BlazorFronted.Services
         {
             var listUser = await userService.UserList();
 
-            if(listUser.ListUser is null || listUser.ListUser.Count() == 0)
+            if (listUser.ListUser is null || listUser.ListUser.Count() == 0)
             {
                 var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
                 if (result.IsSuccessStatusCode)
@@ -47,12 +47,15 @@ namespace BlazorFronted.Services
             }
             else
             {
-                foreach (var user in listUser.ListUser)
+                bool userExists = listUser.ListUser.Any(user => user.Email == registerModel.Email || user.Username == registerModel.Username);
+
+                if (userExists)
                 {
-                    if (user.Email == registerModel.Email || user.Username == registerModel.Username)
+                    return new RegisterResult
                     {
-                        return new RegisterResult { Successful = false, Errors = new List<string> { "Este email o username ya existe. Inicia Sesión" } };
-                    }
+                        Successful = false,
+                        Errors = new List<string> { "Este email o username ya existe. Inicia Sesión" }
+                    };
                 }
 
                 var result = await _httpClient.PostAsJsonAsync("api/User/register", registerModel);
@@ -61,14 +64,14 @@ namespace BlazorFronted.Services
                 {
                     return new RegisterResult { Successful = true, Errors = null };
                 }
-                
 
-            return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
+
+                return new RegisterResult { Successful = false, Errors = new List<string> { "Error occured" } };
             }
 
-            
 
-           
+
+
         }
 
 
@@ -107,17 +110,17 @@ namespace BlazorFronted.Services
 
         public async Task<ResponseAPI<SendEmailRequest>> SendEmail(SendEmailRequest model)
         {
-            var result = await _httpClient.PostAsJsonAsync($"api/Email",model);
+            var result = await _httpClient.PostAsJsonAsync($"api/Email", model);
 
-            if(!result.IsSuccessStatusCode)
+            if (!result.IsSuccessStatusCode)
             {
                 return new ResponseAPI<SendEmailRequest>
                 {
                     Correct = false,
                     Menssage = "Error al enviar el correo"
-                   
+
                 };
-                
+
             }
 
             return new ResponseAPI<SendEmailRequest>

@@ -132,7 +132,7 @@ namespace GYM_Backend.Controllers
 
                 if(existingUser != null)
                 {
-                    return Ok(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
+                    return BadRequest(new RegisterResult { Successful = false, Errors = new List<string> { "Email o Username ya existente" } });
                 }
 
                 var usuario = new User()
@@ -178,7 +178,7 @@ namespace GYM_Backend.Controllers
                 {
                     var errors = createdUser.Errors.Select(x => x.Description);
 
-                    return Ok(new RegisterResult { Successful = false, Errors = errors });
+                    return BadRequest(new RegisterResult { Successful = false, Errors = errors });
                 }
             }
             catch (Exception e)

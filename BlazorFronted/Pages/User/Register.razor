@@ -281,8 +281,6 @@
 
                 var resultSendEmail = await AuthService.SendEmail(sendEmailRequest);
 
-
-
                 if (!resultSendEmail.Correct)
                 {
                     Errors = new List<string> { "Error al enviar el correo" };
