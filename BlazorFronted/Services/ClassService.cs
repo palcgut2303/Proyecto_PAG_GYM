@@ -194,7 +194,7 @@ namespace BlazorFronted.Services
 
             if (classModel.Schedule < fechaHoy)
             {
-                return new ResponseAPI<string> { Correct = false, Menssage = "No puedes crear clases con fechas anterior a la de hoy" };
+                return new ResponseAPI<string> { Correct = false, Menssage = "No puedes crear clases con fechas anteriores a la de hoy" };
             }
 
             if (classModel.Schedule.DayOfWeek == DayOfWeek.Sunday)
@@ -207,7 +207,7 @@ namespace BlazorFronted.Services
 
             var listClasses = classes.ListClass;
 
-            foreach (var item in listClasses)
+            foreach (var item in listClasses!)
             {
 
                 if (item.Schedule.Date == classModel.Schedule.Date)

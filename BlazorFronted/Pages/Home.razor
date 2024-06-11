@@ -20,6 +20,14 @@
         text-align: center;
     }
 
+
+    .poppins-black {
+        font-family: "Poppins", sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        color: orangered;
+    }
+
 </style>
 
 
@@ -34,6 +42,7 @@
                 <Authorized>
                     <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
                     <h2 class="d-flex justify-content-center">FÁCIL CON NUESTRO GIMNASIO</h2>
+                    <h3><a href="reservation" class="poppins-black">RESERVAR</a></h3>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView Roles="Instructor">
@@ -46,6 +55,7 @@
                   <NotAuthorized>
                     <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
                     <h2 class="d-flex justify-content-center">FÁCIL CON NUESTRO GIMNASIO</h2>
+                    <h3><a href="register" class="poppins-black">Registrate</a></h3>
                 </NotAuthorized>
             </AuthorizeView>
 
