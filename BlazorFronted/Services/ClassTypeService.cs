@@ -47,15 +47,6 @@ namespace BlazorFronted.Services
             return new ResponseAPI<bool> { Correct = false };
         }
 
-        public async Task<ResponseAPI<UpdateClassTypeRequestDTO>> Update(UpdateClassTypeRequestDTO classType, int id)
-        {
-            var result = await _http.PutAsJsonAsync($"api/classtype/{id}", classType);
-            if (!result.IsSuccessStatusCode)
-                return new ResponseAPI<UpdateClassTypeRequestDTO> { Correct = false, Menssage = "No se ha podido actualizar" };
-
-            return new ResponseAPI<UpdateClassTypeRequestDTO> { Correct = true, Menssage = null };
-        }
-
         public async Task<bool> Delete(int id)
         {
             var result = await _http.DeleteAsync($"api/classtype/{id}");

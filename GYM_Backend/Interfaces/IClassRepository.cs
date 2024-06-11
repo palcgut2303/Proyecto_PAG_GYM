@@ -19,6 +19,6 @@ namespace GYM_Backend.Interfaces
         Task<int> GetIdGymInstructor(string email);
         Task<int> GetIdGymMember(string email);
         Task<bool> ReserveClass(int idClase, int idUsuario);
-        Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id);
+        //Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id);
     }
 }

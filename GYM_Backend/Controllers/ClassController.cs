@@ -102,19 +102,19 @@ namespace GYM_Backend.Controllers
             return Ok(new CreateClassResult { Successful = true});
         }
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassRequestDTO requestDTO)
-        {
-            var classes = await _classRepository.UpdateClass(requestDTO, id);
+        //[HttpPut]
+        //[Route("{id}")]
+        //public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassRequestDTO requestDTO)
+        //{
+        //    var classes = await _classRepository.UpdateClass(requestDTO, id);
 
-            if (classes == null)
-            {
-                return NotFound("No se ha encontrado el objeto indicado, ya sea Instructor, tipo de clase, o la clase para editar");
-            }
+        //    if (classes == null)
+        //    {
+        //        return NotFound("No se ha encontrado el objeto indicado, ya sea Instructor, tipo de clase, o la clase para editar");
+        //    }
 
-            return Ok(classes);
-        }
+        //    return Ok(classes);
+        //}
 
         [HttpDelete]
         [Route("{id}")]

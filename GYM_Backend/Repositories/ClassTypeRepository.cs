@@ -41,23 +41,23 @@ namespace GYM_Backend.Repositories
             return classType;
         }
 
-        public async Task<ClassType> UpdateClassType(UpdateClassTypeRequestDTO mode, int id)
-        {
-            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Id == id);
+        //public async Task<ClassType> UpdateClassType(UpdateClassTypeRequestDTO mode, int id)
+        //{
+        //    var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(classType == null)
-            {
-                return null;
-            }
+        //    if(classType == null)
+        //    {
+        //        return null;
+        //    }
 
-            classType.Name = mode.Name;
-            classType.Description = mode.Description;
+        //    classType.Name = mode.Name;
+        //    classType.Description = mode.Description;
 
 
-            await _contextDb.SaveChangesAsync();
+        //    await _contextDb.SaveChangesAsync();
 
-            return classType;
-        }
+        //    return classType;
+        //}
 
         public async Task<string> DeleteClassType(int id)
         {

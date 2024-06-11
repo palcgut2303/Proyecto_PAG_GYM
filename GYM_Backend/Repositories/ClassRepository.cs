@@ -68,42 +68,42 @@ namespace GYM_Backend.Repositories
             return classes;
         }
 
-        public async Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id)
-        {
-            var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(X => X.emailUser == mode.emailInstructor);
+        //public async Task<ResponseAPI<List<ClassDTO>>> UpdateClass(UpdateClassRequestDTO mode, int id)
+        //{
+        //    var instructor = await _contextDb.GymInstructors.FirstOrDefaultAsync(X => X.emailUser == mode.emailInstructor);
 
-            if (instructor == null)
-            {
-                return null;
-            }
+        //    if (instructor == null)
+        //    {
+        //        return null;
+        //    }
 
-            var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Name == mode.ClassTypeName);
+        //    var classType = await _contextDb.ClassType.FirstOrDefaultAsync(x => x.Name == mode.ClassTypeName);
 
-            if (classType == null)
-            {
-                return null;
-            }
+        //    if (classType == null)
+        //    {
+        //        return null;
+        //    }
 
-            var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == id);
+        //    var classes = await _contextDb.Classes.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (classes == null)
-            {
-                return null;
-            }
+        //    if (classes == null)
+        //    {
+        //        return null;
+        //    }
 
-            classes.ClassTypeId = classType.Id;
-            classes.GymInstructorId = instructor.Id;
-            classes.Schedule = mode.Schedule;
-            classes.Capacity = mode.Capacity;
+        //    classes.ClassTypeId = classType.Id;
+        //    classes.GymInstructorId = instructor.Id;
+        //    classes.Schedule = mode.Schedule;
+        //    classes.Capacity = mode.Capacity;
 
-            await _contextDb.SaveChangesAsync();
+        //    await _contextDb.SaveChangesAsync();
 
-            var classDTO =  _contextDb.Classes.Include(x => x.Reservations).Include(x => x.GymInstructor).Where(x => x.Id == id).Select(x => x.toClassesDTO());
+        //    var classDTO =  _contextDb.Classes.Include(x => x.Reservations).Include(x => x.GymInstructor).Where(x => x.Id == id).Select(x => x.toClassesDTO());
 
-            var classDTOList = classDTO.ToList();
+        //    var classDTOList = classDTO.ToList();
 
-            return new ResponseAPI<List<ClassDTO>> { Correct = true, Value = classDTOList };
-        }
+        //    return new ResponseAPI<List<ClassDTO>> { Correct = true, Value = classDTOList };
+        //}
 
         public async Task<bool> DeletedClass(int id)
         {

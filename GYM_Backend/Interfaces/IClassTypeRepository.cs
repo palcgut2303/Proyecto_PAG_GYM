@@ -11,6 +11,6 @@ namespace GYM_Backend.Interfaces
         Task<ClassType> CreateClassType(CreatedClassTypeRequestDTO model);
         IEnumerable<ClassTypeDTO> GetAll();
         ClassTypeDTO GetById(int id);
-        Task<ClassType> UpdateClassType(UpdateClassTypeRequestDTO mode, int id);
+        //Task<ClassType> UpdateClassType(UpdateClassTypeRequestDTO mode, int id);
     }
 }

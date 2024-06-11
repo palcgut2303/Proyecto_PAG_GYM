@@ -7,7 +7,7 @@ namespace BlazorFronted.Interfaces
 {
     public interface IClassService
     {
-        Task<ResponseAPI<ClassDTO>> UpdateClass(int id, UpdateClassRequestDTO classModel);
+        //Task<ResponseAPI<ClassDTO>> UpdateClass(int id, UpdateClassRequestDTO classModel);
         Task<ClassListResult> ClassesList();
         Task<CreateClassResult> CreateClass(CreateClassRequestDTO classModel);
         Task<CreateClassRequestDTO> findByIdClass(int id);

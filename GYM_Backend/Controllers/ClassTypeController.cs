@@ -67,21 +67,21 @@ namespace GYM_Backend.Controllers
             return CreatedAtAction(nameof(findById), new { id = typeOfClassCreated.Id }, typeOfClassCreated.toClassTypeDTO());
         }
 
-        [HttpPut]
-        [Route("{id}")]
-        [Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[HttpPut]
+        //[Route("{id}")]
+        //[Authorize(Roles = "Instructor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassTypeRequestDTO requestDTO)
-        {
-            ClassType classType = await _typeofclassRepository.UpdateClassType(requestDTO, id);
+        //public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdateClassTypeRequestDTO requestDTO)
+        //{
+        //    ClassType classType = await _typeofclassRepository.UpdateClassType(requestDTO, id);
 
-            if(classType == null)
-            {
-                return NotFound();
-            }
+        //    if(classType == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(classType.toClassTypeDTO());
-        }
+        //    return Ok(classType.toClassTypeDTO());
+        //}
 
         [HttpDelete]
         [Route("{id}")]

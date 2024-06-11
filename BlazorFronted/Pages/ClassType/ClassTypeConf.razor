@@ -1,5 +1,4 @@
 ﻿@page "/classtypeconf"
-@page "/classtypeconf/{idClassType:int}"
 @attribute [Authorize(Roles = "Instructor")]
 
 @inject IClassTypeService classService;
@@ -67,26 +66,16 @@
     private bool ShowErrors;
     private string Error = "";
     string btnText = "";
-    [Parameter]
-    public int idClassType { get; set; } = 0;
 
     ClassTypeDTO classType = new ClassTypeDTO();
 
 
     protected override async Task OnInitializedAsync()
     {
-        if (idClassType != 0)
-        {
-            title = "Editar Tipo de Clase";
-            btnText = "Editar Tipo de Clase";
-            var resutlClass = await classService.findByClassType(idClassType);
-            classType = resutlClass;
-        }
-        else
-        {
-            title = "Crear Tipo de Clase";
-            btnText = "Crear Tipo de Clase";
-        }
+
+        title = "Crear Tipo de Clase";
+        btnText = "Crear Tipo de Clase";
+
     }
 
 
@@ -94,37 +83,17 @@
     {
         ShowErrors = false;
 
-        if (idClassType != 0)
-        {
-            var updateModel = new UpdateClassTypeRequestDTO
-                {
-                    Description = classType.Description,
-                    Name = classType.Name
-                };
 
-            var result = await classService.Update(updateModel, idClassType);
-            if (result.Menssage != null)
-            {
-                ShowErrors = true;
-                Error = result.Menssage;
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/typeofclasspage");
-            }
+        var result = await classService.Save(classType);
+        if (result.Menssage != null)
+        {
+            ShowErrors = true;
+            Error = result.Menssage;
         }
         else
         {
-            var result = await classService.Save(classType);
-            if (result.Menssage != null)
-            {
-                ShowErrors = true;
-                Error = result.Menssage;
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/typeofclasspage");
-            }
+            NavigationManager.NavigateTo("/typeofclasspage");
         }
+
     }
 }
