@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GYM_Backend.Contexto;
 public class ApplicationContextDb : IdentityDbContext<User>
 {
-
+    
     public ApplicationContextDb(DbContextOptions options) : base(options)
     {
     }

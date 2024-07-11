@@ -60,6 +60,18 @@
     <Content Update="wwwroot\img\gym-video.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\img\img-mgp\imgHomeFooter.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\img-mgp\logoNegro-removebg-preview.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\img-mgp\luxa.org-opacity-changed-img4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\img\img-mgp\luxa.org-opacity-changed-imgHomeFooterOpacity.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\img\line-dec.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

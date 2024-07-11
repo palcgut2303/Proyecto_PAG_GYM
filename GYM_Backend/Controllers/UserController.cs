@@ -83,7 +83,6 @@ namespace GYM_Backend.Controllers
             var usuarioId = await _userRepository.GetUserIdByEmailAsync(login.Email);
 
 
-
             var user = await _userManager.FindByEmailAsync(login.Email);
             var roles = await _userManager.GetRolesAsync(user);
             var rolJWT = await _userRepository.GetUserRolesAsync(usuarioId);

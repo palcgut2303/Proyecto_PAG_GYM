@@ -18,11 +18,28 @@
     .container2 {
         text-align: right;
     }
+
+    .logo-img {
+        width: 60px; /* Ajusta el ancho según tus necesidades */
+        height: auto; /* Mantiene la proporción de la imagen */
+    }
+
+    .navbar {
+        background: linear-gradient(135deg, #000000 70%, #CDFF04 30%);
+    }
+
+    .nav-link{
+        color: white;
+    }
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand logo" href="#">GYM <em>PAG</em></a>
+    <a class="navbar-brand logo" href="#">
+        <img src="/img/img-mgp/logoNegro-removebg-preview.png" alt="LOGO MGP" class="logo-img">
+    </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,8 +52,8 @@
             <AuthorizeView Roles="Instructor">
                 <Authorized>
 
-                    <li class="nav-item"><a class="nav-link" href="listclassadmin">Clases</a></li>
-                    <li class="nav-item"><a class="nav-link" href="typeofclasspage">Tipos de Clases</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="listclassadmin">Clases</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="typeofclasspage">Tipos de Clases</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i>
@@ -62,9 +79,9 @@
                             <i class="bi bi-person-circle"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="dialogcardUser">Mi Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout">Cerrar Sesión</a></li>
+                            <li><a class="dropdown-item text-white" href="dialogcardUser">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider text-white"></li>
+                            <li><a class="dropdown-item text-white" href="logout">Cerrar Sesión</a></li>
                         </ul>
                     </li>
 
@@ -73,7 +90,7 @@
             <AuthorizeView>
 
                 <NotAuthorized>
-                    <li class="nav-item"><a class="nav-link" href="login">Iniciar Sesion</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="login">Iniciar Sesion</a></li>
 
                 </NotAuthorized>
             </AuthorizeView>

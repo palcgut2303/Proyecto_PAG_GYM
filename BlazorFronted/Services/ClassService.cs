@@ -196,8 +196,6 @@ namespace BlazorFronted.Services
             }
             
 
-
-
             var listClasses = classes.ListClass;
 
             foreach (var item in listClasses!)
@@ -210,15 +208,10 @@ namespace BlazorFronted.Services
                         return new ResponseAPI<string> { Correct = false, Menssage = "Ya hay una clase en esta misma fecha y hora" };
                     }
                 }
-
-
             }
 
             return new ResponseAPI<string> { Correct = true };
         }
-
-
-        
 
     }
 }

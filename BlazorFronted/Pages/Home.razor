@@ -12,7 +12,7 @@
 
     #call-to-action {
         padding: 120px 0px;
-        background-image: url(../img/luxa.org-opacity-changed-backgroundHomeFooter.jpg);
+        background-image: url(../img/img-mgp/luxa.org-opacity-changed-imgHomeFooterOpacity.jpg);
         background-color: rgba(0, 0, 0, 0.8);
         background-position: center center;
         background-repeat: no-repeat;
@@ -25,18 +25,24 @@
         font-family: "Poppins", sans-serif;
         font-weight: 900;
         font-style: normal;
-        color: orangered;
+        color: #CDFF04;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 7px;
+        width: 100%;
     }
 
 </style>
 
 
 <div class="main-banner" id="top">
-    <video autoplay muted loop id="bg-video">
-        <source src="img/gym-video.mp4" type="video/mp4" />
-    </video>
+    <img src="/img/img-mgp/luxa.org-opacity-changed-img4.jpg" id="bg-video" />
 
-    <div class="video-overlay header-text">
+    <div class="image-overlay header-text">
         <div class="caption">
             <AuthorizeView Roles="User">
                 <Authorized>
