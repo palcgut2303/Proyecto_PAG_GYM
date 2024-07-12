@@ -36,6 +36,29 @@
         width: 100%;
     }
 
+
+    #bg-video {
+        min-width: 100%;
+        min-height: 100vh;
+        max-width: 100%;
+        object-fit: cover;
+        max-height: 100vh;
+        z-index: -1;
+    }
+
+        #bg-video::-webkit-media-controls {
+            display: none !important;
+        }
+
+    h2, h4 {
+        font-family: Wide;
+        color:white;
+    }
+
+    p{
+        font-family: Open sans;
+        font-size: 15px;
+    }
 </style>
 
 
@@ -46,21 +69,21 @@
         <div class="caption">
             <AuthorizeView Roles="User">
                 <Authorized>
-                    <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
-                    <h2 class="d-flex justify-content-center">FÁCIL CON NUESTRO GIMNASIO</h2>
+                    <h4>DE FORMA RAPIDA, SENSILLA Y DIVERTIDA</h4>
+                    <h2 class="d-flex justify-content-center">EN NUESTRA SALA</h2>
                     <h3><a href="reservation" class="poppins-black">RESERVAR</a></h3>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView Roles="Instructor">
                 <Authorized>
-                    <h6>LIDERA CON EJEMPLO, INSPIRA A TODOS</h6>
+                    <h4>LIDERA CON EJEMPLO, INSPIRA A TODOS</h4>
                     <h2 class="d-flex justify-content-center">¡BIENVENIDO ADMIN!</h2>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView>
-                  <NotAuthorized>
-                    <h6>TRABAJA MÁS DURO, HAZTE MÁS FUERTE</h6>
-                    <h2 class="d-flex justify-content-center">FÁCIL CON NUESTRO GIMNASIO</h2>
+                <NotAuthorized>
+                    <h4>DE FORMA RAPIDA, SENSILLA Y DIVERTIDA</h4>
+                    <h2 class="d-flex justify-content-center">EN NUESTRA SALA</h2>
                     <h3><a href="register" class="poppins-black">Registrate</a></h3>
                 </NotAuthorized>
             </AuthorizeView>
@@ -152,19 +175,19 @@
 </section>
 
 
-    <section class="section" id="call-to-action">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 offset-lg-1">
-                    <div class="cta-content ">
+<section class="section" id="call-to-action">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cta-content ">
 
-                        <h2>NO LO PIENSES, EMPIEZA AHORA!</h2>
+                    <h2>NO LO PIENSES, EMPIEZA AHORA!</h2>
 
-                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 <ScrollToTop />
 
@@ -178,11 +201,11 @@
 
     private async Task export()
     {
-        
+
         await JSRuntime.InvokeVoidAsync("GenerarMapa");
 
     }
 
-    
+
 
 }

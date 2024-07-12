@@ -624,14 +624,6 @@ banner
     position: relative;
 }
 
-#bg-video {
-    min-width: 100%;
-    min-height: 100vh;
-    max-width: 100%;
-    max-height: 100vh;
-    z-index: -1;
-}
-
 
 
 
