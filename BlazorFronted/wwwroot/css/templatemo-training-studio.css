@@ -153,24 +153,16 @@ body {
 
 .section-heading {
     text-align: center;
-    margin-top: 140px;
+    margin-top: 80px;
     margin-bottom: 80px;
 }
 
-    .section-heading h2 {
-        font-size: 28px;
-        font-weight: 800;
-        color: #232d39;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
 
-        .section-heading h2 em {
-            font-style: normal;
-            color: rgb(4, 18, 82);
-        }
+
+    .section-heading h2 em {
+        font-style: normal;
+        color: rgb(4, 18, 82);
+    }
 
     .section-heading img {
         margin: 20px auto;
@@ -630,39 +622,39 @@ banner
 
 
 
-.main-banner .caption {
-    text-align: center;
-    position: absolute;
-    width: 80%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-    .main-banner .caption h6 {
-        margin-top: 0px;
-        font-size: 18px;
-        text-transform: uppercase;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: 0.5px;
+    .main-banner .caption {
+        text-align: center;
+        position: absolute;
+        width: 80%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
     }
 
-    .main-banner .caption h2 {
-        margin-top: 30px;
-        margin-bottom: 25px;
-        font-size: 84px;
-        text-transform: uppercase;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: 1px;
-    }
-
-        .main-banner .caption h2 em {
-            font-style: normal;
-            color: rgb(4, 18, 82);
-            font-weight: 900;
+        .main-banner .caption h6 {
+            margin-top: 0px;
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
         }
+
+        .main-banner .caption h2 {
+            margin-top: 30px;
+            margin-bottom: 25px;
+            font-size: 84px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+            .main-banner .caption h2 em {
+                font-style: normal;
+                color: rgb(4, 18, 82);
+                font-weight: 900;
+            }
 
 
 /*
@@ -671,9 +663,7 @@ features
 ---------------------------------------------
 */
 
-#features {
-    margin-bottom: 80px;
-}
+
 
 .feature-item {
     display: inline-block;
@@ -689,15 +679,7 @@ features
         display: inline;
     }
 
-        .feature-item .right-content h4 {
-            margin-top: 0px;
-            margin-bottom: 7px;
-            letter-spacing: 0.25px;
-            color: #232d39;
-            font-size: 19px;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
+
 
         .feature-item .right-content a.text-button {
             margin-top: 7px;
@@ -1227,19 +1209,23 @@ responsive
 */
 
 
+@media (min-width: 576px) {
+    .container-about {
+        max-width: 540px;
+    }
+}
+
 @media (max-width: 992px) {
 
     .main-banner .caption h2 {
         font-size: 64px;
     }
 
-    #features {
-        margin-bottom: 110px;
-    }
 
-        #features .feature-item {
-            margin-bottom: 30px;
-        }
+
+    .feature-item {
+        margin-bottom: 30px;
+    }
 
     #our-classes .tabs-content {
         margin-left: 0px;
