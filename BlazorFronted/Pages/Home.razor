@@ -94,6 +94,12 @@
         padding: 0 15px;
     }
 
+    .text-home-header{
+        font-size:55px;
+        color: white;
+        font-weight: bold;
+    }
+
 </style>
 
 
@@ -105,20 +111,20 @@
             <AuthorizeView Roles="User">
                 <Authorized>
                     <h4>DE FORMA RAPIDA, SENSILLA Y DIVERTIDA</h4>
-                    <h2 class="d-flex justify-content-center">EN NUESTRA SALA</h2>
+                    <h2 class="d-flex justify-content-center text-home-header">EN NUESTRA SALA</h2>
                     <h3><a href="reservation" class="poppins-black">RESERVAR</a></h3>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView Roles="Instructor">
                 <Authorized>
                     <h4>LIDERA CON EJEMPLO, INSPIRA A TODOS</h4>
-                    <h2 class="d-flex justify-content-center">¡BIENVENIDO ADMIN!</h2>
+                    <h3 class="d-flex justify-content-center text-home-header">¡BIENVENIDO ADMIN!</h3>
                 </Authorized>
             </AuthorizeView>
             <AuthorizeView>
                 <NotAuthorized>
                     <h4>DE FORMA RAPIDA, SENSILLA Y DIVERTIDA</h4>
-                    <h2 class="d-flex justify-content-center">EN NUESTRA SALA</h2>
+                    <h2 class="d-flex justify-content-center text-home-header">EN NUESTRA SALA</h2>
                     <h3><a href="register" class="poppins-black">Registrate</a></h3>
                 </NotAuthorized>
             </AuthorizeView>

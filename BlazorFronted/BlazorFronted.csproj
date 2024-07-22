@@ -63,6 +63,9 @@
     <Content Update="wwwroot\img\img-mgp\imgHomeFooter.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\img\img-mgp\logoAzuladoMGP.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\img\img-mgp\logoNegro-removebg-preview.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
