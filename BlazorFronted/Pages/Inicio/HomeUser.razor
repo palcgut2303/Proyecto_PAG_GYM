@@ -1,0 +1,219 @@
+﻿
+@inject IJSRuntime JSRuntime
+@inject IAuthService AuthService
+
+
+
+
+<style>
+    #map {
+        height: 180px;
+    }
+
+    #call-to-action {
+        padding: 120px 0px;
+        background-image: url(../img/img-mgp/luxa.org-opacity-changed-imgHomeFooterOpacity.jpg);
+        background-color: rgba(0, 0, 0, 0.8);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        text-align: center;
+    }
+
+
+    .poppins-black {
+        font-family: "Poppins", sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        color: #CDFF04;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 7px;
+        width: 100%;
+    }
+
+
+    #bg-video {
+        min-width: 100%;
+        min-height: 100vh;
+        max-width: 100%;
+        object-fit: cover;
+        max-height: 100vh;
+        z-index: -1;
+    }
+
+        #bg-video::-webkit-media-controls {
+            display: none !important;
+        }
+
+    h2, h4 {
+        font-family: "Poppins", sans-serif;
+        color: white;
+    }
+
+    p {
+        font-family: sans-serif;
+        font-size: 18px;
+        color: white;
+    }
+
+
+
+    #features {
+        background: linear-gradient(135deg, #161315 90%, #CDFF04 10%);
+        margin: 0;
+    }
+
+    .section-heading h2 {
+        font-size: 28px;
+        font-weight: 800;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .feature-item .right-content h4 {
+        margin-top: 0px;
+        margin-bottom: 7px;
+        letter-spacing: 0.25px;
+        color: #CDFF04;
+        font-size: 25px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .container-about {
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .text-home-header {
+        font-size: 55px;
+        color: white;
+        font-weight: bold;
+    }
+
+</style>
+
+
+<div class="main-banner" id="top">
+    <img src="/img/img-mgp/luxa.org-opacity-changed-img4.jpg" id="bg-video" />
+
+    <div class="image-overlay header-text">
+        <div class="caption">
+
+            <h4>DE FORMA RAPIDA, SENSILLA Y DIVERTIDA</h4>
+            <h2 class="d-flex justify-content-center text-home-header">EN NUESTRA SALA</h2>
+            <h3><a href="reservation" class="poppins-black">RESERVAR</a></h3>
+
+        </div>
+    </div>
+</div>
+
+
+<section class="section" id="features">
+    <div class="container-about">
+        <div class="row">
+            <div class="col-lg-8 d-flex flex-column">
+                <div class="section-heading">
+                    <h2 class="title-section-about">¿PÓRQUE MGP?</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <ul class="features-items">
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Instalaciones Modernas</h4>
+                                    <p> Nuestro gimnasio está equipado con máquinas y pesas de última generación para ofrecerte la mejor experiencia de entrenamiento.</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Entrenadores Profesionales</h4>
+                                    <p>Contamos con un equipo de entrenadores certificados y con amplia experiencia.</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Clases Grupales</h4>
+                                    <p>Ofrecemos una variedad de clases grupales que incluyen YOGA, TRX, FUERZA, y más. Estas clases son una excelente manera de mantenerse motivado y conocer a otros miembros del gimnasio.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <ul class="features-items">
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Ambiente Seguro y Limpio</h4>
+                                    <p>Mantenemos un alto estándar de limpieza e higiene en todas nuestras instalaciones.</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Clases Intensas</h4>
+                                    <p>Nuestras clases son de una hora de puro esfuerzo y dando mucha caña para poder dar los mejores resultados.</p>
+                                </div>
+                            </li>
+                            <li class="feature-item">
+                                <div class="right-content">
+                                    <h4 class="title-section-about">Zona de Relajación</h4>
+                                    <p>Después de un intenso entrenamiento, relájate en nuestra zona de descanso equipada con sauna y áreas de relajación.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex align-items-center ">
+                <img src="/img/img-mgp/imgSala.jpg" alt="Imagen" class="img-fluid mb-5 mt-5">
+            </div>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+<section class="section" id="call-to-action">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cta-content ">
+
+                    <h2>NO LO PIENSES, EMPIEZA AHORA!</h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ScrollToTop />
+
+@code {
+    private string userRole;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userRole = await AuthService.GetRole();
+    }
+
+    private async Task export()
+    {
+
+        await JSRuntime.InvokeVoidAsync("GenerarMapa");
+
+    }
+
+
+
+}

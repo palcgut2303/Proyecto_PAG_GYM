@@ -1,0 +1,28 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+@inject IAuthService AuthService
+
+<PageTitle>Inicio</PageTitle>
+
+<AuthorizeView Roles="User">
+    <Authorized>
+       <HomeUser />
+    </Authorized>
+</AuthorizeView>
+<AuthorizeView Roles="Instructor">
+    <Authorized>
+        <HomeAdmin />
+    </Authorized>
+</AuthorizeView>
+<AuthorizeView>
+    <NotAuthorized>
+       <HomePage />
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    
+
+
+}

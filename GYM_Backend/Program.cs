@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "API GYM_PABLO", Version = "v1.0.0" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "API GYM_MGP", Version = "v1.0.0" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
